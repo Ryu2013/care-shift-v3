@@ -46,6 +46,14 @@ frontend/dist
 frontend/dist-ssr
 *.local
 
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+crash.log
+terraform.tfvars
+*.auto.tfvars
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
