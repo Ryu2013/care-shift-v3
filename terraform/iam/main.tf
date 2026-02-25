@@ -167,6 +167,15 @@ data "aws_iam_policy_document" "github_actions_policy" {
     ]
     resources = ["*"]
   }
+
+  # RDSサービスリンクロールの作成
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:CreateServiceLinkedRole",
+    ]
+    resources = ["arn:aws:iam::*:role/aws-service-role/rds.amazonaws.com/*"]
+  }
 }
 
 resource "aws_iam_policy" "github_actions" {
