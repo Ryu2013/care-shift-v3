@@ -39,6 +39,7 @@ resource "aws_iam_role" "github_actions" {
 }
 
 data "aws_iam_policy_document" "github_actions_policy" {
+  # Terraform state (S3)
   statement {
     effect = "Allow"
     actions = [
@@ -53,6 +54,7 @@ data "aws_iam_policy_document" "github_actions_policy" {
     ]
   }
 
+  # Terraform state lock (DynamoDB)
   statement {
     effect = "Allow"
     actions = [
@@ -63,6 +65,15 @@ data "aws_iam_policy_document" "github_actions_policy" {
     resources = [
       "arn:aws:dynamodb:${var.aws_region}:${data.aws_caller_identity.current.account_id}:table/${var.tfstate_lock_table_name}",
     ]
+  }
+
+  # VPC・ネットワーク系リソースの管理
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:*",
+    ]
+    resources = ["*"]
   }
 }
 
