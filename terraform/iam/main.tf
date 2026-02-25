@@ -113,6 +113,15 @@ data "aws_iam_policy_document" "github_actions_policy" {
     ]
     resources = ["*"]
   }
+
+  # フロントエンドS3バケットの管理
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:*",
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "github_actions" {
