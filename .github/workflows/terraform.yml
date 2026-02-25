@@ -40,7 +40,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var="db_password=${{ secrets.DB_PASSWORD }}"
         id: plan
 
       - name: Post plan to PR
@@ -61,4 +61,4 @@ jobs:
 
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -var="db_password=${{ secrets.DB_PASSWORD }}"
