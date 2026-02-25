@@ -145,6 +145,7 @@ data "aws_iam_policy_document" "github_actions_policy" {
       "iam:AttachRolePolicy",
       "iam:DetachRolePolicy",
       "iam:ListAttachedRolePolicies",
+      "iam:ListRolePolicies",
       "iam:CreateInstanceProfile",
       "iam:DeleteInstanceProfile",
       "iam:GetInstanceProfile",
@@ -154,6 +155,15 @@ data "aws_iam_policy_document" "github_actions_policy" {
       "iam:TagRole",
       "iam:UntagRole",
       "iam:ListRoleTags",
+    ]
+    resources = ["*"]
+  }
+
+  # RDSの管理
+  statement {
+    effect = "Allow"
+    actions = [
+      "rds:*",
     ]
     resources = ["*"]
   }
