@@ -44,6 +44,13 @@ resource "aws_security_group" "ec2" {
     security_groups = [aws_security_group.alb.id]
   }
 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -63,6 +70,7 @@ resource "aws_instance" "app" {
   vpc_security_group_ids      = [aws_security_group.ec2.id]
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.ec2_ssm.name
+  key_name                    = "care-shift-v3"
 
   tags = {
     Name = "${var.project}-app"
