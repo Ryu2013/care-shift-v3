@@ -123,6 +123,17 @@ data "aws_iam_policy_document" "github_actions_policy" {
     resources = ["*"]
   }
 
+  # SSM Run Command（EC2へのデプロイ）
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:SendCommand",
+      "ssm:GetCommandInvocation",
+      "ssm:ListCommandInvocations",
+    ]
+    resources = ["*"]
+  }
+
   # EC2インスタンスプロファイル用IAMロール管理
   statement {
     effect = "Allow"
