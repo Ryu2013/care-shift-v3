@@ -75,6 +75,35 @@ data "aws_iam_policy_document" "github_actions_policy" {
     ]
     resources = ["*"]
   }
+
+  # ACM証明書の管理
+  statement {
+    effect = "Allow"
+    actions = [
+      "acm:*",
+    ]
+    resources = ["*"]
+  }
+
+  # CloudFrontの管理
+  statement {
+    effect = "Allow"
+    actions = [
+      "cloudfront:*",
+    ]
+    resources = ["*"]
+  }
+
+  # WAF（CloudFrontにアタッチされているため参照権限が必要）
+  statement {
+    effect = "Allow"
+    actions = [
+      "wafv2:GetWebACL",
+      "wafv2:GetWebACLForResource",
+      "wafv2:ListWebACLs",
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "github_actions" {
