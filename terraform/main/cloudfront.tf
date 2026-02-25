@@ -1,5 +1,5 @@
 resource "aws_cloudfront_distribution" "main" {
-  enabled         = false
+  enabled         = true
   aliases         = ["www.ryuuichi-app.com"]
   comment         = "task-app-cdn"
   price_class     = "PriceClass_All"
@@ -8,24 +8,48 @@ resource "aws_cloudfront_distribution" "main" {
 
   web_acl_id = "arn:aws:wafv2:us-east-1:079760567374:global/webacl/CreatedByCloudFront-c3fc1fc1/487512f4-ec7b-4d8e-aad1-36567f9d1fda"
 
-  # デフォルトオリジン（後でS3に変更予定）
+  # S3オリジン（フロントエンド）
   origin {
-    origin_id                = "task-app-s3-ryuuiti.s3.amazonaws.com-mjw4l52uzlg"
-    domain_name              = "temp-delete-bucket-xxxx.s3.ap-northeast-1.amazonaws.com"
-    origin_access_control_id = "E1FYB0HHVZOCRA"
+    origin_id                = "s3-frontend"
+    domain_name              = aws_s3_bucket.frontend.bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.frontend.id
+  }
 
-    s3_origin_config {
-      origin_access_identity = ""
+  # ALBオリジン（バックエンドAPI）
+  origin {
+    origin_id   = "alb-backend"
+    domain_name = "origin.ryuuichi-app.com"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
 
+  # デフォルト → S3（フロントエンド）
   default_cache_behavior {
-    target_origin_id       = "task-app-s3-ryuuiti.s3.amazonaws.com-mjw4l52uzlg"
+    target_origin_id       = "s3-frontend"
     viewer_protocol_policy = "redirect-to-https"
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     compress               = true
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+  }
+
+  # /api/* → ALB（キャッシュ無効・全ヘッダー転送）
+  ordered_cache_behavior {
+    path_pattern           = "/api/*"
+    target_origin_id       = "alb-backend"
+    viewer_protocol_policy = "https-only"
+    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods         = ["GET", "HEAD"]
+
+    # CachingDisabled
+    cache_policy_id = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+    # AllViewerExceptHostHeader（Cookie・クエリ文字列・ヘッダーをALBに転送）
+    origin_request_policy_id = "b689b0a8-53d0-40ab-baf2-68738e2966ac"
   }
 
   custom_error_response {
