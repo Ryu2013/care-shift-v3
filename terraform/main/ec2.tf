@@ -73,9 +73,11 @@ resource "aws_instance" "app" {
   key_name                    = "care-shift-v3"
 
   root_block_device {
-    volume_size = 20
+    volume_size = 30
     volume_type = "gp3"
   }
+
+  user_data = file("${path.module}/user_data.sh")
 
   tags = {
     Name = "${var.project}-app"
