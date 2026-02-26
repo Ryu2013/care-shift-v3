@@ -18,14 +18,18 @@ sudo dnf update -y
 sudo dnf install -y git gcc gcc-c++ make openssl-devel readline-devel zlib-devel libffi-devel
 ```
 
-## 3. Rubyのインストール（mise使用）
+## 3. Rubyのインストール（rbenv使用）
 
 ```bash
-curl https://mise.run | sh
-echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 source ~/.bashrc
 
-mise use --global ruby@3.3
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+
+rbenv install 3.3.10
+rbenv global 3.3.10
 ruby -v
 ```
 
@@ -49,8 +53,12 @@ sudo vi /etc/environment
 ```
 RAILS_ENV=production
 RAILS_MASTER_KEY=<master.keyの中身>
-DATABASE_URL=mysql2://admin:<password>@<rdsエンドポイント>:3306/app
 ```
+
+> `DATABASE_URL` はRailsクレデンシャル（`config/credentials/production.yml.enc`）に保管する。
+> ```yaml
+> database_url: mysql2://admin:<password>@<rdsエンドポイント>:3306/app
+> ```
 
 ## 6. bundleインストール
 
