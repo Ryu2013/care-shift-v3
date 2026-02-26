@@ -39,7 +39,7 @@ jobs:
             --instance-ids "${{ steps.ec2.outputs.instance_id }}" \
             --document-name "AWS-RunShellScript" \
             --parameters 'commands=[
-              "su - ec2-user -c '\''cd /var/www/care-shift-v3 && git pull origin main && cd backend && bundle install --without development test && RAILS_ENV=production bin/rails db:migrate'\''",
+              "su - ssm-user -c '\''cd /var/www/care-shift-v3 && git pull origin main && cd backend && bundle install --without development test && RAILS_ENV=production bin/rails db:migrate'\''",
               "systemctl restart puma"
             ]' \
             --query 'Command.CommandId' \
@@ -53,9 +53,10 @@ jobs:
             --instance-id "${{ steps.ec2.outputs.instance_id }}"
 
       - name: Check deployment result
+        if: always()
         run: |
           aws ssm get-command-invocation \
             --command-id "${{ steps.ssm.outputs.command_id }}" \
             --instance-id "${{ steps.ec2.outputs.instance_id }}" \
-            --query 'StatusDetails' \
+            --query '[StatusDetails, StandardOutputContent, StandardErrorContent]' \
             --output text
