@@ -72,6 +72,11 @@ resource "aws_instance" "app" {
   iam_instance_profile        = aws_iam_instance_profile.ec2_ssm.name
   key_name                    = "care-shift-v3"
 
+  root_block_device {
+    volume_size = 20
+    volume_type = "gp3"
+  }
+
   tags = {
     Name = "${var.project}-app"
   }

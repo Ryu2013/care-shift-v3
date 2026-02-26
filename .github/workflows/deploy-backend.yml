@@ -39,12 +39,8 @@ jobs:
             --instance-ids "${{ steps.ec2.outputs.instance_id }}" \
             --document-name "AWS-RunShellScript" \
             --parameters 'commands=[
-              "cd /var/www/care-shift-v3",
-              "git pull origin main",
-              "cd backend",
-              "bundle install --without development test",
-              "RAILS_ENV=production bin/rails db:migrate",
-              "sudo systemctl restart puma"
+              "su - ec2-user -c '\''cd /var/www/care-shift-v3 && git pull origin main && cd backend && bundle install --without development test && RAILS_ENV=production bin/rails db:migrate'\''",
+              "systemctl restart puma"
             ]' \
             --query 'Command.CommandId' \
             --output text)
