@@ -4,7 +4,7 @@ exec > /var/log/user-data.log 2>&1
 
 # パッケージインストール
 dnf update -y
-dnf install -y git gcc gcc-c++ make openssl-devel readline-devel zlib-devel libffi-devel libyaml-devel mysql-devel
+dnf install -y git gcc gcc-c++ make openssl-devel readline-devel zlib-devel libffi-devel libyaml-devel mariadb105-devel
 
 # rbenv + Ruby セットアップスクリプトを作成
 cat > /tmp/setup_ruby.sh << 'SETUP'
