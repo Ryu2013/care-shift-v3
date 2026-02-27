@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client: one
+  office: one
+  shift_type: 1
+  slots: 1
+  start_time: 2026-02-27 09:46:12
+  end_time: 2026-02-27 09:46:12
+  week: 1
+
+two:
+  client: two
+  office: two
+  shift_type: 1
+  slots: 1
+  start_time: 2026-02-27 09:46:12
+  end_time: 2026-02-27 09:46:12
+  week: 1
