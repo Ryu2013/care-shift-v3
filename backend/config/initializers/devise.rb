@@ -30,3 +30,8 @@ Devise.setup do |config|
     ENV["GOOGLE_CLIENT_ID"],
     ENV["GOOGLE_CLIENT_SECRET"]
 end
+
+# 未認証アクセスに対してJSON 401を返す（Deviseのデフォルトはリダイレクト）
+Devise.setup do |config|
+  config.navigational_formats = []
+end

@@ -1,10 +1,11 @@
 class Api::Users::SessionsController < Devise::SessionsController
+  skip_before_action :verify_authenticity_token
   respond_to :json
 
   private
 
   def respond_with(resource, _opts = {})
-    render json: { user: UserSerializer.new(resource) }, status: :ok
+    render json: UserSerializer.new(resource), status: :ok
   end
 
   def respond_to_on_destroy

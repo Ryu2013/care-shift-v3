@@ -1,13 +1,14 @@
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
+  devise_for :users, path: "/api/users", controllers: {
+    sessions: "api/users/sessions",
+    registrations: "api/users/registrations",
+    invitations: "api/users/invitations",
+    omniauth_callbacks: "api/users/omniauth_callbacks"
+  }
+
   namespace :api do
-    devise_for :users, controllers: {
-      sessions: "api/users/sessions",
-      registrations: "api/users/registrations",
-      invitations: "api/users/invitations",
-      omniauth_callbacks: "api/users/omniauth_callbacks"
-    }
 
     resources :teams, only: %i[index create update destroy]
     resources :users, only: %i[index update destroy]
@@ -23,6 +24,7 @@ Rails.application.routes.draw do
       resources :entries, only: %i[create destroy], shallow: true
     end
     resource :office, only: %i[show update]
+    get 'me', to: 'me#show'
 
     resource :subscription, only: [] do
       post :subscribe

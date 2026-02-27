@@ -1,8 +1,6 @@
 class Api::BaseController < ApplicationController
   before_action :authenticate_user!
 
-  respond_to :json
-
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   rescue_from Pundit::NotAuthorizedError,   with: :forbidden
 
