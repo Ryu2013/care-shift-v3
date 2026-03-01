@@ -11,6 +11,7 @@ class Api::MessagesController < Api::BaseController
   def create
     message = @room.messages.build(message_params.merge(user: current_user, office: current_user.office))
     if message.save
+      ActionCable.server.broadcast("room_#{message.room_id}", message.as_json(include: :user))
       render json: message, status: :created
     else
       render json: { errors: message.errors.full_messages }, status: :unprocessable_entity

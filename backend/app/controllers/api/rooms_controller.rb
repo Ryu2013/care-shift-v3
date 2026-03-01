@@ -6,7 +6,7 @@ class Api::RoomsController < Api::BaseController
   end
 
   def show
-    render json: @room
+    render json: @room.as_json(include: :users)
   end
 
   def create

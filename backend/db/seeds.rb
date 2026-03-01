@@ -2,6 +2,7 @@ require "securerandom"
 
 ActiveRecord::Base.transaction do
   office = Office.find_or_create_by!(name: "デモ事業所")
+  office.update!(subscription_status: "active")
   team   = office.teams.find_or_create_by!(name: "Aチーム")
   client = office.clients.find_or_create_by!(team: team, name: "テスト顧客")
 

@@ -9,6 +9,7 @@ export interface User {
   role: Role
   office_id: number
   team_id: number
+  address: string | null
 }
 
 export interface Office {
@@ -63,6 +64,7 @@ export interface Room {
   id: number
   name: string
   office_id: number
+  users?: User[]
 }
 
 export interface Message {
@@ -71,4 +73,5 @@ export interface Message {
   user_id: number
   room_id: number
   created_at: string
+  user?: User
 }

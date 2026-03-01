@@ -8,6 +8,7 @@ export default function LoginPage() {
   const queryClient = useQueryClient()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [otpAttempt, setOtpAttempt] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -16,11 +17,11 @@ export default function LoginPage() {
     setLoading(true)
     setError(null)
     try {
-      await signIn(email, password)
+      await signIn(email, password, otpAttempt)
       await queryClient.invalidateQueries({ queryKey: ['currentUser'] })
       navigate('/shifts')
     } catch {
-      setError('メールアドレスまたはパスワードが正しくありません')
+      setError('メールアドレス、パスワード、または認証コードが正しくありません')
     } finally {
       setLoading(false)
     }
@@ -65,6 +66,22 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
+              className="w-full px-4 py-3 text-base border-2 border-[#e1e4e8] rounded-lg bg-[#fafbfc] transition-all duration-200 focus:outline-none focus:border-[#5daaf5] focus:bg-white focus:ring-[3px] focus:ring-[#5daaf5]/10"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-[0.9rem] font-bold text-[#444]">
+              二段階認証コード (設定済みの場合)
+            </label>
+            <input
+              type="text"
+              value={otpAttempt}
+              onChange={(e) => setOtpAttempt(e.target.value)}
+              autoComplete="one-time-code"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              placeholder="6桁のコード"
               className="w-full px-4 py-3 text-base border-2 border-[#e1e4e8] rounded-lg bg-[#fafbfc] transition-all duration-200 focus:outline-none focus:border-[#5daaf5] focus:bg-white focus:ring-[3px] focus:ring-[#5daaf5]/10"
             />
           </div>

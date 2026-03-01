@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getUsers } from '../api/users'
-import { createShift, generateMonthlyShifts } from '../api/shifts'
-import type { ShiftType, User } from '../types'
+import { createShift, updateShift, generateMonthlyShifts } from '../api/shifts'
+import type { ShiftType, User, Shift } from '../types'
+import { useEffect } from 'react'
 
 interface ShiftFormModalProps {
     isOpen: boolean
@@ -11,16 +12,38 @@ interface ShiftFormModalProps {
     teamId?: number
     clientId?: number
     initialDate?: string
+    shift?: Shift
 }
 
-export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, clientId, initialDate }: ShiftFormModalProps) {
+export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, clientId, initialDate, shift }: ShiftFormModalProps) {
     const queryClient = useQueryClient()
-    const [userId, setUserId] = useState<number | ''>('')
-    const [shiftType, setShiftType] = useState<ShiftType>('day')
-    const [startTime, setStartTime] = useState('09:00')
-    const [endTime, setEndTime] = useState('18:00')
-    const [date, setDate] = useState(initialDate || new Date().toISOString().split('T')[0])
-    const [note, setNote] = useState('')
+    const formatTimeForInput = (timeString: string) => {
+        if (!timeString) return '09:00'
+        if (timeString.includes('T')) {
+            const match = timeString.match(/T(\d{2}:\d{2})/)
+            return match ? match[1] : timeString.substring(0, 5)
+        }
+        return timeString.substring(0, 5)
+    }
+
+    const [userId, setUserId] = useState<number | ''>(shift?.user_id ?? '')
+    const [shiftType, setShiftType] = useState<ShiftType>(shift?.shift_type ?? 'day')
+    const [startTime, setStartTime] = useState(formatTimeForInput(shift?.start_time ?? '09:00'))
+    const [endTime, setEndTime] = useState(formatTimeForInput(shift?.end_time ?? '18:00'))
+    const [date, setDate] = useState(shift?.date ?? initialDate ?? new Date().toISOString().split('T')[0])
+    const [note, setNote] = useState(shift?.note ?? '')
+
+    // Reset when shift changes or modal opens
+    useEffect(() => {
+        if (isOpen) {
+            setUserId(shift?.user_id ?? '')
+            setShiftType(shift?.shift_type ?? 'day')
+            setStartTime(formatTimeForInput(shift?.start_time ?? '09:00'))
+            setEndTime(formatTimeForInput(shift?.end_time ?? '18:00'))
+            setDate(shift?.date ?? initialDate ?? new Date().toISOString().split('T')[0])
+            setNote(shift?.note ?? '')
+        }
+    }, [shift, isOpen, initialDate])
 
     const { data: users } = useQuery({
         queryKey: ['users', teamId],
@@ -30,6 +53,15 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
 
     const createMutation = useMutation({
         mutationFn: createShift,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['shifts'] })
+            onSuccess()
+            onClose()
+        }
+    })
+
+    const updateMutation = useMutation({
+        mutationFn: ({ id, data }: { id: number, data: Partial<Shift> }) => updateShift(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['shifts'] })
             onSuccess()
@@ -49,18 +81,25 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!clientId) return
+        const clientIdToUse = shift ? shift.client_id : clientId
+        if (!clientIdToUse) return
 
-        createMutation.mutate({
+        const payload = {
             user_id: userId === '' ? null : userId,
-            client_id: clientId,
+            client_id: clientIdToUse,
             shift_type: shiftType,
             start_time: startTime,
             end_time: endTime,
             date,
             note,
-            work_status: 'work'
-        })
+            work_status: shift ? shift.work_status : 'work' as const
+        }
+
+        if (shift) {
+            updateMutation.mutate({ id: shift.id, data: payload })
+        } else {
+            createMutation.mutate(payload)
+        }
     }
 
     if (!isOpen) return null
@@ -69,7 +108,7 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-fade-in-up">
                 <div className="flex items-center justify-between p-6 border-b">
-                    <h2 className="text-xl font-bold text-gray-800">新規シフト登録</h2>
+                    <h2 className="text-xl font-bold text-gray-800">シフトを{shift ? '編集' : '登録'}</h2>
                     <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -78,7 +117,7 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
                 </div>
 
                 <div className="p-6 space-y-6">
-                    {clientId && (
+                    {clientId && !shift && (
                         <div className="flex justify-center">
                             <button
                                 onClick={() => {
@@ -169,10 +208,10 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
                         <div className="pt-4">
                             <button
                                 type="submit"
-                                disabled={createMutation.isPending}
+                                disabled={createMutation.isPending || updateMutation.isPending}
                                 className="w-full py-3 bg-[#5daaf5] hover:bg-[#4a90e2] text-white font-bold rounded-full shadow-lg transition-all active:transform active:scale-95 disabled:opacity-50"
                             >
-                                {createMutation.isPending ? '登録中...' : '登録する'}
+                                {createMutation.isPending || updateMutation.isPending ? '保存中...' : (shift ? '更新する' : '登録する')}
                             </button>
                         </div>
                     </form>

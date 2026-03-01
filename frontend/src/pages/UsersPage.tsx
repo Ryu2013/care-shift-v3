@@ -4,17 +4,20 @@ import { useNavigate, Link } from 'react-router-dom'
 import { getUsers } from '../api/users'
 import { getTeams } from '../api/teams'
 import type { User, Team } from '../types'
+import UserFormModal from '../components/UserFormModal'
 
 export default function UsersPage() {
   const navigate = useNavigate()
   const [selectedTeamId, setSelectedTeamId] = useState<number | ''>('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<User | undefined>(undefined)
 
   const { data: teams } = useQuery({
     queryKey: ['teams'],
     queryFn: () => getTeams().then((res) => res.data),
   })
 
-  const { data: users, isLoading } = useQuery({
+  const { data: users, isLoading, refetch } = useQuery({
     queryKey: ['users', selectedTeamId],
     queryFn: () => getUsers(selectedTeamId || undefined).then((r) => r.data),
   })
@@ -77,6 +80,10 @@ export default function UsersPage() {
             users?.map((user: User) => (
               <div
                 key={user.id}
+                onClick={() => {
+                  setSelectedUser(user)
+                  setIsModalOpen(true)
+                }}
                 className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer group"
               >
                 <div className="flex justify-between items-start">
@@ -103,6 +110,16 @@ export default function UsersPage() {
           )}
         </div>
       </div>
+
+      <UserFormModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false)
+          setSelectedUser(undefined)
+        }}
+        onSuccess={() => refetch()}
+        user={selectedUser}
+      />
     </div>
   )
 }

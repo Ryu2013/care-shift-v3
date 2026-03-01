@@ -26,6 +26,17 @@ Rails.application.routes.draw do
     resource :office, only: %i[show update]
     get 'me', to: 'me#show'
 
+    namespace :employee do
+      resources :shifts, only: %i[index update]
+    end
+
+    namespace :users do
+      resource :two_factor, only: [] do
+        get :setup
+        post :confirm
+      end
+    end
+
     resource :subscription, only: [] do
       post :subscribe
       post :portal

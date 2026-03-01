@@ -8,6 +8,9 @@ import ClientsPage from './pages/ClientsPage'
 import UsersPage from './pages/UsersPage'
 import WorkStatusesPage from './pages/WorkStatusesPage'
 import RoomsPage from './pages/RoomsPage'
+import RoomDetailPage from './pages/RoomDetailPage'
+import SettingsPage from './pages/SettingsPage'
+import TwoFactorSetupPage from './pages/TwoFactorSetupPage'
 
 function PrivateLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -27,6 +30,9 @@ function App() {
       <Route path="/users" element={<PrivateLayout><UsersPage /></PrivateLayout>} />
       <Route path="/work-statuses" element={<PrivateLayout><WorkStatusesPage /></PrivateLayout>} />
       <Route path="/rooms" element={<PrivateLayout><RoomsPage /></PrivateLayout>} />
+      <Route path="/rooms/:id" element={<PrivateLayout><RoomDetailPage /></PrivateLayout>} />
+      <Route path="/settings" element={<PrivateLayout><SettingsPage /></PrivateLayout>} />
+      <Route path="/two-factor-setup" element={<PrivateLayout><TwoFactorSetupPage /></PrivateLayout>} />
       <Route path="*" element={<Navigate to="/shifts" replace />} />
     </Routes>
   )

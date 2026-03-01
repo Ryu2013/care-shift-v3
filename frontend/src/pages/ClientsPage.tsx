@@ -4,17 +4,20 @@ import { useNavigate, Link } from 'react-router-dom'
 import { getClients } from '../api/clients'
 import { getTeams } from '../api/teams'
 import type { Client, Team } from '../types'
+import ClientFormModal from '../components/ClientFormModal'
 
 export default function ClientsPage() {
   const navigate = useNavigate()
   const [selectedTeamId, setSelectedTeamId] = useState<number | ''>('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedClient, setSelectedClient] = useState<Client | undefined>(undefined)
 
   const { data: teams } = useQuery({
     queryKey: ['teams'],
     queryFn: () => getTeams().then((res) => res.data),
   })
 
-  const { data: clients, isLoading } = useQuery({
+  const { data: clients, isLoading, refetch } = useQuery({
     queryKey: ['clients', selectedTeamId],
     queryFn: () => getClients(selectedTeamId || undefined).then((r) => r.data),
   })
@@ -50,7 +53,13 @@ export default function ClientsPage() {
 
         {/* Action Bar & Toggle */}
         <div className="flex items-center justify-between gap-4">
-          <button className="px-6 py-2 bg-[#5daaf5] hover:bg-[#4a90e2] text-white font-bold rounded-full shadow-md transition-all active:scale-95">
+          <button
+            onClick={() => {
+              setSelectedClient(undefined)
+              setIsModalOpen(true)
+            }}
+            className="px-6 py-2 bg-[#5daaf5] hover:bg-[#4a90e2] text-white font-bold rounded-full shadow-md transition-all active:scale-95"
+          >
             新規登録
           </button>
 
@@ -77,6 +86,10 @@ export default function ClientsPage() {
             clients?.map((client: Client) => (
               <div
                 key={client.id}
+                onClick={() => {
+                  setSelectedClient(client)
+                  setIsModalOpen(true)
+                }}
                 className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer group"
               >
                 <div className="space-y-2">
@@ -98,6 +111,17 @@ export default function ClientsPage() {
           )}
         </div>
       </div>
+
+      <ClientFormModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false)
+          setSelectedClient(undefined)
+        }}
+        onSuccess={() => refetch()}
+        initialTeamId={selectedTeamId}
+        client={selectedClient}
+      />
     </div>
   )
 }

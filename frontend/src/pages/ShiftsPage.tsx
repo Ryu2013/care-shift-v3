@@ -5,7 +5,8 @@ import { getShifts } from '../api/shifts'
 import { signOut } from '../api/auth'
 import { getTeams } from '../api/teams'
 import { getClients } from '../api/clients'
-import type { Shift, Team, Client } from '../types'
+import { getUsers } from '../api/users'
+import type { Shift, Team, Client, User } from '../types'
 import ShiftFormModal from '../components/ShiftFormModal'
 
 const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate()
@@ -16,6 +17,7 @@ export default function ShiftsPage() {
   const [selectedTeamId, setSelectedTeamId] = useState<number | ''>('')
   const [selectedClientId, setSelectedClientId] = useState<number | ''>('')
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedShift, setSelectedShift] = useState<Shift | undefined>(undefined)
 
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -34,6 +36,13 @@ export default function ShiftsPage() {
     queryKey: ['clients', selectedTeamId],
     queryFn: () => getClients(selectedTeamId || undefined).then((res: { data: Client[] }) => res.data),
     enabled: true // Always fetch or filter by team
+  })
+
+  // Fetch users for mapping shift.user_id to name
+  const { data: users } = useQuery({
+    queryKey: ['users', selectedTeamId],
+    queryFn: () => getUsers(selectedTeamId || undefined).then((res: { data: User[] }) => res.data),
+    enabled: true
   })
 
   const { data: shifts, refetch } = useQuery({
@@ -78,7 +87,11 @@ export default function ShiftsPage() {
   const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1))
 
   const formatTime = (timeString: string) => {
-    // Assuming format "HH:MM:SS" or similar, just taking first 5 chars
+    // Determine the format. Ruby's full ISO 8601 typically has 'T'.
+    if (timeString.includes('T')) {
+      const match = timeString.match(/T(\d{2}:\d{2})/)
+      return match ? match[1] : timeString.substring(0, 5)
+    }
     return timeString.substring(0, 5)
   }
 
@@ -104,10 +117,10 @@ export default function ShiftsPage() {
       {/* Menu/Header Area */}
       <div className="flex gap-4 p-4 border-b">
         <span className="font-bold cursor-pointer hover:text-blue-500" onClick={() => navigate('/rooms')}>チャット</span>
-        <span className="font-bold cursor-pointer hover:text-blue-500">部署/会社</span>
+        <span className="font-bold cursor-pointer hover:text-blue-500" onClick={() => navigate('/settings')}>部署/会社</span>
         <span className="font-bold cursor-pointer hover:text-blue-500" onClick={() => navigate('/clients')}>利用者とスタッフ</span>
         <span className="font-bold cursor-pointer hover:text-blue-500" onClick={() => navigate('/work-statuses')}>出退勤状況</span>
-        <span className="font-bold cursor-pointer hover:text-blue-500">二段階認証</span>
+        <span className="font-bold cursor-pointer hover:text-blue-500" onClick={() => navigate('/two-factor-setup')}>二段階認証</span>
         <span className="font-bold cursor-pointer hover:text-blue-500 text-red-500 ml-auto" onClick={handleSignOut}>ログアウト</span>
       </div>
 
@@ -145,7 +158,10 @@ export default function ShiftsPage() {
             </select>
 
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                setSelectedShift(undefined)
+                setIsModalOpen(true)
+              }}
               className="px-6 py-2 text-white bg-[#5daaf5] rounded-full hover:bg-[#4a90e2] transition-all font-bold shadow-md hover:-translate-y-0.5"
             >
               新規シフト
@@ -192,7 +208,10 @@ export default function ShiftsPage() {
                     {dateNum}
                   </span>
                   <button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => {
+                      setSelectedShift(undefined)
+                      setIsModalOpen(true)
+                    }}
                     className="opacity-0 group-hover:opacity-100 text-blue-400 hover:text-blue-600 transition-opacity"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,15 +220,23 @@ export default function ShiftsPage() {
                   </button>
                 </div>
                 <div className="flex flex-col gap-1.5 overflow-y-auto flex-1">
-                  {dayShifts.map(shift => (
-                    <div
-                      key={shift.id}
-                      className={`text-[0.65rem] p-1.5 rounded-tr-md rounded-br-md border-l-4 ${getShiftColorClasses(shift)} leading-tight shadow-sm cursor-pointer hover:brightness-95 transition-all`}
-                    >
-                      <div className="font-bold truncate">{shift.user_id ? `スタッフ ${shift.user_id}` : "未配置"}</div>
-                      <div className="opacity-80 font-mono tracking-tighter">{formatTime(shift.start_time)} - {formatTime(shift.end_time)}</div>
-                    </div>
-                  ))}
+                  {dayShifts.map(shift => {
+                    const userName = users?.find(u => u.id === shift.user_id)?.name
+
+                    return (
+                      <div
+                        key={shift.id}
+                        onClick={() => {
+                          setSelectedShift(shift)
+                          setIsModalOpen(true)
+                        }}
+                        className={`text-[0.65rem] p-1.5 rounded-tr-md rounded-br-md border-l-4 ${getShiftColorClasses(shift)} leading-tight shadow-sm cursor-pointer hover:brightness-95 transition-all`}
+                      >
+                        <div className="font-bold truncate">{shift.user_id && userName ? userName : "未配置"}</div>
+                        <div className="opacity-80 font-mono tracking-tighter">{formatTime(shift.start_time)} - {formatTime(shift.end_time)}</div>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             )
@@ -225,10 +252,14 @@ export default function ShiftsPage() {
       {/* Shift Modal */}
       <ShiftFormModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false)
+          setSelectedShift(undefined)
+        }}
         onSuccess={() => refetch()}
         teamId={selectedTeamId || undefined}
         clientId={selectedClientId || undefined}
+        shift={selectedShift}
       />
     </div>
   )
