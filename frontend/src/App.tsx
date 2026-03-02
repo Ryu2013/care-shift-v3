@@ -12,6 +12,7 @@ import RoomDetailPage from './pages/RoomDetailPage'
 import SettingsPage from './pages/SettingsPage'
 import TwoFactorSetupPage from './pages/TwoFactorSetupPage'
 
+
 function PrivateLayout({ children }: { children: React.ReactNode }) {
   return (
     <PrivateRoute>

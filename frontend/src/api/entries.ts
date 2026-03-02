@@ -1,4 +1,4 @@
-import apiClient from './client'
+import apiClient from './rails-api'
 
 export const entryApi = {
     createEntry: (roomId: number, userId: number) =>

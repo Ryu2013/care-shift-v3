@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import apiClient from '../api/client'
+import apiClient from '../api/rails-api'
 
 export default function WorkStatusesPage() {
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10))

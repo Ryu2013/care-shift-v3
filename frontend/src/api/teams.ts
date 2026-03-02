@@ -1,4 +1,4 @@
-import apiClient from './client'
+import apiClient from './rails-api'
 import type { Team } from '../types'
 
 export const getTeams = () =>

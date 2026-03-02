@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getOffice, updateOffice } from '../api/office'
 import { getTeams, createTeam, updateTeam, deleteTeam } from '../api/teams'
 import type { Office, Team } from '../types'
-import './SettingsPage.css'
+import styles from './SettingsPage.module.css'
 
 export default function SettingsPage() {
     const navigate = useNavigate()
@@ -103,14 +103,14 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="settings-container">
-            <div className="settings-header flex items-center gap-4">
+        <div className={styles.settingsContainer}>
+            <div className={`${styles.settingsHeader} flex items-center gap-4`}>
                 <button onClick={() => navigate('/shifts')} className="hover:opacity-80 transition-opacity">
                     <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
                 </button>
-                <h1 className="settings-title mb-0">設定</h1>
+                <h1 className={`${styles.settingsTitle} mb-0`}>設定</h1>
             </div>
 
             <div className="toggle-switch">
@@ -129,14 +129,14 @@ export default function SettingsPage() {
             </div>
 
             {activeTab === 'departments' && (
-                <div className="settings-content">
+                <div>
                     <div className="alert alert-info">
                         <p>部署を消去するには従業員、顧客がいない必要があります。</p>
                     </div>
 
-                    <div className="settings-card">
+                    <div className={styles.settingsCard}>
                         <h3>新しい部署の追加</h3>
-                        <form onSubmit={handleCreateTeam} className="input-group">
+                        <form onSubmit={handleCreateTeam} className={styles.inputGroup}>
                             <input
                                 type="text"
                                 className="form-input"
@@ -144,7 +144,7 @@ export default function SettingsPage() {
                                 value={newTeamName}
                                 onChange={(e) => setNewTeamName(e.target.value)}
                             />
-                            <button type="submit" className="btn-primary" disabled={!newTeamName.trim()}>
+                            <button type="submit" className="btn btn-primary" disabled={!newTeamName.trim()}>
                                 追加
                             </button>
                         </form>
@@ -152,12 +152,12 @@ export default function SettingsPage() {
 
                     <div className="list-group">
                         {teams.length === 0 ? (
-                            <div className="empty-state">部署が登録されていません。</div>
+                            <div className={styles.emptyState}>部署が登録されていません。</div>
                         ) : (
                             teams.map(team => (
                                 <div key={team.id} className="list-item">
                                     {editingTeamId === team.id ? (
-                                        <div className="input-group w-full">
+                                        <div className={`${styles.inputGroup} w-full`}>
                                             <input
                                                 type="text"
                                                 className="form-input"
@@ -165,8 +165,8 @@ export default function SettingsPage() {
                                                 onChange={(e) => setEditingTeamName(e.target.value)}
                                                 autoFocus
                                             />
-                                            <button onClick={() => handleUpdateTeam(team.id)} className="btn-primary">保存</button>
-                                            <button onClick={() => setEditingTeamId(null)} className="btn-secondary">キャンセル</button>
+                                            <button onClick={() => handleUpdateTeam(team.id)} className="btn btn-primary">保存</button>
+                                            <button onClick={() => setEditingTeamId(null)} className="btn btn-secondary">キャンセル</button>
                                         </div>
                                     ) : (
                                         <>
@@ -177,13 +177,13 @@ export default function SettingsPage() {
                                                         setEditingTeamId(team.id)
                                                         setEditingTeamName(team.name)
                                                     }}
-                                                    className="btn-secondary"
+                                                    className="btn btn-secondary"
                                                 >
                                                     編集
                                                 </button>
                                                 <button
                                                     onClick={() => handleDeleteTeam(team.id)}
-                                                    className="btn-danger"
+                                                    className="btn btn-danger"
                                                     disabled={teams.length <= 1}
                                                 >
                                                     削除
@@ -199,8 +199,8 @@ export default function SettingsPage() {
             )}
 
             {activeTab === 'company' && office && (
-                <div className="settings-content">
-                    <div className="settings-card">
+                <div>
+                    <div className={styles.settingsCard}>
                         <h3>契約状況</h3>
 
                         {(() => {
@@ -242,13 +242,13 @@ export default function SettingsPage() {
                         })()}
 
                         <div className="mt-4">
-                            <a href="/api/subscription/portal" className="btn-secondary" style={{ display: 'inline-block', textDecoration: 'none' }}>
+                            <a href="/api/subscription/portal" className="btn btn-secondary" style={{ textDecoration: 'none' }}>
                                 契約内容の確認・変更・解約
                             </a>
                         </div>
                     </div>
 
-                    <div className="settings-card">
+                    <div className={styles.settingsCard}>
                         <h3>会社情報の編集</h3>
                         {officeMessage.text && (
                             <div className={`alert ${officeMessage.type === 'success' ? 'alert-success' : 'alert-warning'}`}>
@@ -267,7 +267,7 @@ export default function SettingsPage() {
                                     required
                                 />
                             </div>
-                            <button type="submit" className="btn-primary" disabled={isUpdatingOffice}>
+                            <button type="submit" className="btn btn-primary" disabled={isUpdatingOffice}>
                                 {isUpdatingOffice ? '保存中...' : '保存'}
                             </button>
                         </form>

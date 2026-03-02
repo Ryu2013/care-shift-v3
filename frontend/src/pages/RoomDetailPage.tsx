@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { roomApi } from '../api/rooms'
-import { messageApi } from '../api/messages'
+import { getRoom } from '../api/rooms'
+import { getMessages, createMessage } from '../api/messages'
 import { entryApi } from '../api/entries'
 import { getUsers } from '../api/users'
 import { cable } from '../api/cable'
 import { useCurrentUser } from '../hooks/useCurrentUser'
-import '../App.css'
+
 
 export default function RoomDetailPage() {
     const { id } = useParams()
@@ -21,12 +21,12 @@ export default function RoomDetailPage() {
 
     const { data: room, isLoading: isLoadingRoom } = useQuery({
         queryKey: ['rooms', roomId],
-        queryFn: () => roomApi.getRoom(roomId),
+        queryFn: () => getRoom(roomId).then(res => res.data),
     })
 
     const { data: messages, isLoading: isLoadingMessages } = useQuery({
         queryKey: ['messages', roomId],
-        queryFn: () => messageApi.getMessages(roomId),
+        queryFn: () => getMessages(roomId).then(res => res.data),
     })
 
     const { data: users } = useQuery({
@@ -34,8 +34,8 @@ export default function RoomDetailPage() {
         queryFn: () => getUsers().then((res) => res.data),
     })
 
-    const createMessage = useMutation({
-        mutationFn: (newContent: string) => messageApi.createMessage(roomId, newContent),
+    const createMessageMutation = useMutation({
+        mutationFn: (newContent: string) => createMessage(roomId, newContent).then(res => res.data),
         onSuccess: () => {
             setContent('')
         }, // WebSocket will handle the list update
@@ -83,7 +83,7 @@ export default function RoomDetailPage() {
     const handleSend = (e: React.FormEvent) => {
         e.preventDefault()
         if (!content.trim()) return
-        createMessage.mutate(content)
+        createMessageMutation.mutate(content)
     }
 
     const getUser = (userId: number) => users?.find((u) => u.id === userId)
@@ -219,11 +219,11 @@ export default function RoomDetailPage() {
                         onChange={(e) => setContent(e.target.value)}
                         className="flex-1 border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-50 border shadow-inner"
                         placeholder="メッセージを入力..."
-                        disabled={createMessage.isPending}
+                        disabled={createMessageMutation.isPending}
                     />
                     <button
                         type="submit"
-                        disabled={!content.trim() || createMessage.isPending}
+                        disabled={!content.trim() || createMessageMutation.isPending}
                         className="bg-green-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed shadow transition-colors"
                     >
                         <svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

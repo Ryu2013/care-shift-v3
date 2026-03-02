@@ -1,4 +1,4 @@
-import apiClient from './client'
+import apiClient from './rails-api'
 import type { Shift } from '../types'
 
 export const getShifts = (params: { date?: string; client_id?: number }) =>

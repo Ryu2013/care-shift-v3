@@ -1,0 +1,39 @@
+@import "tailwindcss";
+@import "./App.css";
+
+/* =========================================
+   Variables
+   ========================================= */
+:root {
+  --primary-color: #69C5FF;
+  --primary-dark: #4a90e2;
+  --accent-color: #F19494;
+  --d-red: #E35B5B;
+  --text-color: #333;
+  --text-light: #666;
+  --bg-color: #fefdf8;
+  --bg-alt: #f4f9ff;
+  --green: #4CAF50;
+  --green-light: #C8F7C5;
+}
+
+/* =========================================
+   Base
+   ========================================= */
+html {
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+  color: var(--text-color);
+  background-image: url('./assets/background-mobile.jpg');
+  background-position: center top;
+  background-repeat: repeat-y;
+  background-size: 100%;
+}
+
+@media (min-width: 450px) {
+  html {
+    background-color: #FFF8F0;
+    background-image: url('./assets/background.jpg');
+    background-position: center top;
+    background-repeat: repeat-y;
+  }
+}

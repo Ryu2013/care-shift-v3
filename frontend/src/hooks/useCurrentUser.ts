@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import apiClient from '../api/client'
+import apiClient from '../api/rails-api'
 import type { User } from '../types'
 
 export const useCurrentUser = () =>

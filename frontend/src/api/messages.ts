@@ -1,7 +1,8 @@
-import apiClient from './client'
+import apiClient from './rails-api'
 import type { Message } from '../types'
 
-export const messageApi = {
-    getMessages: (roomId: number) => apiClient.get<Message[]>(`/rooms/${roomId}/messages`).then(res => res.data),
-    createMessage: (roomId: number, content: string) => apiClient.post<Message>(`/rooms/${roomId}/messages`, { message: { content } }).then(res => res.data),
-}
+export const getMessages = (roomId: number) =>
+    apiClient.get<Message[]>(`/rooms/${roomId}/messages`)
+
+export const createMessage = (roomId: number, content: string) =>
+    apiClient.post<Message>(`/rooms/${roomId}/messages`, { message: { content } })

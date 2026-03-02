@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { roomApi } from '../api/rooms'
+import { getRooms, createRoom } from '../api/rooms'
 
 export default function RoomsPage() {
   const navigate = useNavigate()
@@ -11,11 +11,11 @@ export default function RoomsPage() {
 
   const { data: rooms, isLoading } = useQuery({
     queryKey: ['rooms'],
-    queryFn: roomApi.getRooms,
+    queryFn: () => getRooms().then(res => res.data),
   })
 
-  const createRoom = useMutation({
-    mutationFn: (name: string) => roomApi.createRoom({ name }),
+  const createRoomMutation = useMutation({
+    mutationFn: (name: string) => createRoom({ name }).then(res => res.data),
     onSuccess: (newRoom) => {
       queryClient.invalidateQueries({ queryKey: ['rooms'] })
       setNewRoomName('')
@@ -26,7 +26,7 @@ export default function RoomsPage() {
   const handleCreateRoom = (e: React.FormEvent) => {
     e.preventDefault()
     if (!newRoomName.trim()) return
-    createRoom.mutate(newRoomName)
+    createRoomMutation.mutate(newRoomName)
   }
 
   if (isLoading) return <div className="p-4 flex justify-center items-center h-full text-gray-500">読み込み中...</div>
@@ -39,8 +39,8 @@ export default function RoomsPage() {
       <div className="flex bg-gray-100 p-1 rounded-xl mb-8 shadow-inner max-w-md mx-auto">
         <button
           className={`flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-all duration-200 ${activeTab === 'existing'
-              ? 'bg-white text-green-600 shadow-sm ring-1 ring-black/5'
-              : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'
+            ? 'bg-white text-green-600 shadow-sm ring-1 ring-black/5'
+            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'
             }`}
           onClick={() => setActiveTab('existing')}
         >
@@ -48,8 +48,8 @@ export default function RoomsPage() {
         </button>
         <button
           className={`flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-all duration-200 ${activeTab === 'new'
-              ? 'bg-white text-green-600 shadow-sm ring-1 ring-black/5'
-              : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'
+            ? 'bg-white text-green-600 shadow-sm ring-1 ring-black/5'
+            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'
             }`}
           onClick={() => setActiveTab('new')}
         >
@@ -104,15 +104,15 @@ export default function RoomsPage() {
                 onChange={(e) => setNewRoomName(e.target.value)}
                 placeholder="例: フロント業務連絡"
                 className="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm px-4 py-3 bg-gray-50/50"
-                disabled={createRoom.isPending}
+                disabled={createRoomMutation.isPending}
               />
             </div>
             <button
               type="submit"
-              disabled={!newRoomName.trim() || createRoom.isPending}
+              disabled={!newRoomName.trim() || createRoomMutation.isPending}
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {createRoom.isPending ? '作成中...' : 'ルームを作成する'}
+              {createRoomMutation.isPending ? '作成中...' : 'ルームを作成する'}
             </button>
           </form>
         </div>
