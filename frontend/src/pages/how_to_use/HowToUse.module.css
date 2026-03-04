@@ -1,0 +1,29 @@
+/* Tailwind handles layout/bg for the nav container directly in the TSX */
+
+.navLink {
+    color: var(--blue-color);
+}
+
+.navLink:hover {
+    background-color: var(--bg-alt);
+    color: var(--blue-color);
+}
+
+.navLinkActive {
+    background-color: var(--blue-color);
+    color: white;
+    border-radius: 9999px;
+}
+
+.featureImage {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}

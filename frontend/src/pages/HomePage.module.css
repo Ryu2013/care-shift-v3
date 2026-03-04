@@ -37,84 +37,7 @@
     opacity: 0.8;
 }
 
-/* ハンバーガーボタン */
-.hamburgerBtn {
-    width: 40px;
-    height: 40px;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    cursor: pointer;
-    z-index: 1001;
-    border: 1px solid var(--blue-color);
-    border-radius: 9999px;
-}
-
-.hamburgerIcon,
-.hamburgerIcon::before,
-.hamburgerIcon::after {
-    width: 24px;
-    height: 2px;
-    background-color: var(--blue-color);
-    display: block;
-    transition: all 0.3s ease-in-out;
-}
-
-.hamburgerIcon {
-    position: relative;
-}
-
-.hamburgerIcon::before,
-.hamburgerIcon::after {
-    content: "";
-    position: absolute;
-}
-
-.hamburgerIcon::before {
-    top: -8px;
-}
-
-.hamburgerIcon::after {
-    bottom: -8px;
-}
-
-/* 開いている時の「三」から「×」への変化 */
-.menuOpen .hamburgerIcon {
-    background-color: transparent;
-}
-
-.menuOpen .hamburgerIcon::before {
-    top: 0;
-    transform: rotate(45deg);
-}
-
-.menuOpen .hamburgerIcon::after {
-    bottom: 0;
-    transform: rotate(-45deg);
-}
-
-.mobileMenu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: white;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* ハンバーガーボタンは HamburgerMenuButton コンポーネントに分離されました */
 
 .mobileNavLink {
     font-size: 1.25rem;
@@ -222,9 +145,12 @@
 
 .featureImg {
     width: 100%;
-    border-radius: 1.5rem; /* rounded-3xl */
-    box-shadow: var(--shadow-2xl); /* 共通変数として定義されていれば */
-    border: 4px solid #1f2937; /* border-gray-800 */
+    border-radius: 1.5rem;
+    /* rounded-3xl */
+    box-shadow: var(--shadow-2xl);
+    /* 共通変数として定義されていれば */
+    border: 4px solid #1f2937;
+    /* border-gray-800 */
 }
 
 /* 料金・デバイス訴求セクション */

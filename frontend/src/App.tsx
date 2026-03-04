@@ -11,7 +11,13 @@ import RoomsPage from './pages/RoomsPage'
 import RoomDetailPage from './pages/RoomDetailPage'
 import SettingsPage from './pages/SettingsPage'
 import TwoFactorSetupPage from './pages/TwoFactorSetupPage'
-
+import HowToUseLayout from './pages/how_to_use/HowToUseLayout'
+import HowToUsePage from './pages/how_to_use/HowToUsePage'
+import HowToUseRegistrationPage from './pages/how_to_use/HowToUseRegistrationPage'
+import HowToUseLoginPage from './pages/how_to_use/HowToUseLoginPage'
+import HowToUseShiftCreationPage from './pages/how_to_use/HowToUseShiftCreationPage'
+import HowToUseAttendancePage from './pages/how_to_use/HowToUseAttendancePage'
+import HowToUseChatPage from './pages/how_to_use/HowToUseChatPage'
 
 function PrivateLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -26,6 +32,14 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/how-to-use" element={<HowToUseLayout />}>
+        <Route index element={<HowToUsePage />} />
+        <Route path="registration" element={<HowToUseRegistrationPage />} />
+        <Route path="login" element={<HowToUseLoginPage />} />
+        <Route path="shift-creation" element={<HowToUseShiftCreationPage />} />
+        <Route path="attendance" element={<HowToUseAttendancePage />} />
+        <Route path="chat" element={<HowToUseChatPage />} />
+      </Route>
       <Route path="/shifts" element={<PrivateLayout><ShiftsPage /></PrivateLayout>} />
       <Route path="/clients" element={<PrivateLayout><ClientsPage /></PrivateLayout>} />
       <Route path="/users" element={<PrivateLayout><UsersPage /></PrivateLayout>} />

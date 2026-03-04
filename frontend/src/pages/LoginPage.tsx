@@ -29,8 +29,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[100vh] flex items-center justify-center p-8">
-      {/* Background matches v2 auth-container style (which often has a separate bg, setting a neutral base here) */}
-      <div className="absolute inset-0 bg-gray-50 -z-10"></div>
+
 
       <div className="w-full max-w-[480px] p-10 rounded-2xl bg-white/40 backdrop-blur-[3px] border border-[#eef2f6] shadow-sm transition-all animate-fade-in-up">
 

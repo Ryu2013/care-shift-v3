@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/rails-api';
 import styles from './HomePage.module.css';
 import { FadeInText } from '../components/FadeInText';
+import { HamburgerMenuButton } from '../components/HamburgerMenuButton';
 
 const GoogleIcon = () => (
     <svg viewBox="0 0 24 24" className="w-5 h-5 mr-3">
@@ -25,7 +26,6 @@ const ResponsiveIcon = () => (
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -65,8 +65,8 @@ const HomePage: React.FC = () => {
 
                         {/* デスクトップ用ナビゲーション */}
                         <nav className="hidden md:flex items-center gap-6 ml-6">
-                            <Link to="/" className={styles.navLink}>使い方</Link>
-                            <Link to="/" className={styles.navLink}>運営者情報</Link>
+                            <Link to="/how-to-use" className={styles.navLink}>使い方</Link>
+                            <Link to="https://ryu2013.github.io/ryuuiti_memos/" className={styles.navLink}>運営者情報</Link>
                         </nav>
                     </div>
 
@@ -77,33 +77,22 @@ const HomePage: React.FC = () => {
                     </div>
 
                     {/* ハンバーガーボタン (モバイル用) */}
-                    <button
-                        className={`flex ${styles.hamburgerBtn} ${isMenuOpen ? styles.menuOpen : ''} md:hidden`}
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        aria-label="メニューを開く"
-                    >
-                        <span className={styles.hamburgerIcon}></span>
-                    </button>
-                </div>
-
-                {/* モバイル用ドロワーメニュー */}
-                {isMenuOpen && (
-                    <div className={styles.mobileMenu}>
+                    <HamburgerMenuButton className="md:hidden">
                         <nav className="flex flex-col items-center gap-8 pt-20">
-                            <Link to="/" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>使い方</Link>
-                            <Link to="/" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>運営者情報</Link>
-                            <Link to="/register" className={styles.navLinkSignup} onClick={() => setIsMenuOpen(false)}>新規登録</Link>
-                            <Link to="/login" className={styles.navLinkLogin} onClick={() => setIsMenuOpen(false)}>ログイン</Link>
+                            <Link to="/how-to-use" className={styles.mobileNavLink}>使い方</Link>
+                            <Link to="https://ryu2013.github.io/ryuuiti_memos/" className={styles.mobileNavLink}>運営者情報</Link>
+                            <Link to="/register" className={styles.navLinkSignup}>新規登録</Link>
+                            <Link to="/login" className={styles.navLinkLogin}>ログイン</Link>
                         </nav>
-                    </div>
-                )}
+                    </HamburgerMenuButton>
+                </div>
             </header>
 
             {/* --- メインビジュアル --- */}
             <section className={`${styles.heroSection} pt-28 pb-16 px-6 md:px-12 text-center`}>
                 <div className="max-w-4xl mx-auto flex flex-col items-center gap-10">
                     <div className="relative inline-block mt-6 md:mt-10">
-                        <div className={`absolute top-0 left-0 -mt-6 md:-mt-10 ml-0 md:-ml-4 text-2xl md:text-5xl font-bold tracking-widest whitespace-nowrap z-10 ${styles.heroTitle}`}> 
+                        <div className={`absolute top-0 left-0 -mt-6 md:-mt-10 ml-0 md:-ml-4 text-2xl md:text-5xl font-bold tracking-widest whitespace-nowrap z-10 ${styles.heroTitle}`}>
                             <FadeInText text={"訪問介護の\n無料AIシフト作成ツール"} />
                         </div>
                         <img src="/src/assets/title.png" alt="タイトル" className={styles.heroTitleImage} />
@@ -222,8 +211,8 @@ const HomePage: React.FC = () => {
                         <p className={`${styles.featureDesc} text-lg`}>お客様の家から近い順に<br />従業員が表示され、迷う時間が無くなります。</p>
                     </div>
                     <div className={`flex-1 w-full ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
-                        <div className="relative w-full max-w-md mx-auto overflow-hidden rounded-xl shadow-xl transform hover:scale-105 transition-transform duration-500">
-                            <img src="/src/assets/shift4.png" alt="人員配置画面" className="w-full object-cover object-left" />
+                        <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:rotate-1 transition-transform duration-500">
+                            <img src="/src/assets/shift4.png" alt="人員配置画面" className={styles.featureImg} />
                         </div>
                     </div>
                 </div>
@@ -232,8 +221,8 @@ const HomePage: React.FC = () => {
             {/* --- コスト＆デバイス訴求セクション --- */}
             <section className={`${styles.pricingSection} py-24 px-6 md:px-12 relative overflow-hidden`}>
                 {/* Background decoration */}
-                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-10"></div>
-                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-white opacity-5"></div>
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-20"></div>
+                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-white opacity-10"></div>
 
                 <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-center gap-10 md:gap-16 relative z-10">
                     <div className={`${styles.cardContainer} flex-1 p-10 text-center flex flex-col items-center ${styles.scrollTrigger}`}>
