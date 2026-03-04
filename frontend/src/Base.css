@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "./App.css";
+
 
 /* =========================================
    Variables
@@ -14,6 +14,7 @@
   --bg-color: #fefdf8;
   --green-dark: #4CAF50;
   --green-color: #C8F7C5;
+  --white-color: rgba(255, 255, 255, 0.4);
 }
 
 /* =========================================

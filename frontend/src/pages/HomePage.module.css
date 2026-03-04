@@ -1,15 +1,22 @@
 /* =========================================
-   Base Layout Overrides & Structure (Module Layer)
+  ベースレイアウトの上書きと構造（モジュールレイヤー）
    ========================================= */
 
 /* Header */
 .header {
-    background-color: var(--blue-color);
-    color: var(--bg-color);
+    background-color: var(--white-color);
+    backdrop-filter: blur(90px);
+    color: var(--blue-color);
 }
 
-.headerContainer {
-    max-width: 1200px;
+.navLink {
+    color: var(--black-dark);
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.navLink:hover {
+    opacity: 0.8;
 }
 
 .logoText {
@@ -17,13 +24,31 @@
     font-weight: bold;
 }
 
-.navLink {
+.navLinkSignup {
     color: var(--bg-color);
+    background-color: var(--blue-color);
+    border: 1px solid var(--blue-color);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px; 
     font-weight: 500;
     transition: opacity 0.2s;
 }
 
-.navLink:hover {
+.navLinkSignup:hover {
+    opacity: 0.8;
+}
+
+.navLinkLogin {
+    color: var(--blue-color);
+    background-color: var(--bg-color);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    border: 1px solid var(--blue-color);
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.navLinkLogin:hover {
     opacity: 0.8;
 }
 
@@ -167,7 +192,7 @@
 }
 
 .footerLinkGroup {
-    /* Handled via utility classes */
+     /* ユーティリティクラス経由で処理 */
 }
 
 .footerLink {
@@ -180,7 +205,7 @@
     text-decoration: underline;
 }
 
-/* Animations / Scroll Triggers */
+/* アニメーション / スクロールトリガー */
 .scrollTrigger {
     opacity: 0;
     transform: translateY(20px);

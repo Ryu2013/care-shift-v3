@@ -53,17 +53,19 @@ const HomePage: React.FC = () => {
     }, [navigate]);
 
     return (
-        <div className="font-sans">
+        <div>
             {/* --- ヘッダー --- */}
-            <header className={`${styles.header} py-4 px-6 md:px-12 w-full fixed top-0 z-50 shadow-sm`}>
-                <div className={`${styles.headerContainer} mx-auto flex justify-between items-center`}>
+            <header className={`${styles.header} py-4 px-6 md:px-12 w-full fixed top-0 z-50 `}>
+                <div className="mx-auto flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <img src="/src/assets/logo.png" alt="ケアシフト ロゴ" className="h-8" />
                         <span className={`${styles.logoText} hidden md:block tracking-wide`}>シフト管理アプリ</span>
+                        <Link to="/" className={styles.navLink}>使い方</Link>
+                        <Link to="/" className={styles.navLink}>運営者情報</Link>
                     </div>
                     <nav className="flex items-center gap-6">
-                        <Link to="/register" className={styles.navLink}>新規登録</Link>
-                        <Link to="/login" className={styles.navLink}>ログイン</Link>
+                        <Link to="/register" className={styles.navLinkSignup}>新規登録</Link>
+                        <Link to="/login" className={styles.navLinkLogin}>ログイン</Link>
                     </nav>
                 </div>
             </header>
