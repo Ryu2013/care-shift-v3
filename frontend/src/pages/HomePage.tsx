@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/rails-api';
 import styles from './HomePage.module.css';
@@ -24,6 +24,7 @@ const ResponsiveIcon = () => (
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -59,15 +60,42 @@ const HomePage: React.FC = () => {
                 <div className="mx-auto flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <img src="/src/assets/logo.png" alt="ケアシフト ロゴ" className="h-8" />
-                        <span className={`${styles.logoText} hidden md:block tracking-wide`}>シフト管理アプリ</span>
-                        <Link to="/" className={styles.navLink}>使い方</Link>
-                        <Link to="/" className={styles.navLink}>運営者情報</Link>
+                        <span className={`${styles.logoText} md:text-lg block tracking-wide`}>シフト管理アプリ</span>
+
+                        {/* デスクトップ用ナビゲーション */}
+                        <nav className="hidden md:flex items-center gap-6 ml-6">
+                            <Link to="/" className={styles.navLink}>使い方</Link>
+                            <Link to="/" className={styles.navLink}>運営者情報</Link>
+                        </nav>
                     </div>
-                    <nav className="flex items-center gap-6">
+
+                    {/* デスクトップ用アクションボタン */}
+                    <div className="hidden md:flex items-center gap-6">
                         <Link to="/register" className={styles.navLinkSignup}>新規登録</Link>
                         <Link to="/login" className={styles.navLinkLogin}>ログイン</Link>
-                    </nav>
+                    </div>
+
+                    {/* ハンバーガーボタン (モバイル用) */}
+                    <button
+                        className={`flex ${styles.hamburgerBtn} ${isMenuOpen ? styles.menuOpen : ''} md:hidden`}
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        aria-label="メニューを開く"
+                    >
+                        <span className={styles.hamburgerIcon}></span>
+                    </button>
                 </div>
+
+                {/* モバイル用ドロワーメニュー */}
+                {isMenuOpen && (
+                    <div className={styles.mobileMenu}>
+                        <nav className="flex flex-col items-center gap-8 pt-20">
+                            <Link to="/" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>使い方</Link>
+                            <Link to="/" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>運営者情報</Link>
+                            <Link to="/register" className={styles.navLinkSignup} onClick={() => setIsMenuOpen(false)}>新規登録</Link>
+                            <Link to="/login" className={styles.navLinkLogin} onClick={() => setIsMenuOpen(false)}>ログイン</Link>
+                        </nav>
+                    </div>
+                )}
             </header>
 
             {/* --- メインビジュアル --- */}
