@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/rails-api';
 import styles from './HomePage.module.css';
+import { FadeInText } from '../components/FadeInText';
 
 const GoogleIcon = () => (
     <svg viewBox="0 0 24 24" className="w-5 h-5 mr-3">
@@ -101,7 +102,12 @@ const HomePage: React.FC = () => {
             {/* --- メインビジュアル --- */}
             <section className={`${styles.heroSection} pt-28 pb-16 px-6 md:px-12 text-center`}>
                 <div className="max-w-4xl mx-auto flex flex-col items-center gap-10">
-                    <img src="/src/assets/title.png" alt="タイトル" className={styles.heroTitleImage} />
+                    <div className="relative inline-block mt-6 md:mt-10">
+                        <div className={`absolute top-0 left-0 -mt-6 md:-mt-10 ml-0 md:-ml-4 text-2xl md:text-5xl font-bold tracking-widest whitespace-nowrap z-10 ${styles.heroTitle}`}> 
+                            <FadeInText text={"訪問介護の\n無料AIシフト作成ツール"} />
+                        </div>
+                        <img src="/src/assets/title.png" alt="タイトル" className={styles.heroTitleImage} />
+                    </div>
 
                     <div className={`${styles.heroFeaturesContainer} flex flex-wrap justify-center gap-6 md:gap-12 py-6 px-4 w-full`}>
                         <div className="flex flex-col items-center gap-2 w-20">
@@ -155,8 +161,8 @@ const HomePage: React.FC = () => {
                         <p className={`${styles.featureDesc} text-lg`}>担当者を選んでポチッとするだけ。<br />PCの大画面でも、スマホのタッチ操作でも<br />直感的に登録完了します。</p>
                     </div>
                     <div className={`flex-1 relative w-full ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
-                        <div className="relative w-full max-w-md mx-auto transform hover:scale-105 transition-transform duration-500">
-                            <img src="/src/assets/shifts.png" alt="シフト画面背景" className="w-full rounded-xl shadow-xl border border-gray-100" />
+                        <div className="w-full max-w-md ml-auto mr-auto md:mr-0 transform hover:rotate-1 transition-transform duration-500">
+                            <img src="/src/assets/shifts.png" alt="シフト画面背景" className={styles.featureImg} />
                             <img src="/src/assets/client_need.png" alt="担当者選択ポップアップ" className="absolute -bottom-6 -right-6 w-3/5 rounded-lg shadow-2xl border border-gray-100" />
                         </div>
                     </div>
@@ -171,7 +177,9 @@ const HomePage: React.FC = () => {
                         <p className={`${styles.featureDesc} text-lg`}>出勤状況が一目瞭然。<br />管理の手間を大幅に削減します。</p>
                     </div>
                     <div className={`flex-1 w-full ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
-                        <img src="/src/assets/work_statuses.png" alt="出勤状況管理" className="w-full max-w-md mx-auto rounded-xl shadow-xl transform hover:-translate-y-2 transition-transform duration-500 border border-gray-100" />
+                        <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:-rotate-1 transition-transform duration-500">
+                            <img src="/src/assets/work_statuses.png" alt="出勤状況管理" className={styles.featureImg} />
+                        </div>
                     </div>
                 </div>
             </section>
@@ -185,7 +193,7 @@ const HomePage: React.FC = () => {
                     </div>
                     <div className={`flex-1 w-full flex justify-center ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
                         <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:rotate-1 transition-transform duration-500">
-                            <img src="/src/assets/chat_view.png" alt="チャット画面" className="w-full rounded-3xl shadow-2xl border-4 border-gray-800" />
+                            <img src="/src/assets/chat_view.png" alt="チャット画面" className={styles.featureImg} />
                         </div>
                     </div>
                 </div>
@@ -199,7 +207,9 @@ const HomePage: React.FC = () => {
                         <p className={`${styles.featureDesc} text-lg`}>ボタン一つで本日担当のお宅まで<br />ナビゲーション致します。</p>
                     </div>
                     <div className={`flex-1 w-full flex justify-center ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
-                        <img src="/src/assets/nav_view.png" alt="ナビゲーション画面" className="w-full max-w-sm rounded-3xl shadow-2xl transform hover:-rotate-1 transition-transform duration-500 border-4 border-gray-800" />
+                        <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:-rotate-1 transition-transform duration-500">
+                            <img src="/src/assets/nav_view.png" alt="ナビゲーション画面" className={styles.featureImg} />
+                        </div>
                     </div>
                 </div>
             </section>

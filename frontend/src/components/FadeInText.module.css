@@ -1,0 +1,25 @@
+.container {
+    display: inline-block;
+}
+
+.char {
+    opacity: 0;
+    display: inline-block;
+    animation: fadeIn 0.8s ease-out forwards;
+    /* Add text shadow for better readability over images if needed */
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+        filter: blur(2px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
