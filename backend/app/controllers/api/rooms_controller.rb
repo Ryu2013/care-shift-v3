@@ -1,18 +1,18 @@
-class Api::RoomsController < Api::BaseController
+class Api::RoomsController < Api::AuthorizationController
   before_action :set_room, only: %i[show update destroy]
 
   def index
-    render json: current_user.office.rooms.order(:name)
+    render json: current_user.office.rooms.order(:name).map { |r| RoomSerializer.new(r) }
   end
 
   def show
-    render json: @room.as_json(include: :users)
+    render json: RoomSerializer.new(@room)
   end
 
   def create
     room = current_user.office.rooms.build(room_params)
     if room.save
-      render json: room, status: :created
+      render json: RoomSerializer.new(room), status: :created
     else
       render json: { errors: room.errors.full_messages }, status: :unprocessable_entity
     end
@@ -20,7 +20,7 @@ class Api::RoomsController < Api::BaseController
 
   def update
     if @room.update(room_params)
-      render json: @room
+      render json: RoomSerializer.new(@room)
     else
       render json: { errors: @room.errors.full_messages }, status: :unprocessable_entity
     end

@@ -10,38 +10,38 @@ Rails.application.routes.draw do
 
   namespace :api do
 
-    resources :teams, only: %i[index create update destroy]
-    resources :users, only: %i[index update destroy]
-    resources :clients, only: %i[index create update destroy]
-    resources :client_needs, only: %i[index create destroy]
-    resources :user_clients, only: %i[create destroy]
-    resources :shifts, only: %i[index create update destroy] do
-      post :generate_monthly, on: :collection
+    namespace :admin do
+      resources :teams, only: %i[index create update destroy]
+      resources :users, only: %i[index update destroy]
+      resources :clients, only: %i[index create update destroy]
+      resources :client_needs, only: %i[index create destroy]
+      resources :user_clients, only: %i[create destroy]
+      resources :shifts, only: %i[index create update destroy] do
+        post :generate_monthly, on: :collection
+      end
+      resources :work_statuses, only: %i[index]
+      resource :office, only: %i[show update]
+      resource :subscription, only: [] do
+        post :subscribe
+        post :portal
+      end
     end
-    resources :work_statuses, only: %i[index]
+
     resources :rooms, only: %i[index show create update destroy] do
       resources :messages, only: %i[index create]
       resources :entries, only: %i[create destroy], shallow: true
     end
-    resource :office, only: %i[show update]
     get 'me', to: 'me#show'
+
+    resource :two_factor, only: [] do
+      get :setup
+      post :confirm
+    end
 
     namespace :employee do
       resources :shifts, only: %i[index update]
     end
-
-    namespace :users do
-      resource :two_factor, only: [] do
-        get :setup
-        post :confirm
-      end
-    end
-
-    resource :subscription, only: [] do
-      post :subscribe
-      post :portal
-    end
   end
 
-  post "/api/stripe/webhook", to: "api/stripe_webhooks#create"
+  post "/api/stripe/webhook", to: "api/stripe/webhooks#create"
 end

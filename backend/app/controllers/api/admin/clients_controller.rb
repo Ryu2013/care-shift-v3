@@ -1,4 +1,4 @@
-class Api::ClientsController < Api::BaseController
+class Api::Admin::ClientsController < Api::Admin::AuthorizationController
   before_action :set_client, only: %i[update destroy]
 
   def index
@@ -7,13 +7,13 @@ class Api::ClientsController < Api::BaseController
     else
       current_user.office.clients
     end
-    render json: clients.order(:name)
+    render json: clients.order(:name).map { |c| ClientSerializer.new(c) }
   end
 
   def create
     client = current_user.office.clients.build(client_params)
     if client.save
-      render json: client, status: :created
+      render json: ClientSerializer.new(client), status: :created
     else
       render json: { errors: client.errors.full_messages }, status: :unprocessable_entity
     end
@@ -21,7 +21,7 @@ class Api::ClientsController < Api::BaseController
 
   def update
     if @client.update(client_params)
-      render json: @client
+      render json: ClientSerializer.new(@client)
     else
       render json: { errors: @client.errors.full_messages }, status: :unprocessable_entity
     end

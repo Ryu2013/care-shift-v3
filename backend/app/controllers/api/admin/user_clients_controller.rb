@@ -1,4 +1,4 @@
-class Api::UserClientsController < Api::BaseController
+class Api::Admin::UserClientsController < Api::Admin::AuthorizationController
   def create
     client = current_user.office.clients.find(params[:user_client][:client_id])
     user_client = client.user_clients.build(user_client_params.merge(office: current_user.office))

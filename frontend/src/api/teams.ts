@@ -2,13 +2,13 @@ import apiClient from './rails-api'
 import type { Team } from '../types'
 
 export const getTeams = () =>
-  apiClient.get<Team[]>('/teams')
+  apiClient.get<Team[]>('/admin/teams')
 
 export const createTeam = (name: string) =>
-  apiClient.post<Team>('/teams', { team: { name } })
+  apiClient.post<Team>('/admin/teams', { team: { name } })
 
 export const updateTeam = (id: number, name: string) =>
-  apiClient.patch<Team>(`/teams/${id}`, { team: { name } })
+  apiClient.patch<Team>(`/admin/teams/${id}`, { team: { name } })
 
 export const deleteTeam = (id: number) =>
-  apiClient.delete(`/teams/${id}`)
+  apiClient.delete(`/admin/teams/${id}`)

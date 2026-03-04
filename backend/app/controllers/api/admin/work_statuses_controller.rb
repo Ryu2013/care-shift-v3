@@ -1,4 +1,4 @@
-class Api::WorkStatusesController < Api::BaseController
+class Api::Admin::WorkStatusesController < Api::Admin::AuthorizationController
   def index
     date   = params[:date].present? ? Date.parse(params[:date]) : Date.current
     team   = params[:team_id] ? current_user.office.teams.find(params[:team_id]) : current_user.team
@@ -11,7 +11,7 @@ class Api::WorkStatusesController < Api::BaseController
 
     render json: {
       date: date,
-      shifts: shifts,
+      shifts: shifts.map { |s| ShiftSerializer.new(s) },
       work_count: shifts.count { |s| s.work_status == "work" },
       not_work_count: shifts.count { |s| s.work_status == "not_work" }
     }

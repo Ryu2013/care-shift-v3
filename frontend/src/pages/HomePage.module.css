@@ -1,0 +1,193 @@
+/* =========================================
+   Base Layout Overrides & Structure (Module Layer)
+   ========================================= */
+
+/* Header */
+.header {
+    background-color: var(--blue-color);
+    color: var(--bg-color);
+}
+
+.headerContainer {
+    max-width: 1200px;
+}
+
+.logoText {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.navLink {
+    color: var(--bg-color);
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.navLink:hover {
+    opacity: 0.8;
+}
+
+/* Hero Section */
+.heroSection {
+    background-color: var(--bg-alt);
+}
+
+.heroTitleImage {
+    max-width: 100%;
+    height: auto;
+}
+
+.heroFeaturesContainer {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.heroFeatureItem {
+    color: var(--black-dark);
+}
+
+.heroText {
+    color: var(--black-dark);
+    font-size: 1.125rem;
+    line-height: 1.6;
+}
+
+.heroActionsContainer {
+    /* Tailwind will handle flex layout */
+}
+
+.btnPrimary {
+    background-color: var(--red-color);
+    color: white;
+    font-weight: bold;
+    border-radius: 9999px;
+    transition: background-color 0.2s;
+}
+
+.btnPrimary:hover {
+    background-color: var(--red-dark);
+}
+
+.btnGoogle {
+    background-color: white;
+    color: var(--black-dark);
+    border: 1px solid #e5e7eb;
+    border-radius: 9999px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btnGoogle:hover {
+    background-color: #f9fafb;
+}
+
+/* Feature Sections */
+.featureSection {
+    background-color: white;
+}
+
+.featureSectionAlt {
+    background-color: var(--bg-alt);
+}
+
+.featureTitle {
+    color: var(--blue-dark);
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+.featureTitleHighlight {
+    color: var(--red-color);
+}
+
+.featureDesc {
+    color: var(--black-color);
+    line-height: 1.6;
+}
+
+.featureImageWrapper {
+    /* For image positioning if needed */
+}
+
+/* Pricing & Device Section */
+.pricingSection {
+    background-color: var(--blue-color);
+    color: white;
+}
+
+.cardContainer {
+    background-color: white;
+    color: var(--black-dark);
+    border-radius: 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.priceTag {
+    color: var(--red-color);
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.priceDesc {
+    color: var(--black-color);
+}
+
+.cardTitle {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--blue-dark);
+}
+
+/* Footer / CTA Section */
+.footerSection {
+    background-color: var(--bg-color);
+}
+
+.footerCtaTitle {
+    /* Styling for the image title */
+}
+
+.footerCtaBtn {
+    background-color: var(--red-color);
+    color: white;
+    font-weight: bold;
+    border-radius: 9999px;
+    font-size: 1.125rem;
+    transition: background-color 0.2s;
+}
+
+.footerCtaBtn:hover {
+    background-color: var(--red-dark);
+}
+
+.footerLinksContainer {
+    color: var(--black-color);
+}
+
+.footerLinkGroup {
+    /* Handled via utility classes */
+}
+
+.footerLink {
+    color: var(--blue-dark);
+    transition: color 0.2s;
+}
+
+.footerLink:hover {
+    color: var(--blue-color);
+    text-decoration: underline;
+}
+
+/* Animations / Scroll Triggers */
+.scrollTrigger {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.isVisible {
+    opacity: 1;
+    transform: translateY(0);
+}

@@ -11,7 +11,7 @@ export const signUp = (params: { name: string; email: string; password: string; 
   apiClient.post<{ user: User }>('/users', { user: params })
 
 export const getTwoFactorSetup = () =>
-  apiClient.get<{ secret_key: string; qr_uri: string }>('/users/two_factor/setup')
+  apiClient.get<{ secret_key: string; qr_uri: string }>('/two_factor/setup')
 
 export const confirmTwoFactor = (otp_attempt: string) =>
-  apiClient.post<{ message: string }>('/users/two_factor/confirm', { otp_attempt })
+  apiClient.post<{ message: string }>('/two_factor/confirm', { otp_attempt })

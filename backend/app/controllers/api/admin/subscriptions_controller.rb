@@ -1,4 +1,4 @@
-class Api::SubscriptionsController < Api::BaseController
+class Api::Admin::SubscriptionsController < Api::Admin::AuthorizationController
   def subscribe
     service = StripeSubscriptionService.new(current_user.office, current_user)
     url = service.create_checkout_session(

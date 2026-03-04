@@ -1,11 +1,11 @@
-class Api::ShiftsController < Api::BaseController
+class Api::Admin::ShiftsController < Api::Admin::AuthorizationController
   before_action :set_shift, only: %i[update destroy]
 
   def index
     date = params[:date].present? ? Date.strptime(params[:date], "%Y-%m") : Date.current
     shifts = current_user.office.shifts.scope_month(date).includes(:user, :client)
     shifts = shifts.where(client_id: params[:client_id]) if params[:client_id]
-    render json: shifts.order(:date, :start_time)
+    render json: shifts.order(:date, :start_time).map { |s| ShiftSerializer.new(s) }
   end
 
   def create
@@ -14,7 +14,7 @@ class Api::ShiftsController < Api::BaseController
     end
     shift = current_user.office.shifts.build(shift_params)
     if shift.save
-      render json: shift, status: :created
+      render json: ShiftSerializer.new(shift), status: :created
     else
       render json: { errors: shift.errors.full_messages }, status: :unprocessable_entity
     end
@@ -22,7 +22,7 @@ class Api::ShiftsController < Api::BaseController
 
   def update
     if @shift.update(shift_params)
-      render json: @shift
+      render json: ShiftSerializer.new(@shift)
     else
       render json: { errors: @shift.errors.full_messages }, status: :unprocessable_entity
     end
@@ -36,7 +36,7 @@ class Api::ShiftsController < Api::BaseController
   def generate_monthly
     client = current_user.office.clients.find(params[:client_id])
     month  = Date.strptime(params[:date], "%Y-%m")
-    result = ::Shifts::MonthlyGenerator.new(client: client, month: month, office: current_user.office).call
+    result = ::MonthlyGenerator.new(client: client, month: month, office: current_user.office).call
     render json: { created: result[:created] }
   end
 

@@ -1,4 +1,4 @@
-class Api::UsersController < Api::BaseController
+class Api::Admin::UsersController < Api::Admin::AuthorizationController
   before_action :set_user, only: %i[update destroy]
 
   def index

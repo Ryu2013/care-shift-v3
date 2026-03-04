@@ -1,4 +1,4 @@
-class Api::TeamsController < Api::BaseController
+class Api::Admin::TeamsController < Api::Admin::AuthorizationController
   before_action :set_team, only: %i[update destroy]
 
   def index

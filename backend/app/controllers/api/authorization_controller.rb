@@ -1,4 +1,4 @@
-class Api::BaseController < ApplicationController
+class Api::AuthorizationController < ApplicationController
   before_action :authenticate_user!
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found

@@ -1,11 +1,11 @@
-class Api::OfficesController < Api::BaseController
+class Api::Admin::OfficesController < Api::Admin::AuthorizationController
   def show
-    render json: current_user.office
+    render json: OfficeSerializer.new(current_user.office)
   end
 
   def update
     if current_user.office.update(office_params)
-      render json: current_user.office
+      render json: OfficeSerializer.new(current_user.office)
     else
       render json: { errors: current_user.office.errors.full_messages }, status: :unprocessable_entity
     end

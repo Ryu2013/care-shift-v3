@@ -5,16 +5,15 @@
    Variables
    ========================================= */
 :root {
-  --primary-color: #69C5FF;
-  --primary-dark: #4a90e2;
-  --accent-color: #F19494;
-  --d-red: #E35B5B;
-  --text-color: #333;
-  --text-light: #666;
+  --blue-color: #69C5FF;
+  --blue-dark: #4a90e2;
+  --red-color: #F19494;
+  --red-dark: #E35B5B;
+  --black-dark: #333;
+  --black-color: #666;
   --bg-color: #fefdf8;
-  --bg-alt: #f4f9ff;
-  --green: #4CAF50;
-  --green-light: #C8F7C5;
+  --green-dark: #4CAF50;
+  --green-color: #C8F7C5;
 }
 
 /* =========================================
@@ -22,7 +21,6 @@
    ========================================= */
 html {
   font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
-  color: var(--text-color);
   background-image: url('./assets/background-mobile.jpg');
   background-position: center top;
   background-repeat: repeat-y;
@@ -31,7 +29,6 @@ html {
 
 @media (min-width: 450px) {
   html {
-    background-color: #FFF8F0;
     background-image: url('./assets/background.jpg');
     background-position: center top;
     background-repeat: repeat-y;

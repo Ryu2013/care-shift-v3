@@ -1,14 +1,14 @@
-class Api::ClientNeedsController < Api::BaseController
+class Api::Admin::ClientNeedsController < Api::Admin::AuthorizationController
   def index
     client = current_user.office.clients.find(params[:client_id])
-    render json: client.client_needs.order(:week, :shift_type, :start_time)
+    render json: client.client_needs.order(:week, :shift_type, :start_time).map { |n| ClientNeedSerializer.new(n) }
   end
 
   def create
     client = current_user.office.clients.find(client_need_params[:client_id])
     need = client.client_needs.build(client_need_params)
     if need.save
-      render json: need, status: :created
+      render json: ClientNeedSerializer.new(need), status: :created
     else
       render json: { errors: need.errors.full_messages }, status: :unprocessable_entity
     end

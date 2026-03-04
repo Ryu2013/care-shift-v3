@@ -9,6 +9,6 @@ class Api::Users::SessionsController < Devise::SessionsController
   end
 
   def respond_to_on_destroy
-    render json: { message: "Signed out successfully" }, status: :ok
+    render json: { message: "ログアウトしました" }, status: :ok
   end
 end
