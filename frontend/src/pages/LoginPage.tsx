@@ -11,6 +11,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [otpAttempt, setOtpAttempt] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -35,7 +36,7 @@ export default function LoginPage() {
     setError(null)
     setSuccessMsg(null)
     try {
-      await signIn(email, password, otpAttempt)
+      await signIn(email, password, otpAttempt, rememberMe)
       await queryClient.invalidateQueries({ queryKey: ['currentUser'] })
       navigate('/shifts')
     } catch (err: any) {
@@ -104,6 +105,20 @@ export default function LoginPage() {
               placeholder="6桁のコード"
               className="w-full px-4 py-3 text-base border-2 border-[#e1e4e8] rounded-lg bg-[#fafbfc] transition-all duration-200 focus:outline-none focus:border-[#5daaf5] focus:bg-white focus:ring-[3px] focus:ring-[#5daaf5]/10"
             />
+          </div>
+
+          <div className="flex items-center pt-1 pb-2">
+            <input
+              id="remember-me"
+              name="remember-me"
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="h-4 w-4 rounded border-gray-300 text-[#5daaf5] focus:ring-[#5daaf5]"
+            />
+            <label htmlFor="remember-me" className="ml-2 block text-sm text-[#666] cursor-pointer">
+              ログイン状態を保存する
+            </label>
           </div>
 
           <div className="pt-2">

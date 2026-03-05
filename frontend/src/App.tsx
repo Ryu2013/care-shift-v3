@@ -19,6 +19,8 @@ import HowToUseLoginPage from './pages/how_to_use/HowToUseLoginPage'
 import HowToUseShiftCreationPage from './pages/how_to_use/HowToUseShiftCreationPage'
 import HowToUseAttendancePage from './pages/how_to_use/HowToUseAttendancePage'
 import HowToUseChatPage from './pages/how_to_use/HowToUseChatPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 
 function PrivateLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -34,6 +36,8 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<UserRegistrationPage />} />
+      <Route path="/password-reset" element={<ForgotPasswordPage />} />
+      <Route path="/password-reset/edit" element={<ResetPasswordPage />} />
       <Route path="/how-to-use" element={<HowToUseLayout />}>
         <Route index element={<HowToUsePage />} />
         <Route path="registration" element={<HowToUseRegistrationPage />} />

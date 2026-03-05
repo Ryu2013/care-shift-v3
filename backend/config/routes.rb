@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     invitations: "api/users/invitations",
     confirmations: "api/users/confirmations",
     omniauth_callbacks: "api/users/omniauth_callbacks",
+    passwords: "api/users/passwords",
     unlocks: "api/users/unlocks"
   }
 
