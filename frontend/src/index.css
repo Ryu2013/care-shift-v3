@@ -1,0 +1,69 @@
+
+/* FullCalendar Customizations for CareShift */
+.fc .fc-toolbar-title {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: #333333;
+}
+.fc .fc-button-primary {
+  background-color: #5daaf5 !important;
+  border-color: #5daaf5 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 9999px !important; /* full rounded */
+  padding: 0.5rem 1rem !important;
+  font-weight: 700 !important;
+  transition: all 0.2s;
+}
+.fc .fc-button-primary:hover {
+  background-color: #4a90e2 !important;
+  border-color: #4a90e2 !important;
+  transform: translateY(-2px);
+}
+.fc .fc-button-primary:not(:disabled):active, .fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: #3a7bc8 !important;
+  border-color: #3a7bc8 !important;
+}
+.fc-theme-standard th {
+  background-color: #f9fafb; /* gray-50 */
+  padding: 0.75rem 0;
+  border-color: #aeaeae !important;
+  color: #374151; /* gray-700 */
+}
+.fc-theme-standard td, .fc-theme-standard th {
+  border-color: #aeaeae !important;
+}
+.fc-daygrid-day {
+  background-color: #FFF8F0;
+  transition: background-color 0.2s;
+}
+.fc-daygrid-day:hover {
+  background-color: rgba(255, 237, 213, 0.3) !important; /* orange-50/30 */
+}
+.fc-day-today {
+  background-color: #e6f3ff !important;
+}
+.fc .fc-daygrid-day-number {
+  color: #4b5563; /* gray-600 */
+  font-weight: 600;
+  padding: 0.5rem !important;
+}
+.fc .fc-day-today .fc-daygrid-day-number {
+  background-color: #3b82f6; /* blue-500 */
+  color: white;
+  border-radius: 9999px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.25rem;
+}
+.fc-event {
+  cursor: pointer;
+  border-radius: 0 0.375rem 0.375rem 0 !important;
+  margin: 1px 2px !important;
+  transition: filter 0.2s;
+}
+.fc-event:hover {
+  filter: brightness(0.95);
+}

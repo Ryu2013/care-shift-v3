@@ -1,16 +1,25 @@
 import { useState, useMemo } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
-import { getShifts } from '../api/shifts'
+import { useNavigate, Link } from 'react-router-dom'
+import { getShifts, updateShift } from '../api/shifts'
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
 import { signOut } from '../api/auth'
 import { getTeams } from '../api/teams'
 import { getClients } from '../api/clients'
 import { getUsers } from '../api/users'
 import type { Shift, Team, Client, User } from '../types'
 import ShiftFormModal from '../components/ShiftFormModal'
+import { HamburgerMenuButton } from '../components/HamburgerMenuButton'
 
-const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate()
-const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay()
+const formatTime = (timeString: string) => {
+  if (timeString.includes('T')) {
+    const match = timeString.match(/T(\d{2}:\d{2})/)
+    return match ? match[1] : timeString.substring(0, 5)
+  }
+  return timeString.substring(0, 5)
+}
 
 export default function ShiftsPage() {
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -62,78 +71,127 @@ export default function ShiftsPage() {
     }
   }
 
-  const daysInMonth = getDaysInMonth(year, month)
-  const firstDay = getFirstDayOfMonth(year, month)
+  const handleDateClick = (arg: any) => {
+    // 日付クリックで新規作成
+    const clickedDate = new Date(arg.date)
+    // タイムゾーンのズレを防ぐため、ローカルタイムとしてISO stringを生成してセットする仮シフト
+    const dateStr = `${clickedDate.getFullYear()}-${String(clickedDate.getMonth() + 1).padStart(2, '0')}-${String(clickedDate.getDate()).padStart(2, '0')}`
 
-  // Calculate padding blocks for calendar
-  const paddingBefore = Array.from({ length: firstDay }, (_, i) => i)
-  const totalCells = paddingBefore.length + daysInMonth
-  // 42 cells total for 6 rows
-  const paddingAfter = Array.from({ length: 42 - totalCells }, (_, i) => i)
+    // ShiftFormModalがShiftオブジェクトを受け取るため、最小限のモックを作成
+    setSelectedShift({
+      id: 0,
+      client_id: selectedClientId || 0,
+      user_id: 0,
+      date: dateStr,
+      start_time: '09:00',
+      end_time: '18:00',
+      shift_type: 'day',
+      is_escort: false
+    } as any)
 
-  // Memoize mapping shifts to dates
-  const shiftsByDate = useMemo(() => {
-    if (!shifts) return {}
-    const grouped: Record<string, Shift[]> = {}
-    shifts.forEach((shift: Shift) => {
-      // Assuming shift.date is "YYYY-MM-DD"
-      if (!grouped[shift.date]) {
-        grouped[shift.date] = []
+    setIsModalOpen(true)
+  }
+
+  const handleEventClick = (info: any) => {
+    // 既存シフトクリックで編集モーダル
+    const shiftId = Number(info.event.id)
+    const shift = shifts?.find(s => s.id === shiftId)
+    if (shift) {
+      setSelectedShift(shift)
+      setIsModalOpen(true)
+    }
+  }
+
+  const handleEventDrop = async (info: any) => {
+    // ドラッグ＆ドロップで日付変更
+    const shiftId = Number(info.event.id)
+    const newDateStr = info.event.startStr // "YYYY-MM-DD"
+
+    try {
+      await updateShift(shiftId, { date: newDateStr })
+      refetch() // 成功したら再取得
+    } catch (e) {
+      console.error("Failed to update shift date", e)
+      info.revert() // エラー時はドラッグ元に戻す
+      alert('シフトの日付変更に失敗しました')
+    }
+  }
+
+  // FullCalendar 用のイベント配列を生成
+  const calendarEvents = useMemo(() => {
+    if (!shifts) return []
+
+    return shifts.map((shift: Shift) => {
+      const userName = users?.find(u => u.id === shift.user_id)?.name || "未配置"
+      const startTimeStr = formatTime(shift.start_time)
+      const endTimeStr = formatTime(shift.end_time)
+      const title = `${userName} (${startTimeStr}-${endTimeStr})`
+
+      // カスタムプロパティとして色を判別
+      let bgColor = '#F19494' // day default
+      let borderColor = '#E35B5B'
+      let textColor = '#333333'
+
+      if (shift.user_id === null) {
+        bgColor = '#E0E0E0'
+        borderColor = '#A0A0A0'
+      } else if (shift.is_escort || shift.shift_type === 'escort') {
+        bgColor = '#C8F7C5'
+        borderColor = '#4CAF50'
+      } else if (shift.shift_type === 'night') {
+        bgColor = '#B4E2FF'
+        borderColor = '#69C5FF'
       }
-      grouped[shift.date].push(shift)
+
+      return {
+        id: shift.id.toString(),
+        title: title,
+        start: shift.date,
+        allDay: true, // 時間による縦軸配置(TimeGrid)を使わず、日ごとのブロック(DayGrid)として扱うため
+        backgroundColor: bgColor,
+        borderColor: borderColor,
+        textColor: textColor,
+        extendedProps: { shift }
+      }
     })
-    return grouped
-  }, [shifts])
-
-  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1))
-  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1))
-
-  const formatTime = (timeString: string) => {
-    // Determine the format. Ruby's full ISO 8601 typically has 'T'.
-    if (timeString.includes('T')) {
-      const match = timeString.match(/T(\d{2}:\d{2})/)
-      return match ? match[1] : timeString.substring(0, 5)
-    }
-    return timeString.substring(0, 5)
-  }
-
-  const getShiftColorClasses = (shift: Shift) => {
-    // 未配置 (Unassigned)
-    if (shift.user_id === null) {
-      return "bg-[#E0E0E0] border-l-[#A0A0A0] text-[#333]"
-    }
-    // 同行 (Escort)
-    if (shift.is_escort || shift.shift_type === 'escort') {
-      return "bg-[#C8F7C5] border-l-[#4CAF50] text-[#333]"
-    }
-    // 夜勤 (Night)
-    if (shift.shift_type === 'night') {
-      return "bg-[#B4E2FF] border-l-[#69C5FF] text-[#333]"
-    }
-    // 日勤 (Day/Default)
-    return "bg-[#F19494] border-l-[#E35B5B] text-[#333]"
-  }
+  }, [shifts, users])
 
   return (
     <div className="min-h-screen bg-white">
       {/* Menu/Header Area */}
-      <div className="flex gap-4 p-4 border-b">
-        <span className="font-bold cursor-pointer hover:text-blue-500" onClick={() => navigate('/rooms')}>チャット</span>
-        <span className="font-bold cursor-pointer hover:text-blue-500" onClick={() => navigate('/settings')}>部署/会社</span>
-        <span className="font-bold cursor-pointer hover:text-blue-500" onClick={() => navigate('/clients')}>利用者とスタッフ</span>
-        <span className="font-bold cursor-pointer hover:text-blue-500" onClick={() => navigate('/work-statuses')}>出退勤状況</span>
-        <span className="font-bold cursor-pointer hover:text-blue-500" onClick={() => navigate('/two-factor-setup')}>二段階認証</span>
-        <span className="font-bold cursor-pointer hover:text-blue-500 text-red-500 ml-auto" onClick={handleSignOut}>ログアウト</span>
-      </div>
+      <header className="flex justify-between items-center p-4 border-b bg-white relative z-50">
+        <div className="flex items-center gap-3">
+          <img src="/src/assets/logo.png" alt="ケアシフト ロゴ" className="h-8" />
+          <span className="font-bold text-lg tracking-wide hidden sm:block text-[#333]">シフト管理アプリ</span>
+        </div>
+
+        {/* デスクトップ用ナビゲーション */}
+        <nav className="hidden md:flex items-center gap-6">
+          <Link to="/rooms" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">チャット</Link>
+          <Link to="/settings" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">部署/会社</Link>
+          <Link to="/clients" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">利用者とスタッフ</Link>
+          <Link to="/work-statuses" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">出退勤状況</Link>
+          <Link to="/two-factor-setup" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">二段階認証</Link>
+          <button onClick={handleSignOut} className="font-bold text-red-500 hover:text-red-600 transition-colors cursor-pointer">ログアウト</button>
+        </nav>
+
+        {/* ハンバーガーボタン (モバイル用) */}
+        <HamburgerMenuButton className="md:hidden">
+          <nav className="flex flex-col items-center gap-8 pt-20">
+            <Link to="/rooms" className="font-bold text-xl text-[#333]">チャット</Link>
+            <Link to="/settings" className="font-bold text-xl text-[#333]">部署/会社</Link>
+            <Link to="/clients" className="font-bold text-xl text-[#333]">利用者とスタッフ</Link>
+            <Link to="/work-statuses" className="font-bold text-xl text-[#333]">出退勤状況</Link>
+            <Link to="/two-factor-setup" className="font-bold text-xl text-[#333]">二段階認証</Link>
+            <button onClick={handleSignOut} className="font-bold text-xl text-red-500 mt-2">ログアウト</button>
+          </nav>
+        </HamburgerMenuButton>
+      </header>
 
       <div className="p-4 mx-auto max-w-7xl">
         {/* Filter Area & Legend */}
         <div className="flex flex-wrap items-center justify-between mb-4">
           <div className="flex items-center gap-4">
-            <button onClick={prevMonth} className="px-3 py-1 border rounded hover:bg-gray-50 transition-colors">&lt;</button>
-            <h2 className="text-xl font-bold w-32 text-center">{year}年{month + 1}月</h2>
-            <button onClick={nextMonth} className="px-3 py-1 border rounded hover:bg-gray-50 transition-colors">&gt;</button>
-
             <select
               value={selectedTeamId}
               onChange={(e) => {
@@ -179,75 +237,41 @@ export default function ShiftsPage() {
           <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#E0E0E0] border-[#A0A0A0] shadow-sm">未配置</div>
         </div>
 
-        {/* Calendar Grid */}
-        <div className="grid grid-cols-7 border-t border-l border-[#aeaeae] shadow-inner rounded-sm overflow-hidden">
-          {/* Week Headers */}
-          {['日', '月', '火', '水', '木', '金', '土'].map(wday => (
-            <div key={wday} className="font-bold text-center py-3 border-b border-r border-[#aeaeae] bg-gray-50 text-sm text-gray-700">
-              {wday}
-            </div>
-          ))}
-
-          {/* Padding Before */}
-          {paddingBefore.map(i => (
-            <div key={`empty-before-${i}`} className="min-h-[140px] bg-[#f9f9f9] border-b border-r border-[#aeaeae] border-dashed"></div>
-          ))}
-
-          {/* Days */}
-          {Array.from({ length: daysInMonth }, (_, i) => {
-            const dateNum = i + 1
-            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateNum).padStart(2, '0')}`
-            const dayShifts = shiftsByDate[dateStr] || []
-            const isToday = new Date().toDateString() === new Date(year, month, dateNum).toDateString()
-
-            return (
-              <div
-                key={`day-${dateNum}`}
-                className={`min-h-[140px] p-1.5 bg-[#FFF8F0] border-b border-r border-[#aeaeae] border-dashed flex flex-col transition-colors hover:bg-orange-50/30 group`}
-              >
-                <div className={`text-sm mb-1.5 flex items-center justify-between`}>
-                  <span className={`${isToday ? 'bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold' : 'text-gray-600 font-medium'}`}>
-                    {dateNum}
-                  </span>
-                  <button
-                    onClick={() => {
-                      setSelectedShift(undefined)
-                      setIsModalOpen(true)
-                    }}
-                    className="opacity-0 group-hover:opacity-100 text-blue-400 hover:text-blue-600 transition-opacity"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                  </button>
+        {/* FullCalendar Component */}
+        <div className="calendar-container shadow-inner rounded-sm overflow-hidden bg-white border border-[#aeaeae] p-2">
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            events={calendarEvents}
+            locale="ja"
+            headerToolbar={{
+              left: 'prev,next today',
+              center: 'title',
+              right: ''
+            }}
+            buttonText={{
+              today: '今日'
+            }}
+            height="auto" // ヘッダー含めて自動リサイズ
+            contentHeight={800} // 各セルの高さを確保
+            dayMaxEvents={true} // マスに収まらない場合は "もっと見る" リンクを表示
+            editable={true} // ドラッグ＆ドロップを有効化
+            droppable={true}
+            dateClick={handleDateClick} // 日付クリック
+            eventClick={handleEventClick} // イベントクリック
+            eventDrop={handleEventDrop} // イベントドラッグ完了
+            datesSet={(arg: any) => {
+              setCurrentDate(arg.view.currentStart)
+            }}
+            eventContent={(arg: any) => {
+              // カスタムイベント描画
+              return (
+                <div className="w-full text-[0.7rem] px-1 py-0.5 leading-tight overflow-hidden truncate font-bold border-l-4" style={{ borderColor: arg.event.borderColor }}>
+                  {arg.event.title}
                 </div>
-                <div className="flex flex-col gap-1.5 overflow-y-auto flex-1">
-                  {dayShifts.map(shift => {
-                    const userName = users?.find(u => u.id === shift.user_id)?.name
-
-                    return (
-                      <div
-                        key={shift.id}
-                        onClick={() => {
-                          setSelectedShift(shift)
-                          setIsModalOpen(true)
-                        }}
-                        className={`text-[0.65rem] p-1.5 rounded-tr-md rounded-br-md border-l-4 ${getShiftColorClasses(shift)} leading-tight shadow-sm cursor-pointer hover:brightness-95 transition-all`}
-                      >
-                        <div className="font-bold truncate">{shift.user_id && userName ? userName : "未配置"}</div>
-                        <div className="opacity-80 font-mono tracking-tighter">{formatTime(shift.start_time)} - {formatTime(shift.end_time)}</div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
-
-          {/* Padding After */}
-          {paddingAfter.map(i => (
-            <div key={`empty-after-${i}`} className="min-h-[140px] bg-[#f9f9f9] border-b border-r border-[#aeaeae] border-dashed"></div>
-          ))}
+              )
+            }}
+          />
         </div>
       </div>
 
