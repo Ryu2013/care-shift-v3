@@ -1,6 +1,20 @@
 class Api::Users::SessionsController < Devise::SessionsController
   respond_to :json
 
+  def create
+    user = User.find_by(email: params.dig(:user, :email))
+
+    if user&.valid_password?(params.dig(:user, :password))# Deviseメソッド
+      if user.validate_otp(params.dig(:user, :otp_attempt))# Userモデルの自作メソッド
+        super
+      else
+        render json: { error: "二段階認証コードが正しくありません" }, status: :unauthorized
+      end
+    else
+      render json: { error: "メールアドレスまたはパスワードが正しくありません" }, status: :unauthorized
+    end
+  end
+
   private
 
   def respond_with(resource, _opts = {})

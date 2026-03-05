@@ -24,10 +24,21 @@ class User < ApplicationRecord
 
   delegate :subscription_active?, to: :office, allow_nil: true
 
-  validate :validate_user_limit, on: :create
-
   geocoded_by :address, latitude: :latitude, longitude: :longitude
   after_validation :geocode, if: :address_changed?
+
+  # session_controllerで使用
+  def validate_otp(otp_attempt)
+    if otp_required_for_login
+      if otp_attempt.blank?
+        return false
+      else
+        return validate_and_consume_otp!(otp_attempt)
+      end
+    else
+      return true
+    end
+  end
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
