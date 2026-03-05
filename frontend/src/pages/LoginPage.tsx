@@ -1,27 +1,45 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { signIn } from '../api/auth'
+import AlertMessage from '../components/AlertMessage'
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const queryClient = useQueryClient()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [otpAttempt, setOtpAttempt] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const unlocked = searchParams.get('unlocked')
+    if (unlocked === 'true') {
+      setSuccessMsg('アカウントのロックが解除されました。新しいパスワードでログインしてください。')
+      // URLからパラメータを消去してリロード時などに再度表示されないようにする
+      searchParams.delete('unlocked')
+      setSearchParams(searchParams)
+    } else if (unlocked === 'false') {
+      setError('ロック解除用リンクが無効か、すでに解除されています。')
+      searchParams.delete('unlocked')
+      setSearchParams(searchParams)
+    }
+  }, [searchParams, setSearchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
+    setSuccessMsg(null)
     try {
       await signIn(email, password, otpAttempt)
       await queryClient.invalidateQueries({ queryKey: ['currentUser'] })
       navigate('/shifts')
-    } catch {
-      setError('メールアドレス、パスワード、または認証コードが正しくありません')
+    } catch (err: any) {
+      setError(err)
     } finally {
       setLoading(false)
     }
@@ -37,6 +55,9 @@ export default function LoginPage() {
           <h2 className="text-[#333] text-[1.8rem] font-bold mb-2">ログイン</h2>
           <p className="text-[#888] mb-0 text-[0.9rem] leading-snug">お疲れ様です。<br />アカウントにログインしてください。</p>
         </div>
+
+        <AlertMessage type="success" message={successMsg} />
+        <AlertMessage type="error" message={error} />
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
@@ -84,8 +105,6 @@ export default function LoginPage() {
               className="w-full px-4 py-3 text-base border-2 border-[#e1e4e8] rounded-lg bg-[#fafbfc] transition-all duration-200 focus:outline-none focus:border-[#5daaf5] focus:bg-white focus:ring-[3px] focus:ring-[#5daaf5]/10"
             />
           </div>
-
-          {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
 
           <div className="pt-2">
             <button

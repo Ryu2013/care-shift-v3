@@ -4,14 +4,19 @@ class Api::Users::SessionsController < Devise::SessionsController
   def create
     user = User.find_by(email: params.dig(:user, :email))
 
-    if user&.valid_password?(params.dig(:user, :password))# Deviseメソッド
-      if user.validate_otp(params.dig(:user, :otp_attempt))# Userモデルの自作メソッド
-        super
+    if user && !user.access_locked?
+      if user&.valid_password?(params.dig(:user, :password))# Deviseメソッド
+        if user.validate_otp(params.dig(:user, :otp_attempt))# Userモデルの自作メソッド
+          super
+        else
+          render json: { error: "二段階認証コードが正しくありません" }, status: :unauthorized
+        end
       else
-        render json: { error: "二段階認証コードが正しくありません" }, status: :unauthorized
+        user.valid_for_authentication? { false } # Deviseメソッドでログイン失敗回数を増やす
+        render json: { error: "メールアドレスまたはパスワードが正しくありません" }, status: :unauthorized
       end
     else
-      render json: { error: "メールアドレスまたはパスワードが正しくありません" }, status: :unauthorized
+      render json: { error: "アカウントがロックされています" }, status: :unauthorized
     end
   end
 

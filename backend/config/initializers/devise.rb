@@ -21,7 +21,7 @@ Devise.setup do |config|
   config.lock_strategy = :failed_attempts
   config.unlock_keys = [:email]
   config.unlock_strategy = :both
-  config.maximum_attempts = 20
+  config.maximum_attempts = 5
   config.unlock_in = 1.hour
   config.last_attempt_warning = true
   config.sign_out_via = :delete

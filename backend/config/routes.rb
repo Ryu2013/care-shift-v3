@@ -6,7 +6,8 @@ Rails.application.routes.draw do
     registrations: "api/users/registrations",
     invitations: "api/users/invitations",
     confirmations: "api/users/confirmations",
-    omniauth_callbacks: "api/users/omniauth_callbacks"
+    omniauth_callbacks: "api/users/omniauth_callbacks",
+    unlocks: "api/users/unlocks"
   }
 
   namespace :api do
