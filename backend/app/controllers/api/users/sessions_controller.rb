@@ -7,7 +7,8 @@ class Api::Users::SessionsController < Devise::SessionsController
     render json: UserSerializer.new(resource), status: :ok
   end
 
-  def respond_to_on_destroy
+  def respond_to_on_destroy(*args)
+    reset_session
     render json: { message: "ログアウトしました" }, status: :ok
   end
 end

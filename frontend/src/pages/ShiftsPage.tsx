@@ -53,6 +53,8 @@ export default function ShiftsPage() {
   const handleSignOut = async () => {
     try {
       await signOut()
+      // セッション消去とフロントのme（currentUser）のRAMクリアを確実に行う
+      queryClient.removeQueries({ queryKey: ['currentUser'] })
       queryClient.clear()
       navigate('/login')
     } catch (e) {
