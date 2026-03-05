@@ -19,6 +19,8 @@ gem "bcrypt", "~> 3.1.7"
 
 # Authentication
 gem "devise"
+gem "devise-i18n" # 追加
+gem "rails-i18n"  # 追加
 gem "devise_invitable", "~> 2.0"
 gem "devise-two-factor"
 gem "devise-pwned_password"
@@ -60,4 +62,7 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # View emails in the browser for development
+  gem "letter_opener_web", "~> 3.0"
 end

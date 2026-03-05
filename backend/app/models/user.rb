@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include UserSetup
+
   devise :database_authenticatable, :registerable, :recoverable, :rememberable,
          :validatable, :confirmable, :lockable, :two_factor_authenticatable,
          :invitable,
@@ -33,10 +35,7 @@ class User < ApplicationRecord
       user.password = Devise.friendly_token[0, 20]
       user.name = auth.info.name
       user.confirmed_at = Time.current
-      office = Office.create!(name: "未設定会社名")
-      user.office = office
-      user.team = Team.create!(name: "未設定部署名", office: office)
-      user.role = :admin
+      user.setup_default_office_and_team!
     end
   end
 

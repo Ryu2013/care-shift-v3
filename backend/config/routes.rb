@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     sessions: "api/users/sessions",
     registrations: "api/users/registrations",
     invitations: "api/users/invitations",
+    confirmations: "api/users/confirmations",
     omniauth_callbacks: "api/users/omniauth_callbacks"
   }
 
@@ -44,4 +45,8 @@ Rails.application.routes.draw do
   end
 
   post "/api/stripe/webhook", to: "api/stripe/webhooks#create"
+
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/api/letter_opener"
+  end
 end

@@ -3,6 +3,7 @@ import PrivateRoute from './components/PrivateRoute'
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
+import UserRegistrationPage from './pages/UserRegistrationPage'
 import ShiftsPage from './pages/ShiftsPage'
 import ClientsPage from './pages/ClientsPage'
 import UsersPage from './pages/UsersPage'
@@ -32,6 +33,7 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<UserRegistrationPage />} />
       <Route path="/how-to-use" element={<HowToUseLayout />}>
         <Route index element={<HowToUsePage />} />
         <Route path="registration" element={<HowToUseRegistrationPage />} />

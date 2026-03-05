@@ -63,8 +63,7 @@
 /* ヒーローセクション */
 
 .heroTitle {
-    color: var(--black-color);
-    -webkit-text-stroke: 0.5px var(--black-dark);
+    color: var(--red-dark);
     line-height: 1.4;
 }
 
@@ -185,10 +184,6 @@
 /* フッター / CTAセクション */
 .footerSection {
     background-color: var(--bg-color);
-}
-
-.footerCtaTitle {
-    /* 画像タイトルのスタイリング */
 }
 
 .footerCtaBtn {
