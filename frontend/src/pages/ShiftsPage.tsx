@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, Link } from 'react-router-dom'
 import { getShifts, updateShift } from '../api/shifts'
@@ -23,8 +23,14 @@ const formatTime = (timeString: string) => {
 
 export default function ShiftsPage() {
   const [currentDate, setCurrentDate] = useState(new Date())
-  const [selectedTeamId, setSelectedTeamId] = useState<number | ''>('')
-  const [selectedClientId, setSelectedClientId] = useState<number | ''>('')
+  const [selectedTeamId, setSelectedTeamId] = useState<number | ''>(() => {
+    const saved = localStorage.getItem('careShift_selectedTeamId')
+    return saved ? Number(saved) : ''
+  })
+  const [selectedClientId, setSelectedClientId] = useState<number | ''>(() => {
+    const saved = localStorage.getItem('careShift_selectedClientId')
+    return saved ? Number(saved) : ''
+  })
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedShift, setSelectedShift] = useState<Shift | undefined>(undefined)
   const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined)
@@ -34,6 +40,23 @@ export default function ShiftsPage() {
 
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
+
+  // Persist filters to localStorage
+  useEffect(() => {
+    if (selectedTeamId !== '') {
+      localStorage.setItem('careShift_selectedTeamId', selectedTeamId.toString())
+    } else {
+      localStorage.removeItem('careShift_selectedTeamId')
+    }
+  }, [selectedTeamId])
+
+  useEffect(() => {
+    if (selectedClientId !== '') {
+      localStorage.setItem('careShift_selectedClientId', selectedClientId.toString())
+    } else {
+      localStorage.removeItem('careShift_selectedClientId')
+    }
+  }, [selectedClientId])
 
   // Fetch teams for filter
   const { data: teams } = useQuery({
@@ -148,9 +171,9 @@ export default function ShiftsPage() {
   }, [shifts, users])
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-[100vh]">
       {/* Menu/Header Area */}
-      <header className="flex justify-between items-center p-4 border-b bg-white relative z-50">
+      <header className="flex justify-between items-center p-4 md:border-b bg-white/80 backdrop-blur-md relative z-50">
         <div className="flex items-center gap-3">
           <img src="/src/assets/logo.png" alt="ケアシフト ロゴ" className="h-8" />
           <span className="font-bold text-lg tracking-wide hidden sm:block text-[#333]">シフト管理アプリ</span>
@@ -180,57 +203,61 @@ export default function ShiftsPage() {
       </header>
 
       <div className="p-4 mx-auto max-w-7xl">
-        {/* Filter Area & Legend */}
-        <div className="flex flex-wrap items-center justify-between mb-4">
-          <div className="flex items-center gap-4">
-            <select
-              value={selectedTeamId}
-              onChange={(e) => {
-                setSelectedTeamId(e.target.value ? Number(e.target.value) : '')
-                setSelectedClientId('') // Reset client when team changes
-              }}
-              className="border rounded p-2 focus:ring-2 focus:ring-blue-400 outline-none"
-            >
-              <option value="">チーム選択</option>
-              {teams?.map((team: Team) => (
-                <option key={team.id} value={team.id}>{team.name}</option>
-              ))}
-            </select>
+        {/* Filters and Legend Area */}
+        <div className="bg-white/80 backdrop-blur-sm shadow-sm rounded-xl p-4 mb-4 border border-white/50">
+          <div className="mb-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <div className="flex items-center gap-2 flex-1">
+                <select
+                  value={selectedTeamId}
+                  onChange={(e) => {
+                    setSelectedTeamId(e.target.value ? Number(e.target.value) : '')
+                    setSelectedClientId('') // Reset client when team changes
+                  }}
+                  className="w-full sm:w-auto border border-gray-200/80 rounded-xl p-1.5 md:p-2 text-sm md:text-base focus:ring-2 focus:ring-blue-400 outline-none bg-white/90"
+                >
+                  <option value="">チーム選択</option>
+                  {teams?.map((team: Team) => (
+                    <option key={team.id} value={team.id}>{team.name}</option>
+                  ))}
+                </select>
 
-            <select
-              value={selectedClientId}
-              onChange={(e) => setSelectedClientId(e.target.value ? Number(e.target.value) : '')}
-              className="border rounded p-2 focus:ring-2 focus:ring-blue-400 outline-none"
-            >
-              <option value="">利用者選択</option>
-              {clients?.map((client: Client) => (
-                <option key={client.id} value={client.id}>{client.name}</option>
-              ))}
-            </select>
+                <select
+                  value={selectedClientId}
+                  onChange={(e) => setSelectedClientId(e.target.value ? Number(e.target.value) : '')}
+                  className="w-full sm:w-auto border border-gray-200/80 rounded-xl p-1.5 md:p-2 text-sm md:text-base focus:ring-2 focus:ring-blue-400 outline-none bg-white/90"
+                >
+                  <option value="">利用者選択</option>
+                  {clients?.map((client: Client) => (
+                    <option key={client.id} value={client.id}>{client.name}</option>
+                  ))}
+                </select>
+              </div>
 
-            <button
-              onClick={() => {
-                setSelectedShift(undefined)
-                setSelectedDate(undefined)
-                setIsModalOpen(true)
-              }}
-              className="px-6 py-2 text-white bg-[#5daaf5] rounded-full hover:bg-[#4a90e2] transition-all font-bold shadow-md hover:-translate-y-0.5"
-            >
-              新規シフト
-            </button>
+              <button
+                onClick={() => {
+                  setSelectedShift(undefined)
+                  setSelectedDate(undefined)
+                  setIsModalOpen(true)
+                }}
+                className="w-full sm:w-auto px-4 py-2 md:px-6 md:py-2 text-sm md:text-base text-white bg-[#5daaf5] rounded-full hover:bg-[#4a90e2] transition-all font-bold shadow-md hover:-translate-y-0.5 whitespace-nowrap"
+              >
+                新規シフト
+              </button>
+            </div>
+          </div>
+
+          {/* Legend */}
+          <div className="flex flex-wrap gap-3">
+            <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#F19494]/90 border-[#E35B5B] shadow-sm">日勤</div>
+            <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#B4E2FF]/90 border-[#69C5FF] shadow-sm">夜勤</div>
+            <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#C8F7C5]/90 border-[#4CAF50] shadow-sm">同行</div>
+            <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#E0E0E0]/90 border-[#A0A0A0] shadow-sm">未配置</div>
           </div>
         </div>
 
-        {/* Legend */}
-        <div className="flex gap-4 mb-6">
-          <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#F19494] border-[#E35B5B] shadow-sm">日勤</div>
-          <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#B4E2FF] border-[#69C5FF] shadow-sm">夜勤</div>
-          <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#C8F7C5] border-[#4CAF50] shadow-sm">同行</div>
-          <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#E0E0E0] border-[#A0A0A0] shadow-sm">未配置</div>
-        </div>
-
         {/* FullCalendar Component */}
-        <div className="calendar-container shadow-inner rounded-sm overflow-hidden bg-white border border-[#aeaeae] p-2">
+        <div className="calendar-container shadow-sm rounded-xl overflow-hidden bg-white/90 backdrop-blur-sm border border-gray-200/60 p-2 mt-2">
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
