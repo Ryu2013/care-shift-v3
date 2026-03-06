@@ -1,17 +1,15 @@
 import { useState, useMemo, useEffect } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useNavigate, Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { getShifts, updateShift } from '../api/shifts'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { signOut } from '../api/auth'
 import { getTeams } from '../api/teams'
 import { getClients } from '../api/clients'
 import { getUsers } from '../api/users'
 import type { Shift, Team, Client, User } from '../types'
 import ShiftFormModal from '../components/ShiftFormModal'
-import { HamburgerMenuButton } from '../components/HamburgerMenuButton'
+import { Header } from '../components/Header'
 
 const formatTime = (timeString: string) => {
   if (timeString.includes('T')) {
@@ -34,9 +32,6 @@ export default function ShiftsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedShift, setSelectedShift] = useState<Shift | undefined>(undefined)
   const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined)
-
-  const navigate = useNavigate()
-  const queryClient = useQueryClient()
 
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
@@ -83,17 +78,6 @@ export default function ShiftsPage() {
     queryFn: () => getShifts({ client_id: selectedClientId || undefined }).then((r: { data: Shift[] }) => r.data),
   })
 
-  const handleSignOut = async () => {
-    try {
-      await signOut()
-      // セッション消去とフロントのme（currentUser）のRAMクリアを確実に行う
-      queryClient.removeQueries({ queryKey: ['currentUser'] })
-      queryClient.clear()
-      navigate('/login')
-    } catch (e) {
-      console.error(e)
-    }
-  }
 
   const handleDateClick = (arg: any) => {
     // 日付クリックで新規作成
@@ -172,37 +156,9 @@ export default function ShiftsPage() {
 
   return (
     <div className="min-h-[100vh]">
-      {/* Menu/Header Area */}
-      <header className="flex justify-between items-center p-4 md:border-b bg-white/80 backdrop-blur-md relative z-50">
-        <div className="flex items-center gap-3">
-          <img src="/src/assets/logo.png" alt="ケアシフト ロゴ" className="h-8" />
-          <span className="font-bold text-lg tracking-wide hidden sm:block text-[#333]">シフト管理アプリ</span>
-        </div>
+      <Header />
 
-        {/* デスクトップ用ナビゲーション */}
-        <nav className="hidden md:flex items-center gap-6">
-          <Link to="/rooms" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">チャット</Link>
-          <Link to="/settings" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">部署/会社</Link>
-          <Link to="/clients" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">利用者とスタッフ</Link>
-          <Link to="/work-statuses" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">出退勤状況</Link>
-          <Link to="/two-factor-setup" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">二段階認証</Link>
-          <button onClick={handleSignOut} className="font-bold text-red-500 hover:text-red-600 transition-colors cursor-pointer">ログアウト</button>
-        </nav>
-
-        {/* ハンバーガーボタン (モバイル用) */}
-        <HamburgerMenuButton className="md:hidden">
-          <nav className="flex flex-col items-center gap-8 pt-20">
-            <Link to="/rooms" className="font-bold text-xl text-[#333]">チャット</Link>
-            <Link to="/settings" className="font-bold text-xl text-[#333]">部署/会社</Link>
-            <Link to="/clients" className="font-bold text-xl text-[#333]">利用者とスタッフ</Link>
-            <Link to="/work-statuses" className="font-bold text-xl text-[#333]">出退勤状況</Link>
-            <Link to="/two-factor-setup" className="font-bold text-xl text-[#333]">二段階認証</Link>
-            <button onClick={handleSignOut} className="font-bold text-xl text-red-500 mt-2">ログアウト</button>
-          </nav>
-        </HamburgerMenuButton>
-      </header>
-
-      <div className="p-4 mx-auto max-w-7xl">
+      <div className="p-4 pt-20 mx-auto max-w-7xl">
         {/* Filters and Legend Area */}
         <div className="bg-white/80 backdrop-blur-sm shadow-sm rounded-xl p-4 mb-4 border border-white/50">
           <div className="mb-4">
