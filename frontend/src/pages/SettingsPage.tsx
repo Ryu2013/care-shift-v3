@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { getOffice, updateOffice } from '../api/office'
 import { getTeams, createTeam, updateTeam, deleteTeam } from '../api/teams'
 import type { Office, Team } from '../types'
+import { Header } from '../components/Header'
 import styles from './SettingsPage.module.css'
 
 export default function SettingsPage() {
-    const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState<'departments' | 'company'>('departments')
 
     // Office State
@@ -103,177 +102,175 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className={styles.settingsContainer}>
-            <div className={`${styles.settingsHeader} flex items-center gap-4`}>
-                <button onClick={() => navigate('/shifts')} className="hover:opacity-80 transition-opacity">
-                    <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                </button>
-                <h1 className={`${styles.settingsTitle} mb-0`}>設定</h1>
-            </div>
+        <div className="min-h-screen">
+            <Header />
+            <div className="pt-28 pb-8 px-4 sm:px-6 max-w-4xl mx-auto">
+                <div className={`${styles.container} p-6 sm:p-10`}>
 
-            <div className="toggle-switch">
-                <button
-                    className={`toggle-btn ${activeTab === 'departments' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('departments')}
-                >
-                    部署
-                </button>
-                <button
-                    className={`toggle-btn ${activeTab === 'company' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('company')}
-                >
-                    会社
-                </button>
-            </div>
-
-            {activeTab === 'departments' && (
-                <div>
-                    <div className="alert alert-info">
-                        <p>部署を消去するには従業員、顧客がいない必要があります。</p>
+                    <div className={`${styles.tabContainer} flex p-1 mb-8`}>
+                        <button
+                            className={`flex-1 py-3 px-4 text-sm sm:text-base ${styles.tabButton} ${activeTab === 'departments' ? styles.tabButtonActive : styles.tabButtonInactive}`}
+                            onClick={() => setActiveTab('departments')}
+                        >
+                            部署管理
+                        </button>
+                        <button
+                            className={`flex-1 py-3 px-4 text-sm sm:text-base ${styles.tabButton} ${activeTab === 'company' ? styles.tabButtonActive : styles.tabButtonInactive}`}
+                            onClick={() => setActiveTab('company')}
+                        >
+                            会社情報
+                        </button>
                     </div>
 
-                    <div className={styles.settingsCard}>
-                        <h3>新しい部署の追加</h3>
-                        <form onSubmit={handleCreateTeam} className={styles.inputGroup}>
-                            <input
-                                type="text"
-                                className="form-input"
-                                placeholder="部署名"
-                                value={newTeamName}
-                                onChange={(e) => setNewTeamName(e.target.value)}
-                            />
-                            <button type="submit" className="btn btn-primary" disabled={!newTeamName.trim()}>
-                                追加
-                            </button>
-                        </form>
-                    </div>
+                    {activeTab === 'departments' && (
+                        <div className="space-y-6">
+                            <div className={`${styles.infoAlert} p-4 text-sm`}>
+                                部署を削除するには、その部署に所属する従業員や顧客がいない状態にする必要があります。
+                            </div>
 
-                    <div className="list-group">
-                        {teams.length === 0 ? (
-                            <div className={styles.emptyState}>部署が登録されていません。</div>
-                        ) : (
-                            teams.map(team => (
-                                <div key={team.id} className="list-item">
-                                    {editingTeamId === team.id ? (
-                                        <div className={`${styles.inputGroup} w-full`}>
-                                            <input
-                                                type="text"
-                                                className="form-input"
-                                                value={editingTeamName}
-                                                onChange={(e) => setEditingTeamName(e.target.value)}
-                                                autoFocus
-                                            />
-                                            <button onClick={() => handleUpdateTeam(team.id)} className="btn btn-primary">保存</button>
-                                            <button onClick={() => setEditingTeamId(null)} className="btn btn-secondary">キャンセル</button>
-                                        </div>
-                                    ) : (
-                                        <>
-                                            <div className="list-item-title">{team.name}</div>
-                                            <div className="list-item-actions">
-                                                <button
-                                                    onClick={() => {
-                                                        setEditingTeamId(team.id)
-                                                        setEditingTeamName(team.name)
-                                                    }}
-                                                    className="btn btn-secondary"
-                                                >
-                                                    編集
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDeleteTeam(team.id)}
-                                                    className="btn btn-danger"
-                                                    disabled={teams.length <= 1}
-                                                >
-                                                    削除
-                                                </button>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            ))
-                        )}
-                    </div>
-                </div>
-            )}
+                            <div className={`${styles.card} p-6`}>
+                                <h3 className={`${styles.sectionTitle} text-lg mb-4 pb-3`}>新しい部署の追加</h3>
+                                <form onSubmit={handleCreateTeam} className="flex gap-3">
+                                    <input
+                                        type="text"
+                                        className={`${styles.input} flex-1 py-2 px-4 w-full`}
+                                        placeholder="部署名を入力"
+                                        value={newTeamName}
+                                        onChange={(e) => setNewTeamName(e.target.value)}
+                                    />
+                                    <button type="submit" className={`${styles.btn} ${styles.btnPrimary} px-6 py-2`} disabled={!newTeamName.trim()}>
+                                        追加
+                                    </button>
+                                </form>
+                            </div>
 
-            {activeTab === 'company' && office && (
-                <div>
-                    <div className={styles.settingsCard}>
-                        <h3>契約状況</h3>
-
-                        {(() => {
-                            const status = office.subscription_status
-                            const isActive = ['active', 'trialing', 'past_due', 'unpaid'].includes(status || '')
-
-                            if (isActive) {
-                                if (office.cancel_at_period_end) {
-                                    return (
-                                        <div className="alert alert-warning">
-                                            <p><strong>⚠️ 解約予約済みです</strong></p>
-                                            <p>
-                                                {formatDate(office.current_period_end)} までご利用いただけます。<br />
-                                                その後、自動的に解約されます。
-                                            </p>
-                                        </div>
-                                    )
-                                } else {
-                                    return (
-                                        <div className="alert alert-success">
-                                            <p><strong>✅ 契約中（自動更新）</strong></p>
-                                            <p>次回更新日: {formatDate(office.current_period_end)}</p>
-                                        </div>
-                                    )
-                                }
-                            } else if (status === 'canceled') {
-                                return (
-                                    <div className="alert alert-neutral">
-                                        <p>現在は解約済みです。</p>
+                            <div className="space-y-3">
+                                {teams.length === 0 ? (
+                                    <div className={`${styles.card} p-8 text-center`}>
+                                        <div className="text-gray-500">部署が登録されていません。</div>
                                     </div>
-                                )
-                            } else {
-                                return (
-                                    <div className="alert alert-info">
-                                        <p>サブスクリプションのご契約はこちらから</p>
-                                    </div>
-                                )
-                            }
-                        })()}
-
-                        <div className="mt-4">
-                            <a href="/api/subscription/portal" className="btn btn-secondary" style={{ textDecoration: 'none' }}>
-                                契約内容の確認・変更・解約
-                            </a>
+                                ) : (
+                                    teams.map(team => (
+                                        <div key={team.id} className={`${styles.itemRow} flex items-center justify-between p-4`}>
+                                            {editingTeamId === team.id ? (
+                                                <div className="flex flex-1 items-center gap-2">
+                                                    <input
+                                                        type="text"
+                                                        className={`${styles.input} flex-1 py-2 px-3`}
+                                                        value={editingTeamName}
+                                                        onChange={(e) => setEditingTeamName(e.target.value)}
+                                                        autoFocus
+                                                    />
+                                                    <button onClick={() => handleUpdateTeam(team.id)} className={`${styles.btn} ${styles.btnPrimary} px-4 py-2 text-sm`}>保存</button>
+                                                    <button onClick={() => setEditingTeamId(null)} className={`${styles.btn} ${styles.btnSecondary} px-4 py-2 text-sm`}>取消</button>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <div className="flex-1">
+                                                        <div className={`${styles.itemRowTitle}`}>{team.name}</div>
+                                                    </div>
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick={() => {
+                                                                setEditingTeamId(team.id)
+                                                                setEditingTeamName(team.name)
+                                                            }}
+                                                            className={`${styles.btn} ${styles.btnSecondary} px-4 py-2 text-sm`}
+                                                        >
+                                                            編集
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteTeam(team.id)}
+                                                            className={`${styles.btnDanger} px-3 py-2 text-sm`}
+                                                            disabled={teams.length <= 1}
+                                                        >
+                                                            削除
+                                                        </button>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    ))
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
 
-                    <div className={styles.settingsCard}>
-                        <h3>会社情報の編集</h3>
-                        {officeMessage.text && (
-                            <div className={`alert ${officeMessage.type === 'success' ? 'alert-success' : 'alert-warning'}`}>
-                                {officeMessage.text}
-                            </div>
-                        )}
+                    {activeTab === 'company' && office && (
+                        <div className="space-y-8">
+                            <div className={`${styles.card} p-6`}>
+                                <h3 className={`${styles.sectionTitle} text-lg mb-4 pb-3`}>契約状況</h3>
 
-                        <form onSubmit={handleUpdateOffice}>
-                            <div className="form-group">
-                                <label className="form-label">会社名</label>
-                                <input
-                                    type="text"
-                                    className="form-input"
-                                    value={officeName}
-                                    onChange={(e) => setOfficeName(e.target.value)}
-                                    required
-                                />
+                                {(() => {
+                                    const status = office.subscription_status
+                                    const isActive = ['active', 'trialing', 'past_due', 'unpaid'].includes(status || '')
+
+                                    if (isActive) {
+                                        if (office.cancel_at_period_end) {
+                                            return (
+                                                <div className="space-y-4">
+                                                    <div className={`inline-block px-3 py-1 text-sm ${styles.statusBadge} ${styles.statusWarning}`}>解約予約済み</div>
+                                                    <p className="text-gray-600 text-sm leading-relaxed mt-3">
+                                                        <strong>{formatDate(office.current_period_end)}</strong> までご利用いただけます。期限を過ぎると自動的に解約されます。
+                                                    </p>
+                                                </div>
+                                            )
+                                        } else {
+                                            return (
+                                                <div className="space-y-4">
+                                                    <div className={`inline-block px-3 py-1 text-sm ${styles.statusBadge} ${styles.statusSuccess}`}>契約中</div>
+                                                    <p className="text-gray-600 text-sm leading-relaxed mt-3">
+                                                        次回更新予定日: <strong>{formatDate(office.current_period_end)}</strong>
+                                                    </p>
+                                                </div>
+                                            )
+                                        }
+                                    } else if (status === 'canceled') {
+                                        return <div className={`inline-block px-3 py-1 text-sm ${styles.statusBadge} ${styles.statusWarning}`}>解約済み</div>
+                                    } else {
+                                        return (
+                                            <div className="py-2">
+                                                <p className="text-gray-500 text-sm italic">サブスクリプションのご契約はポータルからお手続きください。</p>
+                                            </div>
+                                        )
+                                    }
+                                })()}
+
+                                <div className="mt-8 pt-6 border-t border-white/20">
+                                    <a href="/api/subscription/portal" className={`block w-full text-center px-6 py-3 ${styles.btn} ${styles.btnSecondary}`} style={{ textDecoration: 'none' }}>
+                                        契約内容の確認・変更・解約
+                                    </a>
+                                </div>
                             </div>
-                            <button type="submit" className="btn btn-primary" disabled={isUpdatingOffice}>
-                                {isUpdatingOffice ? '保存中...' : '保存'}
-                            </button>
-                        </form>
-                    </div>
+
+                            <div className={`${styles.card} p-6`}>
+                                <h3 className={`${styles.sectionTitle} text-lg mb-4 pb-3`}>会社情報の編集</h3>
+                                {officeMessage.text && (
+                                    <div className={`${styles.infoAlert} p-4 mb-6 text-sm ${officeMessage.type === 'success' ? '' : 'bg-red-50 border-red-200 text-red-700'}`}>
+                                        {officeMessage.text}
+                                    </div>
+                                )}
+
+                                <form onSubmit={handleUpdateOffice} className="space-y-6">
+                                    <div>
+                                        <label className={`${styles.label} block text-xs uppercase tracking-widest pl-1 mb-2`}>会社名 / 事業所名</label>
+                                        <input
+                                            type="text"
+                                            className={`${styles.input} w-full py-3 px-4`}
+                                            value={officeName}
+                                            onChange={(e) => setOfficeName(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    <button type="submit" className={`w-full py-3 px-6 ${styles.btn} ${styles.btnPrimary}`} disabled={isUpdatingOffice}>
+                                        {isUpdatingOffice ? '保存中...' : '情報を更新する'}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
         </div>
     )
 }

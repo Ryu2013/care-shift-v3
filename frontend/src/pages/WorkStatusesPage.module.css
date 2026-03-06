@@ -1,0 +1,94 @@
+/* =========================================
+   WorkStatusesPage Module (OOCSS: Visuals Only)
+   Colors are referenced from Base.css
+   ========================================= */
+
+.container {
+    background-color: var(--white-color);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.title {
+    font-weight: bold;
+    color: var(--black-dark);
+}
+
+.input {
+    border-radius: 12px;
+    border: 1px solid rgba(105, 197, 255, 0.4);
+    background-color: white;
+    transition: all 0.2s;
+    color: var(--black-dark);
+    font-family: inherit;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--blue-color);
+    box-shadow: 0 0 0 3px rgba(105, 197, 255, 0.1);
+}
+
+/* Status Badges */
+.statusBadge {
+    font-weight: 600;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    /* default structure */
+}
+
+.statusBadgeWork {
+    background-color: var(--green-color);
+    color: var(--green-dark);
+    border-color: rgba(76, 175, 80, 0.2);
+}
+
+.statusBadgeNotWork {
+    background-color: rgba(241, 148, 148, 0.2);
+    color: var(--red-dark);
+    border-color: rgba(227, 91, 91, 0.2);
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+    border: 1px solid rgba(105, 197, 255, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.clientName {
+    font-weight: bold;
+    color: var(--black-dark);
+}
+
+.userName {
+    color: var(--black-color);
+}
+
+.timeText {
+    color: var(--blue-dark);
+    font-weight: 600;
+}
+
+.statusTextWork {
+    color: var(--green-dark);
+    font-weight: bold;
+}
+
+.statusTextNotWork {
+    color: var(--black-color);
+    font-weight: 500;
+}
+
+.emptyText {
+    color: var(--black-color);
+    text-align: center;
+}

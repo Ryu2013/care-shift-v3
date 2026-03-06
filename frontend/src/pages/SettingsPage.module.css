@@ -1,50 +1,154 @@
 /* =========================================
-   SettingsPage Module（設定ページ固有スタイル）
+   SettingsPage Module (OOCSS: Visuals Only)
+   Colors are referenced from Base.css
    ========================================= */
 
-.settings-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 24px;
+.container {
+  background-color: var(--white-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.settings-header {
-  margin-bottom: 24px;
+.card {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  border: 1px solid rgba(105, 197, 255, 0.2);
 }
 
-.settings-title {
-  font-size: 24px;
+.tabContainer {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(105, 197, 255, 0.2);
+}
+
+.tabButton {
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.2s;
+  color: var(--black-color);
+}
+
+.tabButtonActive {
+  background-color: white;
+  color: var(--blue-dark);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.tabButtonInactive {
+  background-color: transparent;
+}
+
+.tabButtonInactive:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: var(--black-dark);
+}
+
+.sectionTitle {
   font-weight: bold;
-  color: #333;
+  color: var(--black-dark);
+  border-bottom: 1px solid rgba(105, 197, 255, 0.2);
 }
 
-.settings-card {
-  background: white;
-  border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  margin-bottom: 24px;
+.label {
+  font-weight: 600;
+  color: var(--black-dark);
 }
 
-.settings-card h3 {
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 18px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 12px;
+.input {
+  border-radius: 12px;
+  border: 1px solid rgba(105, 197, 255, 0.4);
+  background-color: white;
+  transition: border-color 0.2s;
+  color: var(--black-dark);
 }
 
-.input-group {
-  display: flex;
-  gap: 8px;
+.input:focus {
+  outline: none;
+  border-color: var(--blue-color);
+  box-shadow: 0 0 0 3px rgba(105, 197, 255, 0.1);
 }
 
-.input-group .form-input {
-  flex: 1;
-}
-
-.empty-state {
+.btn {
+  font-weight: bold;
+  border-radius: 9999px;
+  transition: background-color 0.2s, transform 0.1s;
   text-align: center;
-  padding: 24px;
-  color: #777;
+}
+
+.btnPrimary {
+  background-color: var(--blue-color);
+  color: white;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background-color: var(--blue-dark);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  background-color: white;
+  color: var(--black-color);
+  border: 1px solid rgba(105, 197, 255, 0.4);
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background-color: var(--bg-color);
+  color: var(--black-dark);
+}
+
+.btnDanger {
+  color: var(--red-color);
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+  background-color: transparent;
+}
+
+.btnDanger:hover:not(:disabled) {
+  background-color: rgba(241, 148, 148, 0.1);
+}
+
+.btnDanger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.itemRow {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+}
+
+.itemRowTitle {
+  font-weight: 600;
+  color: var(--black-dark);
+}
+
+.infoAlert {
+  background-color: rgba(255, 255, 255, 0.7);
+  border-left: 4px solid var(--blue-color);
+  border-radius: 4px;
+  color: var(--black-dark);
+}
+
+.statusBadge {
+  font-weight: 600;
+  border-radius: 9999px;
+}
+
+.statusSuccess {
+  background-color: var(--green-color);
+  color: var(--green-dark);
+}
+
+.statusWarning {
+  background-color: rgba(241, 148, 148, 0.2);
+  color: var(--red-dark);
 }

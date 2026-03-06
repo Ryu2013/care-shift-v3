@@ -1,0 +1,86 @@
+/* =========================================
+   TwoFactorSetupPage Module (OOCSS: Visuals Only)
+   Colors are referenced from Base.css
+   ========================================= */
+
+.container {
+    background-color: var(--white-color);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+    border: 1px solid rgba(105, 197, 255, 0.2);
+}
+
+.title {
+    font-weight: bold;
+    color: var(--black-dark);
+}
+
+.description {
+    color: var(--black-color);
+}
+
+.qrContainer {
+    background-color: white;
+    border: 2px solid rgba(105, 197, 255, 0.2);
+    border-radius: 16px;
+}
+
+.secretKeyBox {
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(105, 197, 255, 0.2);
+    border-radius: 12px;
+}
+
+.secretKeyText {
+    color: var(--blue-color);
+    font-weight: bold;
+    letter-spacing: 0.1em;
+}
+
+.label {
+    font-weight: 600;
+    color: var(--black-dark);
+}
+
+.input {
+    border-radius: 12px;
+    border: 1px solid rgba(105, 197, 255, 0.4);
+    background-color: white;
+    transition: all 0.2s;
+    color: var(--black-dark);
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--blue-color);
+    box-shadow: 0 0 0 3px rgba(105, 197, 255, 0.1);
+}
+
+.btnPrimary {
+    background-color: var(--blue-color);
+    color: white;
+    font-weight: bold;
+    border-radius: 12px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btnPrimary:hover:not(:disabled) {
+    background-color: var(--blue-dark);
+}
+
+.btnPrimary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.errorText {
+    color: var(--red-color);
+}
