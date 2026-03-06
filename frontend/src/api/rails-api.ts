@@ -16,7 +16,7 @@ apiClient.interceptors.request.use((config) => {
     .find((row) => row.startsWith('XSRF-TOKEN='))
     ?.split('=')[1]
   if (token) {
-    config.headers['X-XSRF-TOKEN'] = decodeURIComponent(token)
+    config.headers['X-CSRF-Token'] = decodeURIComponent(token)
   }
   return config
 })

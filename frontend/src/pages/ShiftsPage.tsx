@@ -27,6 +27,7 @@ export default function ShiftsPage() {
   const [selectedClientId, setSelectedClientId] = useState<number | ''>('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedShift, setSelectedShift] = useState<Shift | undefined>(undefined)
+  const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined)
 
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -74,21 +75,11 @@ export default function ShiftsPage() {
   const handleDateClick = (arg: any) => {
     // 日付クリックで新規作成
     const clickedDate = new Date(arg.date)
-    // タイムゾーンのズレを防ぐため、ローカルタイムとしてISO stringを生成してセットする仮シフト
+    // タイムゾーンのズレを防ぐため、ローカルタイムとしてISO stringを生成
     const dateStr = `${clickedDate.getFullYear()}-${String(clickedDate.getMonth() + 1).padStart(2, '0')}-${String(clickedDate.getDate()).padStart(2, '0')}`
 
-    // ShiftFormModalがShiftオブジェクトを受け取るため、最小限のモックを作成
-    setSelectedShift({
-      id: 0,
-      client_id: selectedClientId || 0,
-      user_id: 0,
-      date: dateStr,
-      start_time: '09:00',
-      end_time: '18:00',
-      shift_type: 'day',
-      is_escort: false
-    } as any)
-
+    setSelectedShift(undefined)
+    setSelectedDate(dateStr)
     setIsModalOpen(true)
   }
 
@@ -220,6 +211,7 @@ export default function ShiftsPage() {
             <button
               onClick={() => {
                 setSelectedShift(undefined)
+                setSelectedDate(undefined)
                 setIsModalOpen(true)
               }}
               className="px-6 py-2 text-white bg-[#5daaf5] rounded-full hover:bg-[#4a90e2] transition-all font-bold shadow-md hover:-translate-y-0.5"
@@ -281,11 +273,13 @@ export default function ShiftsPage() {
         onClose={() => {
           setIsModalOpen(false)
           setSelectedShift(undefined)
+          setSelectedDate(undefined)
         }}
         onSuccess={() => refetch()}
         teamId={selectedTeamId || undefined}
         clientId={selectedClientId || undefined}
         shift={selectedShift}
+        initialDate={selectedDate}
       />
     </div>
   )
