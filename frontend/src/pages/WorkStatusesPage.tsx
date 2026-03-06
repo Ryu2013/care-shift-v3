@@ -9,7 +9,7 @@ export default function WorkStatusesPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['workStatuses', date],
-    queryFn: () => apiClient.get('/work_statuses', { params: { date } }).then((r) => r.data),
+    queryFn: () => apiClient.get('/admin/work_statuses', { params: { date } }).then((r) => r.data),
   })
 
   return (

@@ -5,11 +5,9 @@ import { HamburgerMenuButton } from './HamburgerMenuButton';
 import { signOut } from '../api/auth';
 import logoImg from '../assets/logo.png';
 
-interface HeaderProps {
-    title?: string;
-}
+interface HeaderProps { }
 
-export const Header: React.FC<HeaderProps> = ({ title }) => {
+export const Header: React.FC<HeaderProps> = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -34,18 +32,18 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
                 </div>
             </Link>
 
-        <nav className="hidden md:flex items-center gap-6">
-          <Link to="/shifts" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">シフト表</Link>
-          <Link to="/rooms" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">チャット</Link>
-          <Link to="/settings" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">部署/会社</Link>
-          <Link to="/clients" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">利用者とスタッフ</Link>
-          <Link to="/work-statuses" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">出退勤状況</Link>
-          <Link to="/two-factor-setup" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">二段階認証</Link>
-          <button onClick={handleSignOut} className="font-bold text-red-500 hover:text-red-600 transition-colors cursor-pointer">ログアウト</button>
-        </nav>
+            <nav className="hidden xl:flex items-center gap-6">
+                <Link to="/shifts" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">シフト表</Link>
+                <Link to="/rooms" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">チャット</Link>
+                <Link to="/settings" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">部署/会社</Link>
+                <Link to="/clients" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">利用者とスタッフ</Link>
+                <Link to="/work-statuses" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">出退勤状況</Link>
+                <Link to="/two-factor-setup" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">二段階認証</Link>
+                <button onClick={handleSignOut} className="font-bold text-red-500 hover:text-red-600 transition-colors cursor-pointer">ログアウト</button>
+            </nav>
 
-            {/* ハンバーガーボタン (モバイル用 - md以上で非表示) */}
-            <HamburgerMenuButton className="md:hidden">
+            {/* ハンバーガーボタン (モバイル・タブレット用 - xl以上で非表示) */}
+            <HamburgerMenuButton className="xl:hidden">
                 <nav className="flex flex-col items-center gap-8 pt-20">
                     <Link to="/shifts" className="font-bold text-xl text-[#333]">シフト表</Link>
                     <Link to="/rooms" className="font-bold text-xl text-[#333]">チャット</Link>

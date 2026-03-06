@@ -2,7 +2,7 @@ class Api::Admin::SubscriptionsController < Api::Admin::AuthorizationController
   def subscribe
     service = StripeSubscriptionService.new(current_user.office, current_user)
     url = service.create_checkout_session(
-      success_url: ENV["FRONTEND_URL"] + "/subscription/checkout",
+      success_url: ENV["FRONTEND_URL"] + "/settings?success=true",
       cancel_url:  ENV["FRONTEND_URL"] + "/subscription"
     )
     render json: { url: url }

@@ -11,6 +11,7 @@ import WorkStatusesPage from './pages/WorkStatusesPage'
 import RoomsPage from './pages/RoomsPage'
 import RoomDetailPage from './pages/RoomDetailPage'
 import SettingsPage from './pages/SettingsPage'
+import SubscriptionPage from './pages/SubscriptionPage'
 import TwoFactorSetupPage from './pages/TwoFactorSetupPage'
 import HowToUseLayout from './pages/how_to_use/HowToUseLayout'
 import HowToUsePage from './pages/how_to_use/HowToUsePage'
@@ -54,6 +55,7 @@ function App() {
       <Route path="/rooms/:id" element={<PrivateLayout><RoomDetailPage /></PrivateLayout>} />
       <Route path="/settings" element={<PrivateLayout><SettingsPage /></PrivateLayout>} />
       <Route path="/two-factor-setup" element={<PrivateLayout><TwoFactorSetupPage /></PrivateLayout>} />
+      <Route path="/subscription" element={<PrivateLayout><SubscriptionPage /></PrivateLayout>} />
       <Route path="*" element={<Navigate to="/shifts" replace />} />
     </Routes>
   )

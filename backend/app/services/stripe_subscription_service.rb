@@ -12,7 +12,7 @@ class StripeSubscriptionService
     session = Stripe::Checkout::Session.create(
       customer: office.stripe_customer_id,
       mode: "subscription",
-      line_items: [{ price: ENV["STRIPE_METERED_PRICE_ID"] }],
+      line_items: [{ price: Rails.application.credentials.dig(:stripe, :metered_price_id) }],
       success_url: success_url,
       cancel_url: cancel_url,
       metadata: { office_id: office.id },

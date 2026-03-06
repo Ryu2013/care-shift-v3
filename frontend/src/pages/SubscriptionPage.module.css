@@ -1,0 +1,111 @@
+/* =========================================
+   SubscriptionPage Module (OOCSS: Visuals Only)
+   Colors are referenced from Base.css
+   ========================================= */
+
+.container {
+    background-color: var(--white-color);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.title {
+    color: var(--black-dark);
+    font-weight: bold;
+}
+
+.planCard {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+    border: 1px solid rgba(105, 197, 255, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.planCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.planCardFeatured {
+    border: 2px solid var(--blue-dark);
+}
+
+.featuredBadge {
+    background-color: var(--blue-dark);
+    color: white;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.planName {
+    font-weight: bold;
+    color: var(--black-dark);
+}
+
+.planDescription {
+    color: var(--black-color);
+}
+
+.planPrice {
+    font-weight: bold;
+    color: var(--black-dark);
+}
+
+.planPriceSpan {
+    font-weight: normal;
+    color: var(--black-color);
+}
+
+.featuresList li {
+    color: var(--black-dark);
+    position: relative;
+}
+
+.featuresList li::before {
+    content: "✔";
+    color: var(--green-dark);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.btn {
+    font-weight: bold;
+    border-radius: 12px;
+    transition: background-color 0.2s, color 0.2s;
+    text-align: center;
+}
+
+.btnPrimary {
+    background-color: var(--blue-color);
+    color: white;
+}
+
+.btnPrimary:hover:not(:disabled) {
+    background-color: var(--blue-dark);
+}
+
+.btnPrimary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btnDisabled {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: var(--black-color);
+    border: 1px solid rgba(105, 197, 255, 0.3);
+    cursor: not-allowed;
+}
+
+.btnLoading {
+    background-color: var(--blue-dark);
+    color: white;
+    opacity: 0.7;
+    cursor: wait;
+}

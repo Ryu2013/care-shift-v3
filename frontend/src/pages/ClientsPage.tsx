@@ -1,14 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { getClients } from '../api/clients'
 import { getTeams } from '../api/teams'
 import type { Client, Team } from '../types'
 import ClientFormModal from '../components/ClientFormModal'
+import { Header } from '../components/Header'
 
 export default function ClientsPage() {
-  const navigate = useNavigate()
-  const [selectedTeamId, setSelectedTeamId] = useState<number | ''>('')
+  const [selectedTeamId, setSelectedTeamId] = useState<number | undefined>(undefined)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedClient, setSelectedClient] = useState<Client | undefined>(undefined)
 
@@ -17,34 +17,37 @@ export default function ClientsPage() {
     queryFn: () => getTeams().then((res) => res.data),
   })
 
+  // Set initial team if none selected
+  useEffect(() => {
+    if (teams && teams.length > 0 && selectedTeamId === undefined) {
+      setSelectedTeamId(teams[0].id)
+    }
+  }, [teams, selectedTeamId])
+
   const { data: clients, isLoading, refetch } = useQuery({
     queryKey: ['clients', selectedTeamId],
-    queryFn: () => getClients(selectedTeamId || undefined).then((r) => r.data),
+    queryFn: () => getClients(selectedTeamId).then((r) => r.data),
+    enabled: selectedTeamId !== undefined
   })
 
   return (
     <div className="min-h-screen bg-[#f5f6f8]">
-      {/* Header Area */}
-      <div className="p-4 flex items-center gap-4">
-        <button onClick={() => navigate('/shifts')} className="hover:opacity-80 transition-opacity">
-          <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-        </button>
-        <h1 className="text-2xl font-bold text-gray-800">
-          {teams?.find(t => t.id === selectedTeamId)?.name || '全部署'}
-        </h1>
-      </div>
+      <Header />
 
-      <div className="px-4 space-y-6 max-w-2xl mx-auto">
+      <div className="pt-24 px-4 space-y-6 max-w-2xl mx-auto">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-gray-800">
+            {teams?.find(t => t.id === selectedTeamId)?.name || '部署'}
+          </h1>
+        </div>
+
         {/* Team Selection */}
         <div className="flex justify-center">
           <select
-            value={selectedTeamId}
-            onChange={(e) => setSelectedTeamId(e.target.value ? Number(e.target.value) : '')}
+            value={selectedTeamId || ''}
+            onChange={(e) => setSelectedTeamId(Number(e.target.value))}
             className="w-full max-w-xs border-2 border-gray-200 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none transition-all text-gray-700 font-medium"
           >
-            <option value="">部署を変更</option>
             {teams?.map((team: Team) => (
               <option key={team.id} value={team.id}>{team.name}</option>
             ))}
@@ -119,9 +122,10 @@ export default function ClientsPage() {
           setSelectedClient(undefined)
         }}
         onSuccess={() => refetch()}
-        initialTeamId={selectedTeamId}
+        initialTeamId={selectedTeamId === undefined ? '' : selectedTeamId}
         client={selectedClient}
       />
     </div>
   )
 }
+
