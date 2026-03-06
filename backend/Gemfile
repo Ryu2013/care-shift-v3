@@ -30,7 +30,6 @@ gem "pundit"
 
 # OmniAuth
 gem "omniauth-google-oauth2"
-gem "omniauth-rails_csrf_protection"
 
 # Stripe
 gem "stripe", ">= 8.0"

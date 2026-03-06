@@ -27,8 +27,8 @@ Devise.setup do |config|
   config.sign_out_via = :delete
 
   config.omniauth :google_oauth2,
-    ENV["GOOGLE_CLIENT_ID"],
-    ENV["GOOGLE_CLIENT_SECRET"]
+    Rails.application.credentials.google_client_id || ENV["GOOGLE_CLIENT_ID"],
+    Rails.application.credentials.google_client_secret || ENV["GOOGLE_CLIENT_SECRET"]
 end
 
 # 未認証アクセスに対してJSON 401を返す（Deviseのデフォルトはリダイレクト）

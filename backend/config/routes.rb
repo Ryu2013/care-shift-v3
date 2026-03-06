@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   }
 
   namespace :api do
+    get 'csrf', to: 'csrf#index'
 
     namespace :admin do
       resources :teams, only: %i[index create update destroy]
