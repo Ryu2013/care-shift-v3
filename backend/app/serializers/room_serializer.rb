@@ -8,7 +8,6 @@ class RoomSerializer
       id: @room.id,
       name: @room.name,
       office_id: @room.office_id,
-      room_type: @room.room_type,
       users: @room.users.map { |u| UserSerializer.new(u) }
     }
   end

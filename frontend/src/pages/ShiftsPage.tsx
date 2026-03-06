@@ -139,7 +139,7 @@ export default function ShiftsPage() {
       const userName = users?.find(u => u.id === shift.user_id)?.name || "未配置"
       const startTimeStr = formatTime(shift.start_time)
       const endTimeStr = formatTime(shift.end_time)
-      const title = `${userName} (${startTimeStr}-${endTimeStr})`
+      const title = userName
 
       // カスタムプロパティとして色を判別
       let bgColor = '#F19494' // day default
@@ -165,7 +165,7 @@ export default function ShiftsPage() {
         backgroundColor: bgColor,
         borderColor: borderColor,
         textColor: textColor,
-        extendedProps: { shift }
+        extendedProps: { shift, startTimeStr, endTimeStr }
       }
     })
   }, [shifts, users])
@@ -248,16 +248,16 @@ export default function ShiftsPage() {
           </div>
 
           {/* Legend */}
-          <div className="flex flex-wrap gap-3">
-            <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#F19494]/90 border-[#E35B5B] shadow-sm">日勤</div>
-            <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#B4E2FF]/90 border-[#69C5FF] shadow-sm">夜勤</div>
-            <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#C8F7C5]/90 border-[#4CAF50] shadow-sm">同行</div>
-            <div className="px-3 py-1.5 text-xs font-bold rounded-tr-lg border-l-4 bg-[#E0E0E0]/90 border-[#A0A0A0] shadow-sm">未配置</div>
+          <div className="flex flex-wrap justify-center gap-3">
+            <div className="px-3 py-1.5 text-xm font-bold rounded-tr-lg border-l-4 bg-[#F19494]/90 border-[#E35B5B] shadow-sm">日勤</div>
+            <div className="px-3 py-1.5 text-xm font-bold rounded-tr-lg border-l-4 bg-[#B4E2FF]/90 border-[#69C5FF] shadow-sm">夜勤</div>
+            <div className="px-3 py-1.5 text-xm font-bold rounded-tr-lg border-l-4 bg-[#C8F7C5]/90 border-[#4CAF50] shadow-sm">同行</div>
+            <div className="px-3 py-1.5 text-xm font-bold rounded-tr-lg border-l-4 bg-[#E0E0E0]/90 border-[#A0A0A0] shadow-sm">未配置</div>
           </div>
         </div>
 
         {/* FullCalendar Component */}
-        <div className="calendar-container shadow-sm rounded-xl overflow-hidden bg-white/90 backdrop-blur-sm border border-gray-200/60 p-2 mt-2">
+        <div className="calendar-container shadow-sm rounded-xl overflow-hidden bg-[var(--white-color)] border border-gray-200/60 p-2 mt-2">
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
@@ -283,10 +283,17 @@ export default function ShiftsPage() {
               setCurrentDate(arg.view.currentStart)
             }}
             eventContent={(arg: any) => {
-              // カスタムイベント描画
+              // カスタムイベント描画 (複数行で折り返し表示)
+              const { startTimeStr, endTimeStr } = arg.event.extendedProps;
+
               return (
-                <div className="w-full text-[0.7rem] px-1 py-0.5 leading-tight overflow-hidden truncate font-bold border-l-4" style={{ borderColor: arg.event.borderColor }}>
-                  {arg.event.title}
+                <div
+                  className="w-full text-[0.65rem] sm:text-[0.7rem] px-1 py-0.5 leading-tight font-bold border-l-[3px] break-words whitespace-normal"
+                  style={{ borderColor: arg.event.borderColor }}
+                >
+                  <div className="mb-0.5">{arg.event.title}</div>
+                  <div className="text-[0.55rem] sm:text-[0.6rem] font-normal leading-none">{startTimeStr}</div>
+                  <div className="text-[0.55rem] sm:text-[0.6rem] font-normal leading-none">{endTimeStr}</div>
                 </div>
               )
             }}

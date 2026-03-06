@@ -7,7 +7,7 @@ import { entryApi } from '../api/entries'
 import { getUsers } from '../api/users'
 import { cable } from '../api/cable'
 import { useCurrentUser } from '../hooks/useCurrentUser'
-
+import styles from './RoomDetailPage.module.css'
 
 export default function RoomDetailPage() {
     const { id } = useParams()
@@ -38,10 +38,9 @@ export default function RoomDetailPage() {
         mutationFn: (newContent: string) => createMessage(roomId, newContent).then(res => res.data),
         onSuccess: () => {
             setContent('')
-        }, // WebSocket will handle the list update
+        },
     })
 
-    // Mutations for Entry Management
     const addEntry = useMutation({
         mutationFn: (userId: number) => entryApi.createEntry(roomId, userId),
         onSuccess: () => {
@@ -53,7 +52,6 @@ export default function RoomDetailPage() {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
 
-    // WebSocket Subscription
     useEffect(() => {
         const channel = cable.subscriptions.create(
             { channel: 'RoomChannel', room_id: roomId },
@@ -61,7 +59,6 @@ export default function RoomDetailPage() {
                 received(message: any) {
                     queryClient.setQueryData(['messages', roomId], (oldConfig: any) => {
                         if (!oldConfig) return [message]
-                        // check if message is already in list to avoid duplicate rendering from own API request
                         if (oldConfig.some((m: any) => m.id === message.id)) return oldConfig;
                         return [...oldConfig, message]
                     })
@@ -77,8 +74,8 @@ export default function RoomDetailPage() {
         scrollToBottom()
     }, [messages])
 
-    if (isLoadingRoom || isLoadingMessages) return <div className="p-4">読み込み中...</div>
-    if (!room) return <div className="p-4">ルームが見つかりません</div>
+    if (isLoadingRoom || isLoadingMessages) return <div className="p-4 flex justify-center items-center h-full text-gray-500">読み込み中...</div>
+    if (!room) return <div className="p-4 text-center">ルームが見つかりません</div>
 
     const handleSend = (e: React.FormEvent) => {
         e.preventDefault()
@@ -88,40 +85,51 @@ export default function RoomDetailPage() {
 
     const getUser = (userId: number) => users?.find((u) => u.id === userId)
 
-    // Identify users in and out of the room
     const memberIds = room.users?.map((u) => u.id) || []
     const availableUsers = users?.filter((u) => !memberIds.includes(u.id)) || []
     const members = room.users || []
 
     return (
-        <div className="flex flex-col h-[calc(100vh-100px)] max-h-[800px] bg-gray-50 -mx-4 -my-6 sm:mx-0 sm:my-0 sm:border sm:rounded-lg overflow-hidden relative">
+        <div className={styles.container}>
             {/* Header */}
-            <div className="flex items-center justify-between bg-white px-4 py-3 border-b shadow-sm z-10 relative">
+            <div className={styles.header}>
                 <div className="flex items-center">
                     <button
                         onClick={() => navigate('/rooms')}
-                        className="text-gray-500 hover:text-gray-700 mr-4 flex-shrink-0"
+                        className={styles.backButton}
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
-                    <h3 className="font-bold text-gray-800 truncate">{room.name}</h3>
+                    <h3 className={styles.headerTitle}>{room.name}</h3>
                 </div>
 
-                <button
-                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                    className="text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
-                >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => navigate('/shifts')}
+                        className={styles.sidebarToggle}
+                        title="シフト表へ"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </button>
+                    <button
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        className={styles.sidebarToggle}
+                        title="メンバー管理"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </button>
+                </div>
             </div>
 
-            <div className="flex-1 flex overflow-hidden">
+            <div className={styles.mainArea}>
                 {/* Messages area */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-100 flex flex-col">
+                <div className={styles.messagesArea}>
                     {messages?.map((msg) => {
                         const isMine = msg.user_id === currentUser?.id
                         const msgUser = getUser(msg.user_id)
@@ -133,30 +141,23 @@ export default function RoomDetailPage() {
                         return (
                             <div
                                 key={msg.id}
-                                className={`flex flex-col ${isMine ? 'items-end' : 'items-start'}`}
+                                className={`${styles.messageRow} ${isMine ? styles.messageRowMine : styles.messageRowOther}`}
                             >
                                 {!isMine && (
-                                    <span className="text-xs text-gray-500 mb-1 ml-1">
+                                    <span className={styles.userName}>
                                         {msgUser?.name || '不明なユーザー'}
                                     </span>
                                 )}
-                                <div className={`flex items-end max-w-[80%] ${isMine ? 'flex-row-reverse' : 'flex-row'}`}>
-                                    {/* User Icon placeholder if not mine */}
+                                <div className={`${styles.bubbleContainer} ${isMine ? styles.bubbleContainerMine : styles.bubbleContainerOther}`}>
                                     {!isMine && (
-                                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs mr-2 flex-shrink-0 shadow-sm">
+                                        <div className={styles.userAvatar}>
                                             {(msgUser?.name || '?').charAt(0)}
                                         </div>
                                     )}
-                                    <div
-                                        className={`px-4 py-2 rounded-2xl shadow-sm ${isMine
-                                            ? 'bg-[#8de055] text-white rounded-br-none'
-                                            : 'bg-white text-gray-800 rounded-bl-none'
-                                            }`}
-                                        style={{ wordBreak: 'break-word' }}
-                                    >
-                                        <p className="whitespace-pre-wrap text-sm">{msg.content}</p>
+                                    <div className={`${styles.messageBubble} ${isMine ? styles.messageBubbleMine : styles.messageBubbleOther}`}>
+                                        {msg.content}
                                     </div>
-                                    <div className={`text-[10px] text-gray-400 mb-1 ${isMine ? 'mr-2' : 'ml-2'}`}>
+                                    <div className={`${styles.timestamp} ${isMine ? styles.timestampMine : styles.timestampOther}`}>
                                         {time}
                                     </div>
                                 </div>
@@ -168,35 +169,35 @@ export default function RoomDetailPage() {
 
                 {/* Members Sidebar */}
                 {isSidebarOpen && (
-                    <div className="w-64 bg-white border-l shadow-xl flex flex-col z-20 absolute right-0 top-14 bottom-0 sm:relative sm:top-0 sm:bottom-auto">
-                        <div className="p-4 border-b">
-                            <h4 className="font-medium text-gray-800 flex justify-between items-center">
+                    <div className={styles.sidebar}>
+                        <div className={styles.sidebarHeader}>
+                            <h4 className={styles.sidebarTitle}>
                                 参加メンバー
-                                <span className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded-full">{members.length}</span>
+                                <span className={styles.memberCount}>{members.length}</span>
                             </h4>
                         </div>
-                        <div className="flex-1 overflow-y-auto p-2">
-                            <ul className="space-y-1 mb-4">
+                        <div className={styles.sidebarContent}>
+                            <ul className={styles.memberList}>
                                 {members.map(u => (
-                                    <li key={`member-${u.id}`} className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded flex items-center justify-between">
-                                        <span>{u.name}</span>
+                                    <li key={`member-${u.id}`} className={styles.memberItem}>
+                                        {u.name}
                                     </li>
                                 ))}
                             </ul>
 
                             {availableUsers.length > 0 && (
                                 <>
-                                    <div className="px-4 py-2 bg-gray-50 border-y -mx-2 mb-2">
-                                        <h5 className="text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">未参加</h5>
+                                    <div className={styles.sectionDivider}>
+                                        <h5 className={styles.sectionTitle}>未参加</h5>
                                     </div>
-                                    <ul className="space-y-1">
+                                    <ul className={styles.memberList}>
                                         {availableUsers.map(u => (
-                                            <li key={`invite-${u.id}`} className="px-3 py-2 text-sm text-gray-700 flex justify-between items-center bg-white rounded border border-transparent hover:border-gray-200">
+                                            <li key={`invite-${u.id}`} className={`${styles.memberItem} flex justify-between items-center`}>
                                                 <span>{u.name}</span>
                                                 <button
                                                     onClick={() => addEntry.mutate(u.id)}
                                                     disabled={addEntry.isPending}
-                                                    className="text-xs text-blue-600 hover:text-blue-800 hover:underline px-2 py-1"
+                                                    className={styles.addButton}
                                                 >
                                                     追加
                                                 </button>
@@ -211,20 +212,20 @@ export default function RoomDetailPage() {
             </div>
 
             {/* Input area */}
-            <div className="bg-white px-4 py-3 border-t z-10 relative">
-                <form onSubmit={handleSend} className="flex gap-2">
+            <div className={styles.inputArea}>
+                <form onSubmit={handleSend} className={styles.inputForm}>
                     <input
                         type="text"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        className="flex-1 border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-50 border shadow-inner"
+                        className={styles.messageInput}
                         placeholder="メッセージを入力..."
                         disabled={createMessageMutation.isPending}
                     />
                     <button
                         type="submit"
                         disabled={!content.trim() || createMessageMutation.isPending}
-                        className="bg-green-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed shadow transition-colors"
+                        className={styles.sendButton}
                     >
                         <svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
