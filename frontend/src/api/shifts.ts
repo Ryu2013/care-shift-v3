@@ -4,6 +4,9 @@ import type { Shift } from '../types'
 export const getShifts = (params: { date?: string; client_id?: number }) =>
   apiClient.get<Shift[]>('/admin/shifts', { params })
 
+export const getUserShifts = (params: { date?: string; user_id?: number }) =>
+  apiClient.get<Shift[]>('/shifts', { params })
+
 export const createShift = (data: Partial<Shift>) =>
   apiClient.post<Shift>('/admin/shifts', { shift: data })
 

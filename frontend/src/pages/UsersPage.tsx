@@ -101,9 +101,20 @@ export default function UsersPage() {
                       </span>
                     </div>
                   </div>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${user.role === 'admin' ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-500'}`}>
-                    {user.role === 'admin' ? '管理者' : 'スタッフ'}
-                  </span>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${user.role === 'admin' ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-500'}`}>
+                      {user.role === 'admin' ? '管理者' : 'スタッフ'}
+                    </span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation() // Prevent modal from opening
+                        navigate(`/user-shifts?user_id=${user.id}`)
+                      }}
+                      className="px-3 py-1 text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-200"
+                    >
+                      シフト確認
+                    </button>
+                  </div>
                 </div>
               </div>
             ))

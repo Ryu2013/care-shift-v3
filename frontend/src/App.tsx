@@ -24,6 +24,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import ResendConfirmationPage from './pages/ResendConfirmationPage'
 import AccountUnlockPage from './pages/AccountUnlockPage'
+import UserShiftsPage from './pages/UserShiftsPage'
 
 function PrivateLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -57,6 +58,7 @@ function App() {
       <Route path="/work-statuses" element={<PrivateLayout><WorkStatusesPage /></PrivateLayout>} />
       <Route path="/rooms" element={<PrivateLayout><RoomsPage /></PrivateLayout>} />
       <Route path="/rooms/:id" element={<PrivateLayout><RoomDetailPage /></PrivateLayout>} />
+      <Route path="/user-shifts" element={<PrivateLayout><UserShiftsPage /></PrivateLayout>} />
       <Route path="/settings" element={<PrivateLayout><SettingsPage /></PrivateLayout>} />
       <Route path="/two-factor-setup" element={<PrivateLayout><TwoFactorSetupPage /></PrivateLayout>} />
       <Route path="/subscription" element={<PrivateLayout><SubscriptionPage /></PrivateLayout>} />
