@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getRoom, updateRoom } from '../api/rooms'
 import { getMessages, createMessage } from '../api/messages'
 import { entryApi } from '../api/entries'
-import { getUsers } from '../api/users'
+import { getOfficeUsers } from '../api/users'
 import { cable } from '../api/cable'
 import { useCurrentUser } from '../hooks/useCurrentUser'
 import styles from './RoomDetailPage.module.css'
@@ -32,8 +32,8 @@ export default function RoomDetailPage() {
     })
 
     const { data: users } = useQuery({
-        queryKey: ['users'],
-        queryFn: () => getUsers().then((res) => res.data),
+        queryKey: ['officeUsers'],
+        queryFn: () => getOfficeUsers().then((res) => res.data),
     })
 
     const createMessageMutation = useMutation({
@@ -102,8 +102,6 @@ export default function RoomDetailPage() {
         }
         updateRoomMutation.mutate(editName)
     }
-
-    const getUser = (userId: number) => users?.find((u) => u.id === userId)
 
     const memberIds = room.users?.map((u) => u.id) || []
     const availableUsers = users?.filter((u) => !memberIds.includes(u.id)) || []
@@ -200,7 +198,6 @@ export default function RoomDetailPage() {
                 <div className={styles.messagesArea}>
                     {messages?.map((msg) => {
                         const isMine = msg.user_id === currentUser?.id
-                        const msgUser = getUser(msg.user_id)
                         const time = new Date(msg.created_at).toLocaleTimeString('ja-JP', {
                             hour: '2-digit',
                             minute: '2-digit',
@@ -213,13 +210,13 @@ export default function RoomDetailPage() {
                             >
                                 {!isMine && (
                                     <span className={styles.userName}>
-                                        {msgUser?.name || '不明なユーザー'}
+                                        {msg.user?.name || '不明なユーザー'}
                                     </span>
                                 )}
                                 <div className={`${styles.bubbleContainer} ${isMine ? styles.bubbleContainerMine : styles.bubbleContainerOther}`}>
                                     {!isMine && (
                                         <div className={styles.userAvatar}>
-                                            {(msgUser?.name || '?').charAt(0)}
+                                            {(msg.user?.name || '?').charAt(0)}
                                         </div>
                                     )}
                                     <div className={`${styles.messageBubble} ${isMine ? styles.messageBubbleMine : styles.messageBubbleOther}`}>

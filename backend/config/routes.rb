@@ -36,6 +36,7 @@ Rails.application.routes.draw do
       resources :entries, only: %i[create destroy], shallow: true
     end
     get 'me', to: 'me#show'
+    resources :users, only: [:index]
 
     resource :two_factor, only: [] do
       get :setup
