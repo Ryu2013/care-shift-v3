@@ -92,7 +92,7 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
             end_time: endTime,
             date,
             note,
-            work_status: shift ? shift.work_status : 'work' as const
+            work_status: shift ? shift.work_status : 'not_work' as const
         }
 
         if (shift) {

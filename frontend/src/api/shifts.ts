@@ -7,6 +7,9 @@ export const getShifts = (params: { date?: string; client_id?: number }) =>
 export const getUserShifts = (params: { date?: string; user_id?: number }) =>
   apiClient.get<Shift[]>('/shifts', { params })
 
+export const updateUserShiftStatus = (id: number, work_status: string) =>
+  apiClient.patch<Shift>(`/shifts/${id}`, { shift: { work_status } })
+
 export const createShift = (data: Partial<Shift>) =>
   apiClient.post<Shift>('/admin/shifts', { shift: data })
 

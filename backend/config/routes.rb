@@ -37,7 +37,7 @@ Rails.application.routes.draw do
     end
     get 'me', to: 'me#show'
     resources :users, only: [:index]
-    resources :shifts, only: [:index]
+    resources :shifts, only: [:index, :update]
 
     resource :two_factor, only: [] do
       get :setup

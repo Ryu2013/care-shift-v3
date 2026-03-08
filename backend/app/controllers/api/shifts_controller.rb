@@ -13,4 +13,24 @@ class Api::ShiftsController < Api::AuthorizationController
     shifts = @user.shifts.scope_month(date).includes(:client)
     render json: shifts.order(:date, :start_time).map { |s| ShiftSerializer.new(s) }
   end
+
+  def update
+    @shift = current_user.office.shifts.find(params[:id])
+    
+    if @shift.user_id != current_user.id
+      authorize :admin, :allow?
+    end
+
+    if @shift.update(shift_params)
+      render json: ShiftSerializer.new(@shift)
+    else
+      render json: { errors: @shift.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def shift_params
+    params.require(:shift).permit(:work_status)
+  end
 end

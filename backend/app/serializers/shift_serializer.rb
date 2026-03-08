@@ -14,6 +14,8 @@ class ShiftSerializer
       start_time: @shift.start_time&.strftime("%H:%M"),
       end_time: @shift.end_time&.strftime("%H:%M"),
       work_status: @shift.work_status,
+      client: { name: @shift.client&.name },
+      user: @shift.user ? { name: @shift.user.name } : nil,
       is_escort: @shift.is_escort,
       office_id: @shift.office_id
     }
