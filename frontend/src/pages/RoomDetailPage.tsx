@@ -40,6 +40,7 @@ export default function RoomDetailPage() {
         mutationFn: (newContent: string) => createMessage(roomId, newContent).then(res => res.data),
         onSuccess: () => {
             setContent('')
+            queryClient.invalidateQueries({ queryKey: ['messages', roomId] })
         },
     })
 

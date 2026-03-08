@@ -11,10 +11,15 @@ class Api::RoomsController < Api::AuthorizationController
 
   def create
     room = current_user.office.rooms.build(room_params)
-    if room.save
+
+    begin
+      ActiveRecord::Base.transaction do
+        room.save!
+        room.entries.create!(user: current_user, office: current_user.office)
+      end
       render json: RoomSerializer.new(room), status: :created
-    else
-      render json: { errors: room.errors.full_messages }, status: :unprocessable_entity
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
