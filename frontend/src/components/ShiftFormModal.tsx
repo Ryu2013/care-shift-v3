@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getUsers } from '../api/users'
-import { createShift, updateShift, generateMonthlyShifts } from '../api/shifts'
+import { createShift, updateShift, generateMonthlyShifts, deleteShift } from '../api/shifts'
 import type { ShiftType, User, Shift } from '../types'
 import { useEffect } from 'react'
 
@@ -62,6 +62,15 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
 
     const updateMutation = useMutation({
         mutationFn: ({ id, data }: { id: number, data: Partial<Shift> }) => updateShift(id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['shifts'] })
+            onSuccess()
+            onClose()
+        }
+    })
+
+    const deleteMutation = useMutation({
+        mutationFn: deleteShift,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['shifts'] })
             onSuccess()
@@ -205,14 +214,28 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
                             />
                         </div>
 
-                        <div className="pt-4">
+                        <div className="pt-4 flex flex-col gap-3">
                             <button
                                 type="submit"
-                                disabled={createMutation.isPending || updateMutation.isPending}
+                                disabled={createMutation.isPending || updateMutation.isPending || deleteMutation.isPending}
                                 className="w-full py-3 bg-[#5daaf5] hover:bg-[#4a90e2] text-white font-bold rounded-full shadow-lg transition-all active:transform active:scale-95 disabled:opacity-50"
                             >
                                 {createMutation.isPending || updateMutation.isPending ? '保存中...' : (shift ? '更新する' : '登録する')}
                             </button>
+                            {shift && (
+                                <button
+                                    type="button"
+                                    disabled={deleteMutation.isPending}
+                                    onClick={() => {
+                                        if (window.confirm('このシフトを本当に削除しますか？')) {
+                                            deleteMutation.mutate(shift.id)
+                                        }
+                                    }}
+                                    className="w-full py-2 bg-white border-2 border-red-500 text-red-500 hover:bg-red-50 font-bold rounded-full shadow-sm transition-all active:transform active:scale-95 disabled:opacity-50"
+                                >
+                                    {deleteMutation.isPending ? '削除中...' : '削除する'}
+                                </button>
+                            )}
                         </div>
                     </form>
                 </div>
