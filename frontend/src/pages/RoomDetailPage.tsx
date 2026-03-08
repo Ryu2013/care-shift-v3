@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getRoom } from '../api/rooms'
+import { getRoom, updateRoom } from '../api/rooms'
 import { getMessages, createMessage } from '../api/messages'
 import { entryApi } from '../api/entries'
 import { getUsers } from '../api/users'
@@ -17,6 +17,8 @@ export default function RoomDetailPage() {
     const { data: currentUser } = useCurrentUser()
     const [content, setContent] = useState('')
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const [isEditingName, setIsEditingName] = useState(false)
+    const [editName, setEditName] = useState('')
     const messagesEndRef = useRef<HTMLDivElement>(null)
 
     const { data: room, isLoading: isLoadingRoom } = useQuery({
@@ -45,6 +47,14 @@ export default function RoomDetailPage() {
         mutationFn: (userId: number) => entryApi.createEntry(roomId, userId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['rooms', roomId] })
+        },
+    })
+
+    const updateRoomMutation = useMutation({
+        mutationFn: (newName: string) => updateRoom(roomId, { name: newName }).then(res => res.data),
+        onSuccess: (updatedRoom) => {
+            queryClient.setQueryData(['rooms', roomId], updatedRoom)
+            setIsEditingName(false)
         },
     })
 
@@ -83,6 +93,15 @@ export default function RoomDetailPage() {
         createMessageMutation.mutate(content)
     }
 
+    const handleEditNameSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!editName.trim() || editName === room.name) {
+            setIsEditingName(false)
+            return
+        }
+        updateRoomMutation.mutate(editName)
+    }
+
     const getUser = (userId: number) => users?.find((u) => u.id === userId)
 
     const memberIds = room.users?.map((u) => u.id) || []
@@ -102,7 +121,55 @@ export default function RoomDetailPage() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
-                    <h3 className={styles.headerTitle}>{room.name}</h3>
+                    {isEditingName ? (
+                        <form onSubmit={handleEditNameSubmit} className="flex items-center gap-2">
+                            <input
+                                type="text"
+                                value={editName}
+                                onChange={(e) => setEditName(e.target.value)}
+                                className="border rounded px-2 py-1 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                autoFocus
+                                disabled={updateRoomMutation.isPending}
+                            />
+                            <button
+                                type="submit"
+                                disabled={updateRoomMutation.isPending}
+                                className="text-green-600 hover:text-green-800"
+                                title="保存"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setIsEditingName(false)}
+                                disabled={updateRoomMutation.isPending}
+                                className="text-gray-500 hover:text-gray-700"
+                                title="キャンセル"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </form>
+                    ) : (
+                        <>
+                            <h3 className={styles.headerTitle}>{room.name}</h3>
+                            <button
+                                onClick={() => {
+                                    setEditName(room.name)
+                                    setIsEditingName(true)
+                                }}
+                                className="ml-2 text-gray-400 hover:text-gray-600 transition-colors"
+                                title="ルーム名を編集"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                            </button>
+                        </>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-2">

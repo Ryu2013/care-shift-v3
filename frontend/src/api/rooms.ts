@@ -9,3 +9,6 @@ export const getRoom = (id: number) =>
 
 export const createRoom = (data: { name: string }) =>
     apiClient.post<Room>('/rooms', { room: data })
+
+export const updateRoom = (id: number, data: { name: string }) =>
+    apiClient.put<Room>(`/rooms/${id}`, { room: data })

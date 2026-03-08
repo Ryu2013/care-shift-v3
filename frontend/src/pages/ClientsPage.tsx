@@ -9,7 +9,7 @@ import { Header } from '../components/Header'
 
 export default function ClientsPage() {
   const [selectedTeamId, setSelectedTeamId] = useState<number | undefined>(undefined)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [selectedClient, setSelectedClient] = useState<Client | undefined>(undefined)
 
   const { data: teams } = useQuery({
