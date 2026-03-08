@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
+import { useCurrentUser } from '../hooks/useCurrentUser';
 import { HamburgerMenuButton } from './HamburgerMenuButton';
 import { signOut } from '../api/auth';
 import logoImg from '../assets/logo.png';
@@ -10,6 +11,7 @@ interface HeaderProps { }
 export const Header: React.FC<HeaderProps> = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const { data: currentUser } = useCurrentUser();
 
     const handleSignOut = async () => {
         try {
@@ -35,9 +37,13 @@ export const Header: React.FC<HeaderProps> = () => {
             <nav className="hidden xl:flex items-center gap-6">
                 <Link to="/shifts" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">シフト表</Link>
                 <Link to="/rooms" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">チャット</Link>
-                <Link to="/settings" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">部署/会社</Link>
-                <Link to="/clients" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">利用者とスタッフ</Link>
-                <Link to="/work-statuses" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">出退勤状況</Link>
+                {currentUser?.role === 'admin' && (
+                    <>
+                        <Link to="/settings" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">部署/会社</Link>
+                        <Link to="/clients" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">利用者とスタッフ</Link>
+                        <Link to="/work-statuses" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">出退勤状況</Link>
+                    </>
+                )}
                 <Link to="/two-factor-setup" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">二段階認証</Link>
                 <button onClick={handleSignOut} className="font-bold text-red-500 hover:text-red-600 transition-colors cursor-pointer">ログアウト</button>
             </nav>
@@ -47,9 +53,13 @@ export const Header: React.FC<HeaderProps> = () => {
                 <nav className="flex flex-col items-center gap-8 pt-20">
                     <Link to="/shifts" className="font-bold text-xl text-[#333]">シフト表</Link>
                     <Link to="/rooms" className="font-bold text-xl text-[#333]">チャット</Link>
-                    <Link to="/settings" className="font-bold text-xl text-[#333]">部署/会社</Link>
-                    <Link to="/clients" className="font-bold text-xl text-[#333]">利用者とスタッフ</Link>
-                    <Link to="/work-statuses" className="font-bold text-xl text-[#333]">出退勤状況</Link>
+                    {currentUser?.role === 'admin' && (
+                        <>
+                            <Link to="/settings" className="font-bold text-xl text-[#333]">部署/会社</Link>
+                            <Link to="/clients" className="font-bold text-xl text-[#333]">利用者とスタッフ</Link>
+                            <Link to="/work-statuses" className="font-bold text-xl text-[#333]">出退勤状況</Link>
+                        </>
+                    )}
                     <Link to="/two-factor-setup" className="font-bold text-xl text-[#333]">二段階認証</Link>
                     <button onClick={handleSignOut} className="font-bold text-xl text-red-500 mt-2">ログアウト</button>
                 </nav>
