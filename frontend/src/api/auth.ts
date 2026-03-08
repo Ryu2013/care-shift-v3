@@ -21,3 +21,9 @@ export const requestPasswordReset = (email: string) =>
 
 export const resetPassword = (reset_password_token: string, password: string, password_confirmation: string) =>
   apiClient.put<{ message: string }>('/users/password', { user: { reset_password_token, password, password_confirmation } })
+
+export const resendConfirmation = (email: string) =>
+  apiClient.post<{ message: string }>('/users/confirmation', { user: { email } })
+
+export const sendUnlockEmail = (email: string) =>
+  apiClient.post<{ message: string }>('/users/unlock', { user: { email } })

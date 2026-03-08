@@ -65,6 +65,8 @@ export interface Room {
   name: string
   office_id: number
   users?: User[]
+  has_unread?: boolean
+  latest_message?: Message
 }
 
 export interface Message {

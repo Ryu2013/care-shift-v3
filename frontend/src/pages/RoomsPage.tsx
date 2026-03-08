@@ -35,7 +35,7 @@ export default function RoomsPage() {
 
   return (
     <>
-      <Header title="チャットルーム" />
+      <Header />
       <div className={styles.container}>
         {/* Toggle Switch */}
         <div className={styles.tabContainer}>
@@ -67,9 +67,22 @@ export default function RoomsPage() {
                       <div className={styles.roomIcon}>
                         {r.name.charAt(0) || '#'}
                       </div>
-                      <span className={styles.roomName}>
-                        {r.name}
-                      </span>
+                      <div className={styles.roomInfoContent}>
+                        <div className={styles.roomNameContainer}>
+                          <span className={styles.roomName}>
+                            {r.name}
+                          </span>
+                          {r.has_unread && (
+                            <span className={styles.unreadBadge}>New</span>
+                          )}
+                        </div>
+                        {r.latest_message && (
+                          <div className={styles.latestMessage}>
+                            {r.latest_message.user?.name ? `${r.latest_message.user.name}: ` : ''}
+                            {r.latest_message.content}
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <svg className={styles.chevron} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

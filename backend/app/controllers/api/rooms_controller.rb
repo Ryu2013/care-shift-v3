@@ -2,11 +2,11 @@ class Api::RoomsController < Api::AuthorizationController
   before_action :set_room, only: %i[show update destroy]
 
   def index
-    render json: current_user.office.rooms.order(:name).map { |r| RoomSerializer.new(r) }
+    render json: current_user.office.rooms.order(:name).map { |r| RoomSerializer.new(r, user: current_user) }
   end
 
   def show
-    render json: RoomSerializer.new(@room)
+    render json: RoomSerializer.new(@room, user: current_user)
   end
 
   def create

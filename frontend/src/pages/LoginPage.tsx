@@ -164,6 +164,16 @@ export default function LoginPage() {
               パスワードをお忘れの場合
             </Link>
           </div>
+          <div className="mt-2 text-[0.85rem]">
+            <Link to="/resend-confirmation" className="text-[#888] no-underline hover:text-[#5daaf5]">
+              確認メールが届いていない場合
+            </Link>
+          </div>
+          <div className="mt-2 text-[0.85rem]">
+            <Link to="/unlock" className="text-[#888] no-underline hover:text-[#5daaf5]">
+              アカウントがロックされた場合
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -64,7 +64,6 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  divide-y: 1px;
 }
 
 .roomItem {
@@ -106,6 +105,45 @@
 .roomName {
   font-weight: 500;
   color: var(--black-dark);
+}
+
+.roomInfoContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.roomNameContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.latestMessage {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  /* tailwind gray-500 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
+}
+
+@media (min-width: 640px) {
+  .latestMessage {
+    max-width: 350px;
+  }
+}
+
+.unreadBadge {
+  background-color: #ef4444;
+  /* tailwind red-500 */
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.125rem 0.375rem;
+  border-radius: 9999px;
+  line-height: 1;
 }
 
 .chevron {

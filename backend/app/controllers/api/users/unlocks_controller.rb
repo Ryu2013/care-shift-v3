@@ -1,4 +1,18 @@
 class Api::Users::UnlocksController < Devise::UnlocksController
+  respond_to :json
+  skip_before_action :verify_authenticity_token, only: [:create]
+
+  def create
+    self.resource = resource_class.send_unlock_instructions(resource_params)
+    yield resource if block_given?
+
+    if successfully_sent?(resource)
+      render json: { message: I18n.t("devise.unlocks.send_instructions") }, status: :ok
+    else
+      render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   def show
     self.resource = User.unlock_access_by_token(params[:unlock_token])# Deviseのメソッドでロックを解除
     if block_given?
