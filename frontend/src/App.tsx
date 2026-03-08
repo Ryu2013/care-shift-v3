@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
+import { useCurrentUser } from './hooks/useCurrentUser'
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
@@ -34,6 +35,13 @@ function PrivateLayout({ children }: { children: React.ReactNode }) {
   )
 }
 
+function RootRedirect() {
+  const { data: user, isLoading } = useCurrentUser()
+  if (isLoading) return null
+  if (!user) return <Navigate to="/login" replace />
+  return user.role === 'admin' ? <Navigate to="/shifts" replace /> : <Navigate to="/user-shifts" replace />
+}
+
 function App() {
   return (
     <Routes>
@@ -62,7 +70,7 @@ function App() {
       <Route path="/settings" element={<PrivateLayout><SettingsPage /></PrivateLayout>} />
       <Route path="/two-factor-setup" element={<PrivateLayout><TwoFactorSetupPage /></PrivateLayout>} />
       <Route path="/subscription" element={<PrivateLayout><SubscriptionPage /></PrivateLayout>} />
-      <Route path="*" element={<Navigate to="/shifts" replace />} />
+      <Route path="*" element={<RootRedirect />} />
     </Routes>
   )
 }

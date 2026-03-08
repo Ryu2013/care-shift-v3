@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { signIn } from '../api/auth'
+import apiClient from '../api/rails-api'
+import type { User } from '../types'
 import AlertMessage from '../components/AlertMessage'
 import GoogleLoginButton from '../components/GoogleLoginButton'
 
@@ -47,7 +49,15 @@ export default function LoginPage() {
     try {
       await signIn(email, password, otpAttempt, rememberMe)
       await queryClient.invalidateQueries({ queryKey: ['currentUser'] })
-      navigate('/shifts')
+
+      const res = await apiClient.get<User>('/me')
+      const user = res.data
+
+      if (user.role === 'admin') {
+        navigate('/shifts')
+      } else {
+        navigate('/user-shifts')
+      }
     } catch (err: any) {
       setError(err)
     } finally {

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/rails-api';
+import type { User } from '../types';
 import styles from './HomePage.module.css';
 import { FadeInText } from '../components/FadeInText';
 import { HamburgerMenuButton } from '../components/HamburgerMenuButton';
@@ -30,8 +31,12 @@ const HomePage: React.FC = () => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                await api.get('/shifts');
-                navigate('/shifts', { replace: true });
+                const res = await api.get<User>('/me');
+                if (res.data.role === 'admin') {
+                    navigate('/shifts', { replace: true });
+                } else {
+                    navigate('/user-shifts', { replace: true });
+                }
             } catch {
                 // 未ログイン状態
             }

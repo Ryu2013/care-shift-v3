@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { getUserShifts } from '../api/shifts'
 import { getOfficeUsers } from '../api/users'
+import { useCurrentUser } from '../hooks/useCurrentUser'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -19,9 +20,10 @@ const formatTime = (timeString: string) => {
 
 export default function UserShiftsPage() {
     const navigate = useNavigate()
+    const { data: currentUser } = useCurrentUser()
     const [searchParams] = useSearchParams()
     const userIdParam = searchParams.get('user_id')
-    const targetUserId = userIdParam ? Number(userIdParam) : undefined
+    const targetUserId = userIdParam ? Number(userIdParam) : currentUser?.id
 
     const [currentDate, setCurrentDate] = useState(new Date())
     const year = currentDate.getFullYear()
@@ -86,15 +88,6 @@ export default function UserShiftsPage() {
             <div className="p-4 pt-20 mx-auto max-w-7xl">
                 <div className="bg-white/80 backdrop-blur-sm shadow-sm rounded-xl p-4 mb-4 border border-white/50 flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => navigate('/users')}
-                            className="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100 transition-colors"
-                            title="戻る"
-                        >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
                         <h2 className="text-xl font-bold text-gray-800">
                             {targetUser ? `${targetUser.name} さんのシフト` : (isLoading ? '読み込み中...' : 'ユーザーが指定されていません')}
                         </h2>
