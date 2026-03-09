@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client: one
+  office: one
+  user: one
+  date: 2026-02-27
+  start_time: 2026-02-27 09:46:19
+  end_time: 2026-02-27 09:46:19
+  shift_type: 1
+  work_status: 1
+  is_escort: false
+  note: MyString
+
+two:
+  client: two
+  office: two
+  user: two
+  date: 2026-02-27
+  start_time: 2026-02-27 09:46:19
+  end_time: 2026-02-27 09:46:19
+  shift_type: 1
+  work_status: 1
+  is_escort: false
+  note: MyString

@@ -1,0 +1,12 @@
+<%= @resource.email %> さん、こんにちは。
+
+Care Shiftへの招待が届きました。以下のURLからシステムを利用開始できます。
+
+<%= accept_invitation_url(@resource, invitation_token: @token) %>
+
+<% if @resource.invitation_due_at %>
+この招待は <%= l(@resource.invitation_due_at, format: :long) %> まで有効です。
+<% end %>
+
+もしこの招待に心当たりがない場合は、このメールを無視してください。
+招待を承認するまで、あなたのアカウントが作成されることはありません。

@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+
+/* =========================================
+   Variables
+   ========================================= */
+:root {
+  --blue-color: #69C5FF;
+  --blue-dark: #4a90e2;
+  --red-color: #F19494;
+  --red-dark: #E35B5B;
+  --black-dark: #333;
+  --black-color: #666;
+  --bg-color: #fefdf8;
+  --green-dark: #4CAF50;
+  --green-color: #C8F7C5;
+  --white-color: rgba(255, 255, 255, 0.4);
+}
+
+/* =========================================
+   Base
+   ========================================= */
+html {
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+  background-image: url('./assets/background-mobile.jpg');
+  background-position: center top;
+  background-repeat: repeat-y;
+  background-size: 100%;
+}
+
+@media (min-width: 450px) {
+  html {
+    background-image: url('./assets/background.jpg');
+    background-position: center top;
+    background-repeat: repeat-y;
+  }
+}

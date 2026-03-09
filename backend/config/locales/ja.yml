@@ -1,0 +1,19 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        name: "名前"
+        email: "メールアドレス"
+        password: "パスワード"
+        current_password: "現在のパスワード"
+        password_confirmation: "パスワード（確認用）"
+      office:
+        name: "事業所名"
+      team:
+        name: "部署名"
+    errors:
+      messages:
+        pwned_password: "過去のデータ流出に含まれているため、使用できません。より安全なパスワードを選択してください。"
+  errors:
+    messages:
+      pwned_password: "過去のデータ流出に含まれているため、使用できません。より安全なパスワードを選択してください。"

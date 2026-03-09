@@ -1,34 +1,77 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import PrivateRoute from './components/PrivateRoute'
+import { useCurrentUser } from './hooks/useCurrentUser'
+import Layout from './components/Layout'
+import HomePage from './pages/HomePage'
+import LoginPage from './pages/LoginPage'
+import UserRegistrationPage from './pages/UserRegistrationPage'
+import ShiftsPage from './pages/ShiftsPage'
+import ClientsPage from './pages/ClientsPage'
+import UsersPage from './pages/UsersPage'
+import WorkStatusesPage from './pages/WorkStatusesPage'
+import RoomsPage from './pages/RoomsPage'
+import RoomDetailPage from './pages/RoomDetailPage'
+import SettingsPage from './pages/SettingsPage'
+import SubscriptionPage from './pages/SubscriptionPage'
+import TwoFactorSetupPage from './pages/TwoFactorSetupPage'
+import HowToUseLayout from './pages/how_to_use/HowToUseLayout'
+import HowToUsePage from './pages/how_to_use/HowToUsePage'
+import HowToUseRegistrationPage from './pages/how_to_use/HowToUseRegistrationPage'
+import HowToUseLoginPage from './pages/how_to_use/HowToUseLoginPage'
+import HowToUseShiftCreationPage from './pages/how_to_use/HowToUseShiftCreationPage'
+import HowToUseAttendancePage from './pages/how_to_use/HowToUseAttendancePage'
+import HowToUseChatPage from './pages/how_to_use/HowToUseChatPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
+import ResendConfirmationPage from './pages/ResendConfirmationPage'
+import AccountUnlockPage from './pages/AccountUnlockPage'
+import UserShiftsPage from './pages/UserShiftsPage'
+
+function PrivateLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <PrivateRoute>
+      <Layout>{children}</Layout>
+    </PrivateRoute>
+  )
+}
+
+function RootRedirect() {
+  const { data: user, isLoading } = useCurrentUser()
+  if (isLoading) return null
+  if (!user) return <Navigate to="/login" replace />
+  return user.role === 'admin' ? <Navigate to="/shifts" replace /> : <Navigate to="/user-shifts" replace />
+}
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<UserRegistrationPage />} />
+      <Route path="/password-reset" element={<ForgotPasswordPage />} />
+      <Route path="/password-reset/edit" element={<ResetPasswordPage />} />
+      <Route path="/resend-confirmation" element={<ResendConfirmationPage />} />
+      <Route path="/unlock" element={<AccountUnlockPage />} />
+      <Route path="/how-to-use" element={<HowToUseLayout />}>
+        <Route index element={<HowToUsePage />} />
+        <Route path="registration" element={<HowToUseRegistrationPage />} />
+        <Route path="login" element={<HowToUseLoginPage />} />
+        <Route path="shift-creation" element={<HowToUseShiftCreationPage />} />
+        <Route path="attendance" element={<HowToUseAttendancePage />} />
+        <Route path="chat" element={<HowToUseChatPage />} />
+      </Route>
+      <Route path="/shifts" element={<PrivateLayout><ShiftsPage /></PrivateLayout>} />
+      <Route path="/clients" element={<PrivateLayout><ClientsPage /></PrivateLayout>} />
+      <Route path="/users" element={<PrivateLayout><UsersPage /></PrivateLayout>} />
+      <Route path="/work-statuses" element={<PrivateLayout><WorkStatusesPage /></PrivateLayout>} />
+      <Route path="/rooms" element={<PrivateLayout><RoomsPage /></PrivateLayout>} />
+      <Route path="/rooms/:id" element={<PrivateLayout><RoomDetailPage /></PrivateLayout>} />
+      <Route path="/user-shifts" element={<PrivateLayout><UserShiftsPage /></PrivateLayout>} />
+      <Route path="/settings" element={<PrivateLayout><SettingsPage /></PrivateLayout>} />
+      <Route path="/two-factor-setup" element={<PrivateLayout><TwoFactorSetupPage /></PrivateLayout>} />
+      <Route path="/subscription" element={<PrivateLayout><SubscriptionPage /></PrivateLayout>} />
+      <Route path="*" element={<RootRedirect />} />
+    </Routes>
   )
 }
 
