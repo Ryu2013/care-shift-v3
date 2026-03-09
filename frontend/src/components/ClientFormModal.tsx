@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { createClient, updateClient } from '../api/clients'
 import { getTeams } from '../api/teams'
+import { getUsers } from '../api/users'
 import { getClientNeeds, createClientNeed, deleteClientNeed } from '../api/client_needs'
-import type { Client, Team, ClientNeed, ShiftType } from '../types'
+import { createUserClient, deleteUserClient } from '../api/user_clients'
+import type { Client, Team, ShiftType } from '../types'
 
 interface ClientFormModalProps {
     isOpen: boolean
@@ -27,6 +29,9 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
     const [needEndTime, setNeedEndTime] = useState('18:00')
     const [needSlots, setNeedSlots] = useState<number>(1)
 
+    // User Client setup states
+    const [selectedUserId, setSelectedUserId] = useState<number | ''>('')
+
     // Fetch teams for select dropdown
     const { data: teams } = useQuery({
         queryKey: ['teams'],
@@ -41,6 +46,13 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
         enabled: isOpen && !!client?.id
     })
 
+    // Fetch users for the current team to assign to client
+    const { data: teamUsers } = useQuery({
+        queryKey: ['users', teamId],
+        queryFn: () => getUsers(teamId as number).then((res) => res.data),
+        enabled: isOpen && typeof teamId === 'number'
+    })
+
     // Reset when client changes or modal opens
     useEffect(() => {
         if (isOpen) {
@@ -48,7 +60,8 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
             setAddress(client?.address ?? '')
             setTeamId(client?.team_id ?? initialTeamId ?? '')
         }
-    }, [client, isOpen, initialTeamId])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [client?.id, isOpen, initialTeamId])
 
     const createMutation = useMutation({
         mutationFn: createClient,
@@ -83,6 +96,25 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
         mutationFn: deleteClientNeed,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['clientNeeds', client?.id] })
+        }
+    })
+
+    const createUserClientMutation = useMutation({
+        mutationFn: createUserClient,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['clients'] })
+            setSelectedUserId('')
+        },
+        onError: (err: any) => {
+            const msg = err.response?.data?.errors?.join('\n') || '割り当てに失敗しました'
+            alert(msg)
+        }
+    })
+
+    const deleteUserClientMutation = useMutation({
+        mutationFn: deleteUserClient,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['clients'] })
         }
     })
 
@@ -121,6 +153,14 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
             start_time: needStartTime,
             end_time: needEndTime,
             slots: needSlots
+        })
+    }
+
+    const handleAddUserClient = () => {
+        if (!client || !selectedUserId) return
+        createUserClientMutation.mutate({
+            client_id: client.id,
+            user_id: selectedUserId as number
         })
     }
 
@@ -242,7 +282,7 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                             {/* Add Need Form */}
                             <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                                 <h4 className="text-sm font-bold text-gray-700 mb-3">要件の追加</h4>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 items-end">
                                     <div className="space-y-1">
                                         <label className="block text-xs font-bold text-gray-600">曜日</label>
                                         <select value={needWeek} onChange={e => setNeedWeek(e.target.value)} className="w-full text-sm px-2 py-1.5 rounded border border-gray-300">
@@ -277,6 +317,70 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                                             {createNeedMutation.isPending ? '...' : '+ 追加'}
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {client && (
+                        <div className="mt-8 pt-6 border-t border-gray-200">
+                            <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                <svg className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                担当従業員
+                            </h3>
+
+                            {/* Assigned Users List */}
+                            <div className="space-y-3 mb-6 max-h-[300px] overflow-y-auto pr-2">
+                                {!client.user_clients || client.user_clients.length === 0 ? (
+                                    <p className="text-sm text-gray-500 text-center py-4 bg-gray-50 rounded-lg">担当従業員は割り当てられていません</p>
+                                ) : (
+                                    client.user_clients.map((uc) => (
+                                        <div key={uc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
+                                            <span className="font-bold text-gray-700 px-2">{uc.user_name}</span>
+                                            <button
+                                                onClick={() => {
+                                                    if (window.confirm(`${uc.user_name}さんを担当から外しますか？`)) {
+                                                        deleteUserClientMutation.mutate(uc.id)
+                                                    }
+                                                }}
+                                                disabled={deleteUserClientMutation.isPending}
+                                                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors flex-shrink-0"
+                                            >
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+
+                            {/* Add User Client Form */}
+                            <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 className="text-sm font-bold text-gray-700 mb-3">担当者の追加</h4>
+                                <div className="flex flex-col sm:flex-row gap-3">
+                                    <select
+                                        value={selectedUserId}
+                                        onChange={e => setSelectedUserId(e.target.value ? Number(e.target.value) : '')}
+                                        className="flex-1 text-sm px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-400"
+                                    >
+                                        <option value="">（未割り当ての従業員から選択）</option>
+                                        {teamUsers
+                                            ?.filter(u => !client.user_clients?.some(uc => uc.user_id === u.id))
+                                            .map(u => (
+                                                <option key={u.id} value={u.id}>{u.name}</option>
+                                            ))}
+                                    </select>
+                                    <button
+                                        type="button"
+                                        onClick={handleAddUserClient}
+                                        disabled={!selectedUserId || createUserClientMutation.isPending}
+                                        className="py-2 px-6 bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold rounded-lg shadow-sm text-sm transition-colors border border-blue-200 disabled:opacity-50"
+                                    >
+                                        {createUserClientMutation.isPending ? '...' : '追加'}
+                                    </button>
                                 </div>
                             </div>
                         </div>

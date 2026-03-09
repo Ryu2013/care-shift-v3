@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getUsers } from '../api/users'
+import { getClients } from '../api/clients'
 import { createShift, updateShift, generateMonthlyShifts, deleteShift } from '../api/shifts'
-import type { ShiftType, User, Shift } from '../types'
+import type { ShiftType, User, Shift, Client } from '../types'
 import { useEffect } from 'react'
 
 interface ShiftFormModalProps {
@@ -51,6 +52,20 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
         enabled: isOpen && !!teamId
     })
 
+    const { data: clients } = useQuery({
+        queryKey: ['clients', teamId],
+        queryFn: () => getClients(teamId).then((res: { data: Client[] }) => res.data),
+        enabled: isOpen && !!teamId
+    })
+
+    const clientIdToUse = shift ? shift.client_id : clientId
+    const currentClient = clients?.find(c => c.id === clientIdToUse)
+    const allowedUserIds = currentClient?.user_clients?.map(uc => uc.user_id) || []
+
+    // If no client is selected or client has no specific user assignments, we might just show an empty list or let them pick anyone?
+    // Let's strictly filter: only assigned users are shown.
+    const filteredUsers = users?.filter(u => allowedUserIds.includes(u.id)) || []
+
     const createMutation = useMutation({
         mutationFn: createShift,
         onSuccess: () => {
@@ -90,7 +105,6 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        const clientIdToUse = shift ? shift.client_id : clientId
         if (!clientIdToUse) return
 
         const payload = {
@@ -151,10 +165,15 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
                                 className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
                             >
                                 <option value="">担当従業員を選択</option>
-                                {users?.map((user: User) => (
+                                {filteredUsers?.map((user: User) => (
                                     <option key={user.id} value={user.id}>{user.name}</option>
                                 ))}
                             </select>
+                            {currentClient && filteredUsers.length === 0 && (
+                                <p className="text-sm text-red-500 mt-1">
+                                    ※ 顧客画面で担当従業員を割り当ててください
+                                </p>
+                            )}
                         </div>
 
                         <div className="space-y-1">

@@ -34,6 +34,7 @@ export interface Client {
   longitude: number | null
   office_id: number
   team_id: number
+  user_clients?: { id: number; user_id: number; user_name: string }[]
 }
 
 export interface Shift {

@@ -11,7 +11,14 @@ class ClientSerializer
       name: @client.name,
       address: @client.address,
       latitude: @client.latitude,
-      longitude: @client.longitude
+      longitude: @client.longitude,
+      user_clients: @client.user_clients.includes(:user).map do |uc|
+        {
+          id: uc.id,
+          user_id: uc.user_id,
+          user_name: uc.user.name
+        }
+      end
     }
   end
 end

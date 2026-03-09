@@ -123,7 +123,7 @@ export default function ClientsPage() {
         }}
         onSuccess={() => refetch()}
         initialTeamId={selectedTeamId === undefined ? '' : selectedTeamId}
-        client={selectedClient}
+        client={clients?.find(c => c.id === selectedClient?.id) || selectedClient}
       />
     </div>
   )
