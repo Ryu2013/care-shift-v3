@@ -63,7 +63,11 @@
 /* ヒーローセクション */
 
 .heroTitle {
-    color: var(--red-dark);
+    font-family: 'Mochiy Pop One', 'Dela Gothic One', sans-serif;
+    color: white;
+    -webkit-text-stroke: 1px var(--black-dark);
+    text-shadow: 2px 2px 0 var(--black-dark), 4px 4px 0 rgba(0, 0, 0, 0.15);
+    letter-spacing: 0.05em;
     line-height: 1.4;
 }
 
