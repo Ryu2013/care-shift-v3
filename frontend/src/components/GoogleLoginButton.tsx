@@ -3,9 +3,15 @@ import apiClient from '../api/rails-api'
 
 interface GoogleLoginButtonProps {
     buttonText?: string
+    variant?: 'button' | 'link'
+    className?: string
 }
 
-export default function GoogleLoginButton({ buttonText = 'Googleでログイン' }: GoogleLoginButtonProps) {
+export default function GoogleLoginButton({
+    buttonText = 'Googleでログイン',
+    variant = 'button',
+    className = ''
+}: GoogleLoginButtonProps) {
     const [csrfLoading, setCsrfLoading] = useState(true)
 
     useEffect(() => {
@@ -22,7 +28,8 @@ export default function GoogleLoginButton({ buttonText = 'Googleでログイン'
         fetchCsrf()
     }, [])
 
-    const handleGoogleSignIn = () => {
+    const handleGoogleSignIn = (e: React.MouseEvent) => {
+        e.preventDefault()
         const csrfToken = document.cookie
             .split('; ')
             .find((row) => row.startsWith('XSRF-TOKEN='))
@@ -44,12 +51,25 @@ export default function GoogleLoginButton({ buttonText = 'Googleでログイン'
         form.submit()
     }
 
+    if (variant === 'link') {
+        return (
+            <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={csrfLoading}
+                className={`text-gray-400 text-sm hover:text-[#5daaf5] cursor-pointer disabled:opacity-50 border-none bg-transparent p-0 m-0 ${className}`}
+            >
+                {buttonText}
+            </button>
+        )
+    }
+
     return (
         <button
             type="button"
             onClick={handleGoogleSignIn}
             disabled={csrfLoading}
-            className="w-full flex items-center justify-center gap-3 bg-white text-[#3c4043] border border-[#dadce0] font-medium py-3 px-4 rounded-full transition-all duration-200 hover:bg-[#f8faff] hover:shadow-sm cursor-pointer disabled:opacity-50"
+            className={`w-full flex items-center justify-center gap-3 bg-white text-[#3c4043] border border-[#dadce0] font-medium py-3 px-4 rounded-full transition-all duration-200 hover:bg-[#f8faff] hover:shadow-sm cursor-pointer disabled:opacity-50 ${className}`}
         >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
