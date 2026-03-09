@@ -14,7 +14,8 @@ class ApplicationController < ActionController::API
     cookies["XSRF-TOKEN"] = {
       value: form_authenticity_token, # 上のRequestForgeryProtectionモジュールで生成されたトークン
       same_site: :lax,
-      secure: Rails.env.production?
+      secure: Rails.env.production?,
+      domain: :all
     }
   end
 end
