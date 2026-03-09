@@ -32,7 +32,7 @@ module App
 
     # Deviseのクッキーセッション認証に必要
     config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore, key: "_care_shift_session"
+    config.middleware.use ActionDispatch::Session::CookieStore, key: "_care_shift_session", domain: :all
     config.middleware.use ActionDispatch::Flash
   end
 end
