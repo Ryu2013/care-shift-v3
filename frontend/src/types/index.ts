@@ -47,7 +47,7 @@ export interface Shift {
   is_escort: boolean
   note: string | null
   client_id: number
-  client?: { name: string }
+  client?: { name: string; address?: string | null; latitude?: number | null; longitude?: number | null }
   user_id: number | null
   office_id: number
 }

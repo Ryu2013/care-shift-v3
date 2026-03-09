@@ -144,20 +144,39 @@ export default function UserShiftsPage() {
                                                 {startTimeStr} - {endTimeStr}
                                             </div>
                                         </div>
-                                        <button
-                                            onClick={() => handleToggleWorkStatus(shift.id)}
-                                            disabled={mutation.isPending || isWorking}
-                                            className={`
-                                                px-5 py-2 rounded-full font-bold text-sm transition-all shadow-sm
-                                                flex items-center justify-center gap-2 min-w-[120px]
-                                                ${isWorking
-                                                    ? 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'
-                                                    : 'bg-[#5daaf5] text-white hover:bg-[#4a90e2] hover:-translate-y-0.5 hover:shadow-md'
-                                                }
-                                            `}
-                                        >
-                                            {mutation.isPending ? '更新中...' : (isWorking ? '出勤済み' : '出勤する')}
-                                        </button>
+                                        <div className="flex gap-2">
+                                            {shift.client?.latitude && shift.client?.longitude && (
+                                                <a
+                                                    href={`https://www.google.com/maps/dir/?api=1&destination=${shift.client.latitude},${shift.client.longitude}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="px-4 py-2 rounded-full font-bold text-sm transition-all shadow-sm flex items-center justify-center gap-2 bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:-translate-y-0.5 hover:shadow-md"
+                                                >
+                                                    <svg className="w-4 h-4 ml-0.5" viewBox="0 0 34 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M17 0C7.6 0 0 7.6 0 17C0 27.6 14.9 46.3 15.6 47.1C16.3 48.2 17.7 48.2 18.5 47.1C19.1 46.3 34 27.6 34 17C34 7.6 26.4 0 17 0Z" fill="#34A853" />
+                                                        <path d="M17 0C7.6 0 0 7.6 0 17C0 19.4 0.5 21.7 1.4 23.8L17 12V0Z" fill="#E35B5B" />
+                                                        <path d="M34 17C34 7.6 26.4 0 17 0V12L28.8 28.4C32 25.5 34 21.5 34 17Z" fill="#5daaf5" />
+                                                        <path d="M17 12L1.4 23.8C3.1 27.2 5.7 30.1 8.7 32.2L17 12Z" fill="#fcd86dff" />
+                                                        <circle cx="17" cy="17" r="6.5" fill="white" />
+                                                    </svg>
+                                                    経路
+                                                </a>
+                                            )}
+                                            <button
+                                                onClick={() => handleToggleWorkStatus(shift.id)}
+                                                disabled={mutation.isPending || isWorking}
+                                                className={`
+                                                    px-5 py-2 rounded-full font-bold text-sm transition-all shadow-sm
+                                                    flex items-center justify-center gap-2 min-w-[120px]
+                                                    ${isWorking
+                                                        ? 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'
+                                                        : 'bg-[#5daaf5] text-white hover:bg-[#4a90e2] hover:-translate-y-0.5 hover:shadow-md'
+                                                    }
+                                                `}
+                                            >
+                                                {mutation.isPending ? '更新中...' : (isWorking ? '出勤済み' : '出勤する')}
+                                            </button>
+                                        </div>
                                     </div>
                                 )
                             })}
