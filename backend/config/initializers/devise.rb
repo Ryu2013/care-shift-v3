@@ -29,6 +29,9 @@ Devise.setup do |config|
   config.omniauth :google_oauth2,
     Rails.application.credentials.google_client_id || ENV["GOOGLE_CLIENT_ID"],
     Rails.application.credentials.google_client_secret || ENV["GOOGLE_CLIENT_SECRET"]
+
+  # CloudFrontのHostヘッダー書き換えに対応するため、リダイレクトURLのドメインをwwwに固定
+  OmniAuth.config.full_host = "https://www.ryuuichi-app.com"
 end
 
 # 未認証アクセスに対してJSON 401を返す（Deviseのデフォルトはリダイレクト）
