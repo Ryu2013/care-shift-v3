@@ -16,7 +16,7 @@ class Api::ShiftsController < Api::AuthorizationController
 
   def update
     @shift = current_user.office.shifts.find(params[:id])
-    
+
     if @shift.user_id != current_user.id
       authorize :admin, :allow?
     end

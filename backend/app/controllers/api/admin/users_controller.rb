@@ -31,7 +31,7 @@ class Api::Admin::UsersController < Api::Admin::AuthorizationController
   end
 
   def user_params
-    permitted = [:team_id, :name, :email, :address, :password, :password_confirmation]
+    permitted = [ :team_id, :name, :email, :address, :password, :password_confirmation ]
     permitted << :role if current_user != @user
     params.require(:user).permit(permitted)
   end

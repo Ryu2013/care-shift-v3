@@ -29,10 +29,10 @@ ActiveRecord::Base.transaction do
 
   emp_password = "CareShift2024!"
   [
-    ["employee1@example.com", "従業員 太郎"],
-    ["employee2@example.com", "従業員 次郎"],
-    ["employee3@example.com", "従業員 三郎"],
-    ["employee4@example.com", "従業員 四郎"]
+    [ "employee1@example.com", "従業員 太郎" ],
+    [ "employee2@example.com", "従業員 次郎" ],
+    [ "employee3@example.com", "従業員 三郎" ],
+    [ "employee4@example.com", "従業員 四郎" ]
   ].each do |email, name|
     emp = User.find_or_initialize_by(email: email)
     if emp.new_record?

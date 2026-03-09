@@ -13,7 +13,7 @@ class Office < ApplicationRecord
 
   def subscription_active?
     return true if users.count <= 4
-    return true if ["active", "trialing", "past_due", "unpaid"].include?(subscription_status)
+    return true if [ "active", "trialing", "past_due", "unpaid" ].include?(subscription_status)
     false
   end
 end

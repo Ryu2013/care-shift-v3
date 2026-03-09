@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable,
          :validatable, :confirmable, :lockable, :two_factor_authenticatable,
          :invitable,
-         :omniauthable, omniauth_providers: [:google_oauth2]
+         :omniauthable, omniauth_providers: [ :google_oauth2 ]
   devise :pwned_password unless Rails.env.test?
 
   encrypts :otp_secret
@@ -31,12 +31,12 @@ class User < ApplicationRecord
   def validate_otp(otp_attempt)
     if otp_required_for_login
       if otp_attempt.blank?
-        return false
+        false
       else
-        return validate_and_consume_otp!(otp_attempt)
+        validate_and_consume_otp!(otp_attempt)
       end
     else
-      return true
+      true
     end
   end
 

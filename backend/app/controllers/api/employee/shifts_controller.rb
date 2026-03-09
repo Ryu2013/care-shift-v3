@@ -1,4 +1,4 @@
-class Api::Employee::ShiftsController < Api::BaseController
+class Api::Employee::ShiftsController < Api::AuthorizationController
   before_action :set_user
 
   def index

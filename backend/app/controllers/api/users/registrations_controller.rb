@@ -1,6 +1,6 @@
 class Api::Users::RegistrationsController < Devise::RegistrationsController
   respond_to :json
-    # サインアップ
+  # サインアップ
   def create
     build_resource(sign_up_params)
 

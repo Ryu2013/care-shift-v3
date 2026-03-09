@@ -35,14 +35,14 @@ class Shift < ApplicationRecord
                     .where("start_time < ? AND end_time > ?", end_time, start_time)
                     .first
     return unless conflict
-    date_str = date.strftime('%Y年%m月%d日')
-    start_str = start_time.strftime('%H:%M')
-    end_str = end_time.strftime('%H:%M')
-    c_start_str = conflict.start_time.strftime('%H:%M')
-    c_end_str = conflict.end_time.strftime('%H:%M')
+    date_str = date.strftime("%Y年%m月%d日")
+    start_str = start_time.strftime("%H:%M")
+    end_str = end_time.strftime("%H:%M")
+    c_start_str = conflict.start_time.strftime("%H:%M")
+    c_end_str = conflict.end_time.strftime("%H:%M")
 
     errors.add(
-      :base, 
+      :base,
       "#{user&.name}さんの#{date_str}のシフト（#{start_str}〜#{end_str}）は、既に登録されているシフト（#{conflict.client&.name} #{c_start_str}〜#{c_end_str}）と時間が重複しています"
     )
   end

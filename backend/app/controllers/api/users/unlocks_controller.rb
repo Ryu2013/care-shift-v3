@@ -1,6 +1,6 @@
 class Api::Users::UnlocksController < Devise::UnlocksController
   respond_to :json
-  skip_before_action :verify_authenticity_token, only: [:create]
+  skip_before_action :verify_authenticity_token, only: [ :create ]
 
   def create
     self.resource = resource_class.send_unlock_instructions(resource_params)

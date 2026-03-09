@@ -40,6 +40,6 @@ class Api::Admin::ClientsController < Api::Admin::AuthorizationController
 
   def client_params
     params.require(:client).permit(:team_id, :name, :address,
-      user_clients_attributes: [:id, :user_id, :note, :_destroy])
+      user_clients_attributes: [ :id, :user_id, :note, :_destroy ])
   end
 end

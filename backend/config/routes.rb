@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   }
 
   namespace :api do
-    get 'csrf', to: 'csrf#index'
+    get "csrf", to: "csrf#index"
 
     namespace :admin do
       resources :teams, only: %i[index create update destroy]
@@ -35,9 +35,9 @@ Rails.application.routes.draw do
       resources :messages, only: %i[index create]
       resources :entries, only: %i[create destroy], shallow: true
     end
-    get 'me', to: 'me#show'
-    resources :users, only: [:index]
-    resources :shifts, only: [:index, :update]
+    get "me", to: "me#show"
+    resources :users, only: [ :index ]
+    resources :shifts, only: [ :index, :update ]
 
     resource :two_factor, only: [] do
       get :setup
@@ -55,5 +55,5 @@ Rails.application.routes.draw do
     mount LetterOpenerWeb::Engine, at: "/api/letter_opener"
   end
 
-  mount ActionCable.server => '/api/cable'
+  mount ActionCable.server => "/api/cable"
 end

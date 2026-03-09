@@ -38,7 +38,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.2]
       t.datetime :invitation_accepted_at
       t.integer  :invitation_limit
       t.references :invited_by, polymorphic: true
-      t.integer  :invitations_count, default: 0
+      t.integer :invitations_count, default: 0
 
       ## Profile
       t.string  :name,    null: false

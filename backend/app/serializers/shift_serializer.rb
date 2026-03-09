@@ -14,11 +14,11 @@ class ShiftSerializer
       start_time: @shift.start_time&.strftime("%H:%M"),
       end_time: @shift.end_time&.strftime("%H:%M"),
       work_status: @shift.work_status,
-      client: @shift.client ? { 
-        name: @shift.client.name, 
+      client: @shift.client ? {
+        name: @shift.client.name,
         address: @shift.client.address,
-        latitude: @shift.client.latitude, 
-        longitude: @shift.client.longitude 
+        latitude: @shift.client.latitude,
+        longitude: @shift.client.longitude
       } : nil,
       user: @shift.user ? { name: @shift.user.name } : nil,
       is_escort: @shift.is_escort,
