@@ -11,6 +11,10 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
 
   api:
     build:
@@ -30,8 +34,8 @@ services:
       - "3000:3000"
     depends_on:
       - mysql
+      - redis
     command: bash -lc "bundle install && rm -f tmp/pids/server.pid && bin/rails s -b 0.0.0.0 -p 3000"
-
 
   frontend:
     image: node:20
@@ -42,7 +46,6 @@ services:
     ports:
       - "5173:5173"
     command: bash -lc "npm install && npm run dev -- --host 0.0.0.0"
-
 
 volumes:
   mysql_data:
