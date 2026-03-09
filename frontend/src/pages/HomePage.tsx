@@ -132,10 +132,10 @@ const HomePage: React.FC = () => {
                         <Link to="/register" className={`${styles.btnPrimary} w-full py-4 text-center text-lg shadow-md hover:shadow-lg`}>
                             新規登録
                         </Link>
-                        <button type="button" onClick={() => alert('Not implemented')} className={`${styles.btnGoogle} w-full py-3 flex items-center justify-center shadow-sm hover:shadow`}>
+                        <a href={`${import.meta.env.VITE_API_BASE_URL || ''}/api/users/auth/google_oauth2`} className={`${styles.btnGoogle} w-full py-3 flex items-center justify-center shadow-sm hover:shadow`}>
                             <GoogleIcon />
                             <span>Googleで登録</span>
-                        </button>
+                        </a>
                         <p className="text-xs text-gray-500 mt-2 leading-relaxed">
                             アカウントを作成することで、
                             <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700">利用規約</a>
@@ -267,7 +267,7 @@ const HomePage: React.FC = () => {
                         <div className="flex items-center gap-4 text-gray-400 text-sm">
                             <Link to="/login" className={styles.footerLink}>ログイン</Link>
                             <span>|</span>
-                            <button type="button" onClick={() => alert('Not implemented')} className={styles.footerLink}>Googleでログイン</button>
+                            <a href={`${import.meta.env.VITE_API_BASE_URL || ''}/api/users/auth/google_oauth2`} className={styles.footerLink}>Googleでログイン</a>
                         </div>
 
                         <div className="flex flex-wrap justify-center items-center gap-4 text-gray-400 text-sm mt-4">

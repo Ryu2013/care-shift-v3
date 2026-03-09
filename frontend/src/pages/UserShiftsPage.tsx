@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { getUserShifts, updateUserShiftStatus } from '../api/shifts'
 import { getOfficeUsers } from '../api/users'
 import { useCurrentUser } from '../hooks/useCurrentUser'
@@ -19,7 +19,6 @@ const formatTime = (timeString: string) => {
 }
 
 export default function UserShiftsPage() {
-    const navigate = useNavigate()
     const queryClient = useQueryClient()
     const { data: currentUser } = useCurrentUser()
     const [searchParams] = useSearchParams()
