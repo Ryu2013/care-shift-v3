@@ -1,6 +1,7 @@
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import styles from './HowToUse.module.css';
 import { HamburgerMenuButton } from '../../components/HamburgerMenuButton';
+import logoImg from '../../assets/logo.png';
 
 const navItems = [
     { path: '/', label: 'ホーム' },
@@ -19,7 +20,7 @@ export default function HowToUseLayout() {
             <nav className={`relative z-50 py-3 mb-5 border-b border-gray-200 bg-white ${styles.howToUseNav} flex items-center justify-between px-5 md:px-12`}>
                 {/* ロゴとホームへのリンク */}
                 <Link to="/" className="flex items-center gap-3 decoration-none">
-                    <img src="/src/assets/logo.png" alt="ケアシフト ロゴ" className="h-8" />
+                    <img src={logoImg} alt="ケアシフト ロゴ" className="h-8" />
                 </Link>
 
                 {/* モバイル用ハンバーガーメニュー（ドロワー内蔵） */}

@@ -5,6 +5,20 @@ import type { User } from '../types';
 import styles from './HomePage.module.css';
 import { FadeInText } from '../components/FadeInText';
 import { HamburgerMenuButton } from '../components/HamburgerMenuButton';
+import logoImg from '../assets/logo.png';
+import titleImg from '../assets/title.png';
+import calendarImg from '../assets/calendar.png';
+import clockImg from '../assets/clock.png';
+import chatImg from '../assets/chat.png';
+import naviImg from '../assets/navi.png';
+import humanImg from '../assets/human.png';
+import shiftsImg from '../assets/shifts.png';
+import clientNeedImg from '../assets/client_need.png';
+import workStatusesImg from '../assets/work_statuses.png';
+import chatViewImg from '../assets/chat_view.png';
+import navViewImg from '../assets/nav_view.png';
+import shift4Img from '../assets/shift4.png';
+import footerTitleImg from '../assets/footer_title.png';
 
 const GoogleIcon = () => (
     <svg viewBox="0 0 24 24" className="w-5 h-5 mr-3">
@@ -65,7 +79,7 @@ const HomePage: React.FC = () => {
             <header className={`${styles.header} py-4 px-6 md:px-12 w-full fixed top-0 z-50 `}>
                 <div className="mx-auto flex justify-between items-center">
                     <div className="flex items-center gap-3">
-                        <img src="/src/assets/logo.png" alt="ケアシフト ロゴ" className="h-8" />
+                        <img src={logoImg} alt="ケアシフト ロゴ" className="h-8" />
                         <span className={`${styles.logoText} md:text-lg block tracking-wide`}>シフト管理アプリ</span>
 
                         {/* デスクトップ用ナビゲーション */}
@@ -100,28 +114,28 @@ const HomePage: React.FC = () => {
                         <div className={`absolute top-0 left-0 -mt-6 md:-mt-10 ml-0 md:-ml-4 text-2xl md:text-5xl font-bold tracking-widest whitespace-nowrap z-10 ${styles.heroTitle}`}>
                             <FadeInText text={"訪問介護の\n無料AIシフト作成ツール"} />
                         </div>
-                        <img src="/src/assets/title.png" alt="タイトル" className={styles.heroTitleImage} />
+                        <img src={titleImg} alt="タイトル" className={styles.heroTitleImage} />
                     </div>
 
                     <div className={`${styles.heroFeaturesContainer} flex flex-wrap justify-center gap-6 md:gap-12 py-6 px-4 w-full`}>
                         <div className="flex flex-col items-center gap-2 w-20">
-                            <img src="/src/assets/calendar.png" alt="シフト管理" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
+                            <img src={calendarImg} alt="シフト管理" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
                             <span className={`${styles.heroFeatureItem} text-sm font-bold`}>シフト管理</span>
                         </div>
                         <div className="flex flex-col items-center gap-2 w-20">
-                            <img src="/src/assets/clock.png" alt="勤怠管理" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
+                            <img src={clockImg} alt="勤怠管理" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
                             <span className={`${styles.heroFeatureItem} text-sm font-bold`}>勤怠管理</span>
                         </div>
                         <div className="flex flex-col items-center gap-2 w-20">
-                            <img src="/src/assets/chat.png" alt="チャット" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
+                            <img src={chatImg} alt="チャット" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
                             <span className={`${styles.heroFeatureItem} text-sm font-bold`}>チャット</span>
                         </div>
                         <div className="flex flex-col items-center gap-2 w-20">
-                            <img src="/src/assets/navi.png" alt="ナビ" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
+                            <img src={naviImg} alt="ナビ" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
                             <span className={`${styles.heroFeatureItem} text-sm font-bold`}>ナビ</span>
                         </div>
                         <div className="flex flex-col items-center gap-2 w-20">
-                            <img src="/src/assets/human.png" alt="人員配置" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
+                            <img src={humanImg} alt="人員配置" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
                             <span className={`${styles.heroFeatureItem} text-sm font-bold`}>人員配置</span>
                         </div>
                     </div>
@@ -156,8 +170,8 @@ const HomePage: React.FC = () => {
                     </div>
                     <div className={`flex-1 relative w-full ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
                         <div className="w-full max-w-md ml-auto mr-auto md:mr-0 transform hover:rotate-1 transition-transform duration-500">
-                            <img src="/src/assets/shifts.png" alt="シフト画面背景" className={styles.featureImg} />
-                            <img src="/src/assets/client_need.png" alt="担当者選択ポップアップ" className="absolute -bottom-6 -right-6 w-3/5 rounded-lg shadow-2xl border border-gray-100" />
+                            <img src={shiftsImg} alt="シフト画面背景" className={styles.featureImg} />
+                            <img src={clientNeedImg} alt="担当者選択ポップアップ" className="absolute -bottom-6 -right-6 w-3/5 rounded-lg shadow-2xl border border-gray-100" />
                         </div>
                     </div>
                 </div>
@@ -172,7 +186,7 @@ const HomePage: React.FC = () => {
                     </div>
                     <div className={`flex-1 w-full ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
                         <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:-rotate-1 transition-transform duration-500">
-                            <img src="/src/assets/work_statuses.png" alt="出勤状況管理" className={styles.featureImg} />
+                            <img src={workStatusesImg} alt="出勤状況管理" className={styles.featureImg} />
                         </div>
                     </div>
                 </div>
@@ -187,7 +201,7 @@ const HomePage: React.FC = () => {
                     </div>
                     <div className={`flex-1 w-full flex justify-center ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
                         <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:rotate-1 transition-transform duration-500">
-                            <img src="/src/assets/chat_view.png" alt="チャット画面" className={styles.featureImg} />
+                            <img src={chatViewImg} alt="チャット画面" className={styles.featureImg} />
                         </div>
                     </div>
                 </div>
@@ -202,7 +216,7 @@ const HomePage: React.FC = () => {
                     </div>
                     <div className={`flex-1 w-full flex justify-center ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
                         <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:-rotate-1 transition-transform duration-500">
-                            <img src="/src/assets/nav_view.png" alt="ナビゲーション画面" className={styles.featureImg} />
+                            <img src={navViewImg} alt="ナビゲーション画面" className={styles.featureImg} />
                         </div>
                     </div>
                 </div>
@@ -217,7 +231,7 @@ const HomePage: React.FC = () => {
                     </div>
                     <div className={`flex-1 w-full ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
                         <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:rotate-1 transition-transform duration-500">
-                            <img src="/src/assets/shift4.png" alt="人員配置画面" className={styles.featureImg} />
+                            <img src={shift4Img} alt="人員配置画面" className={styles.featureImg} />
                         </div>
                     </div>
                 </div>
@@ -257,7 +271,7 @@ const HomePage: React.FC = () => {
             {/* --- フッター/CTA --- */}
             <footer className={`${styles.footerSection} pt-20 pb-12 px-6 md:px-12 text-center border-t border-gray-100`}>
                 <div className="max-w-3xl mx-auto flex flex-col items-center gap-10">
-                    <img src="/src/assets/footer_title.png" alt="さあ、始めましょう" className="max-w-[280px] md:max-w-sm mb-4" />
+                    <img src={footerTitleImg} alt="さあ、始めましょう" className="max-w-[280px] md:max-w-sm mb-4" />
 
                     <div className="w-full flex flex-col items-center gap-8">
                         <Link to="/register" className={`${styles.footerCtaBtn} w-full max-w-sm py-4 text-center shadow-lg hover:shadow-xl hover:-translate-y-1 transform transition-all`}>

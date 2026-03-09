@@ -68,7 +68,21 @@ gem install bundler
 bundle install --without development test
 ```
 
-## 7. systemd puma.serviceの設定
+## 7. Redisのインストールと起動（ActionCable用）
+
+WebSocket（ActionCable）のPub/Sub機能を利用するため、EC2上にRedisを常駐させます。
+
+```bash
+# Redisのインストール
+sudo dnf install -y redis6
+
+# Redisの自動起動設定と起動
+sudo systemctl enable redis6
+sudo systemctl start redis6
+sudo systemctl status redis6
+```
+
+## 8. systemd puma.serviceの設定
 
 ```bash
 sudo vi /etc/systemd/system/puma.service
@@ -92,11 +106,13 @@ Restart=always
 WantedBy=multi-user.target
 ```
 
-## 8. サービスの起動
+## 9. サービスの起動
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable puma
-sudo systemctl start puma
+sudo systemctl enable puma redis6
+sudo systemctl start puma redis6
 sudo systemctl status puma
 ```
+
+
