@@ -12,6 +12,10 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'icon-192.png', 'icon-512.png', 'icon-152.png'],
+      workbox: {
+        // API requests, including OAuth callback navigations, must bypass the SPA fallback.
+        navigateFallbackDenylist: [/^\/api(?:\/|$)/],
+      },
       manifest: {
         name: 'ケアシフト',
         short_name: 'CareShift',
