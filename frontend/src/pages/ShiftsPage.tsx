@@ -59,23 +59,49 @@ export default function ShiftsPage() {
     queryFn: () => getTeams().then((res: { data: Team[] }) => res.data)
   })
 
+  const isTeamSelectionValid =
+    teams !== undefined && (selectedTeamId === '' || teams.some((team) => team.id === selectedTeamId))
+
+  useEffect(() => {
+    if (!teams || selectedTeamId === '') return
+
+    const teamExists = teams.some((team) => team.id === selectedTeamId)
+    if (!teamExists) {
+      setSelectedTeamId('')
+      setSelectedClientId('')
+    }
+  }, [teams, selectedTeamId])
+
   // Fetch clients for filter
   const { data: clients } = useQuery({
     queryKey: ['clients', selectedTeamId],
     queryFn: () => getClients(selectedTeamId || undefined).then((res: { data: Client[] }) => res.data),
-    enabled: true // Always fetch or filter by team
+    enabled: isTeamSelectionValid
   })
+
+  const isClientSelectionValid =
+    clients !== undefined && (selectedClientId === '' || clients.some((client) => client.id === selectedClientId))
+
+  useEffect(() => {
+    if (!clients || selectedClientId === '') return
+
+    const clientExists = clients.some((client) => client.id === selectedClientId)
+    if (!clientExists) {
+      setSelectedClientId('')
+    }
+  }, [clients, selectedClientId])
 
   // Fetch users for mapping shift.user_id to name
   const { data: users } = useQuery({
     queryKey: ['users', selectedTeamId],
     queryFn: () => getUsers(selectedTeamId || undefined).then((res: { data: User[] }) => res.data),
-    enabled: true
+    enabled: isTeamSelectionValid
   })
 
   const { data: shifts, refetch } = useQuery({
     queryKey: ['shifts', year, month, selectedClientId],
     queryFn: () => getShifts({ client_id: selectedClientId || undefined }).then((r: { data: Shift[] }) => r.data),
+    enabled: isClientSelectionValid
   })
 
 
