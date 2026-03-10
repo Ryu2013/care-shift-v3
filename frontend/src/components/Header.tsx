@@ -16,6 +16,8 @@ export const Header: React.FC<HeaderProps> = () => {
     const handleSignOut = async () => {
         try {
             await signOut();
+            localStorage.removeItem('careShift_selectedTeamId');
+            localStorage.removeItem('careShift_selectedClientId');
             queryClient.removeQueries({ queryKey: ['currentUser'] });
             queryClient.clear();
             navigate('/login');
