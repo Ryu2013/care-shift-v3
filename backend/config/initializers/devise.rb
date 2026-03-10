@@ -5,7 +5,7 @@ Devise.setup do |config|
     manager.default_strategies(scope: :user).unshift :two_factor_authenticatable
   end
 
-  config.mailer_sender = ENV.fetch("DEVISE_MAILER_SENDER", "noreply@example.com")
+  config.mailer_sender = Rails.application.credentials.dig(:mail, :from)
 
   require "devise/orm/active_record"
 
@@ -27,8 +27,8 @@ Devise.setup do |config|
   config.sign_out_via = :delete
 
   config.omniauth :google_oauth2,
-    Rails.application.credentials.google_client_id || ENV["GOOGLE_CLIENT_ID"],
-    Rails.application.credentials.google_client_secret || ENV["GOOGLE_CLIENT_SECRET"]
+    Rails.application.credentials.google_client_id,
+    Rails.application.credentials.google_client_secret
 
   # CloudFrontのHostヘッダー書き換えに対応するため、リダイレクトURLのドメインをwwwに固定
   OmniAuth.config.full_host = "https://www.ryuuichi-app.com"

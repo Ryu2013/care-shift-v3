@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-OmniAuth.config.allowed_request_methods = [ :post, :get ]
+OmniAuth.config.allowed_request_methods = [ :post ]
 
 # omniauth-rails_csrf_protection は ActionController::Base を前提としているため
 # APIモードでは ActionController::InvalidAuthenticityToken が発生しやすい。

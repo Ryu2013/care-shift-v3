@@ -22,8 +22,19 @@ export default function LoginPage() {
   useEffect(() => {
     const errorParam = searchParams.get('error')
     if (errorParam) {
-      setError(errorParam)
+      setError(
+        errorParam === 'confirmation_failed'
+          ? '確認リンクが無効か、すでに使用済み、または期限切れの可能性があります。確認メールを再送してからもう一度お試しください。'
+          : errorParam
+      )
       searchParams.delete('error')
+      setSearchParams(searchParams)
+    }
+
+    const confirmed = searchParams.get('confirmed')
+    if (confirmed === 'true') {
+      setSuccessMsg('メールアドレスの確認が完了しました。ログインできます。')
+      searchParams.delete('confirmed')
       setSearchParams(searchParams)
     }
 
