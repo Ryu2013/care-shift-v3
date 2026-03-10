@@ -47,10 +47,7 @@ Rails.application.configure do
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
-  # Log to STDOUT by default
-  config.logger = ActiveSupport::Logger.new(STDOUT)
-    .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
-    .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+  # Use the default Rails file logger in log/production.log.
 
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
@@ -74,9 +71,19 @@ Rails.application.configure do
   # メールのリンクで使用するデフォルトのホスト設定
   config.action_mailer.default_url_options = { host: "www.ryuuichi-app.com", protocol: "https" }
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  # 不正なメールアドレスを無視して、メール配信エラーを発生させません。
+  # 配信エラーを発生させたい場合は true に設定し、メールサーバを即時配信するよう設定してください。
+  config.action_mailer.raise_delivery_errors = true # 送信エラーを確認するため true に変更
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              "smtp.sendgrid.net",
+    port:                 587,
+    domain:               "care-shift.jp",
+    user_name:            "apikey",
+    password:             Rails.application.credentials.dig(:sendgrid, :api_key),
+    authentication:       :plain,
+    enable_starttls_auto: true
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
