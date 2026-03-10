@@ -1,7 +1,11 @@
 import { createConsumer } from '@rails/actioncable'
 
-// Use WebSockets locally on port 3000
+const defaultActionCableURL =
+    typeof window === 'undefined'
+        ? 'ws://localhost:3000/api/cable'
+        : `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/api/cable`
+
 const ActionCableURL =
-    import.meta.env.VITE_ACTION_CABLE_URL || 'ws://localhost:3000/api/cable'
+    import.meta.env.VITE_ACTION_CABLE_URL || defaultActionCableURL
 
 export const cable = createConsumer(ActionCableURL)

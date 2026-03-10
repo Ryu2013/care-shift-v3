@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
 import { signUp } from '../api/auth'
 import GoogleLoginButton from '../components/GoogleLoginButton'
+import { extractErrorMessage } from '../utils/extractErrorMessage'
 
 export default function UserRegistrationPage() {
     const navigate = useNavigate()
-    const queryClient = useQueryClient()
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -21,10 +20,9 @@ export default function UserRegistrationPage() {
 
         try {
             await signUp({ name, email, password })
-            await queryClient.invalidateQueries({ queryKey: ['currentUser'] })
-            navigate('/shifts') // 登録完了後はメインページへ
-        } catch {
-            setError('登録に失敗しました。入力内容をご確認ください。')
+            navigate('/login?registered=true')
+        } catch (err) {
+            setError(extractErrorMessage(err, '登録に失敗しました。入力内容をご確認ください。'))
         } finally {
             setLoading(false)
         }

@@ -6,6 +6,7 @@ import apiClient from '../api/rails-api'
 import type { User } from '../types'
 import AlertMessage from '../components/AlertMessage'
 import GoogleLoginButton from '../components/GoogleLoginButton'
+import { extractErrorMessage } from '../utils/extractErrorMessage'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -35,6 +36,13 @@ export default function LoginPage() {
     if (confirmed === 'true') {
       setSuccessMsg('メールアドレスの確認が完了しました。ログインできます。')
       searchParams.delete('confirmed')
+      setSearchParams(searchParams)
+    }
+
+    const registered = searchParams.get('registered')
+    if (registered === 'true') {
+      setSuccessMsg('確認メールを送信しました。メール内のリンクを開いてからログインしてください。')
+      searchParams.delete('registered')
       setSearchParams(searchParams)
     }
 
@@ -69,8 +77,8 @@ export default function LoginPage() {
       } else {
         navigate('/user-shifts')
       }
-    } catch (err: any) {
-      setError(err)
+    } catch (err) {
+      setError(extractErrorMessage(err, 'ログインに失敗しました。入力内容をご確認ください。'))
     } finally {
       setLoading(false)
     }
