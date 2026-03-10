@@ -13,6 +13,9 @@ class Api::Users::ConfirmationsController < Devise::ConfirmationsController
       # 認証成功時はフロントエンドのログインページへリダイレクト
       redirect_to "#{frontend_url}/login?confirmed=true", allow_other_host: true
     else
+      Rails.logger.warn(
+        "Email confirmation failed for #{resource.try(:email) || 'unknown'}: #{resource.errors.full_messages.join(', ')}"
+      )
       redirect_to "#{frontend_url}/login?error=confirmation_failed", allow_other_host: true
     end
   end
