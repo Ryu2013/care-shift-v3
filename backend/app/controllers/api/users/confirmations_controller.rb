@@ -27,7 +27,7 @@ class Api::Users::ConfirmationsController < Devise::ConfirmationsController
     if successfully_sent?(resource)
       render json: { message: I18n.t("devise.confirmations.send_instructions") }, status: :ok
     else
-      render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: resource.errors.full_messages }, status: :unprocessable_content
     end
   end
 end

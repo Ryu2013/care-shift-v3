@@ -7,7 +7,7 @@ import type { User, Team, Role } from '../types'
 interface UserFormModalProps {
     isOpen: boolean
     onClose: () => void
-    onSuccess: () => void
+    onSuccess: () => void | Promise<unknown>
     user?: User
 }
 
@@ -42,9 +42,9 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
 
     const updateMutation = useMutation({
         mutationFn: ({ id, data }: { id: number, data: Partial<User> }) => updateUser(id, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['users'] })
-            onSuccess()
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['users'] })
+            await onSuccess()
             onClose()
         }
     })
@@ -87,8 +87,9 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
                 <div className="p-6 space-y-6">
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">お名前 <span className="text-red-500">*</span></label>
+                            <label htmlFor="userName" className="block text-sm font-bold text-gray-700">お名前 <span className="text-red-500">*</span></label>
                             <input
+                                id="userName"
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
@@ -99,8 +100,9 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
                         </div>
 
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">メールアドレス <span className="text-red-500">*</span></label>
+                            <label htmlFor="userEmail" className="block text-sm font-bold text-gray-700">メールアドレス <span className="text-red-500">*</span></label>
                             <input
+                                id="userEmail"
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -111,8 +113,9 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
                         </div>
 
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">住所</label>
+                            <label htmlFor="userAddress" className="block text-sm font-bold text-gray-700">住所</label>
                             <input
+                                id="userAddress"
                                 type="text"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
@@ -122,8 +125,9 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
                         </div>
 
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">部署（チーム） <span className="text-red-500">*</span></label>
+                            <label htmlFor="userTeamId" className="block text-sm font-bold text-gray-700">部署（チーム） <span className="text-red-500">*</span></label>
                             <select
+                                id="userTeamId"
                                 value={teamId}
                                 onChange={(e) => setTeamId(e.target.value ? Number(e.target.value) : '')}
                                 required
@@ -137,8 +141,9 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
                         </div>
 
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">権限 <span className="text-red-500">*</span></label>
+                            <label htmlFor="userRole" className="block text-sm font-bold text-gray-700">権限 <span className="text-red-500">*</span></label>
                             <select
+                                id="userRole"
                                 value={role}
                                 onChange={(e) => setRole(e.target.value as Role)}
                                 required

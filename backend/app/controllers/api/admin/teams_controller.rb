@@ -11,7 +11,7 @@ class Api::Admin::TeamsController < Api::Admin::AuthorizationController
     if team.save
       render json: team, status: :created
     else
-      render json: { errors: team.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: team.errors.full_messages }, status: :unprocessable_content
     end
   end
 
@@ -19,7 +19,7 @@ class Api::Admin::TeamsController < Api::Admin::AuthorizationController
     if @team.update(team_params)
       render json: @team
     else
-      render json: { errors: @team.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @team.errors.full_messages }, status: :unprocessable_content
     end
   end
 

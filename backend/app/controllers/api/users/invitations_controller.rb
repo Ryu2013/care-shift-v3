@@ -8,7 +8,7 @@ class Api::Users::InvitationsController < Devise::InvitationsController
     if resource.errors.empty?
       render json: { message: "Invitation sent" }, status: :ok
     else
-      render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: resource.errors.full_messages }, status: :unprocessable_content
     end
   end
 end

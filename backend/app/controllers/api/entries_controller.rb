@@ -5,7 +5,7 @@ class Api::EntriesController < Api::AuthorizationController
     if entry.save
       render json: EntrySerializer.new(entry), status: :created
     else
-      render json: { errors: entry.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: entry.errors.full_messages }, status: :unprocessable_content
     end
   end
 

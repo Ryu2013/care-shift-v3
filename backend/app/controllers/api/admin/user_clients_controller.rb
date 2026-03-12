@@ -5,7 +5,7 @@ class Api::Admin::UserClientsController < Api::Admin::AuthorizationController
     if user_client.save
       render json: user_client, status: :created
     else
-      render json: { errors: user_client.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: user_client.errors.full_messages }, status: :unprocessable_content
     end
   end
 

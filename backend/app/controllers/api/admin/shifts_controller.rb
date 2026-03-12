@@ -16,7 +16,7 @@ class Api::Admin::ShiftsController < Api::Admin::AuthorizationController
     if shift.save
       render json: ShiftSerializer.new(shift), status: :created
     else
-      render json: { errors: shift.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: shift.errors.full_messages }, status: :unprocessable_content
     end
   end
 
@@ -24,7 +24,7 @@ class Api::Admin::ShiftsController < Api::Admin::AuthorizationController
     if @shift.update(shift_params)
       render json: ShiftSerializer.new(@shift)
     else
-      render json: { errors: @shift.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @shift.errors.full_messages }, status: :unprocessable_content
     end
   end
 

@@ -7,7 +7,7 @@ class Api::Admin::OfficesController < Api::Admin::AuthorizationController
     if current_user.office.update(office_params)
       render json: OfficeSerializer.new(current_user.office)
     else
-      render json: { errors: current_user.office.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: current_user.office.errors.full_messages }, status: :unprocessable_content
     end
   end
 

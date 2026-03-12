@@ -68,7 +68,7 @@ export default function SettingsPage() {
         try {
             const response = await getOffice()
             setOffice(response.data)
-            setOfficeName(response.data.name)
+            setOfficeName(currentName => currentName || response.data.name)
         } catch (error) {
             console.error('Failed to fetch office', error)
         }
@@ -90,6 +90,7 @@ export default function SettingsPage() {
         try {
             const response = await updateOffice(officeName)
             setOffice(response.data)
+            setOfficeName(response.data.name)
             setOfficeMessage({ type: 'success', text: '会社情報を更新しました。' })
         } catch (error) {
             setOfficeMessage({ type: 'error', text: '会社情報の更新に失敗しました。' })
@@ -102,8 +103,8 @@ export default function SettingsPage() {
         e.preventDefault()
         if (!newTeamName.trim()) return
         try {
-            const response = await createTeam(newTeamName)
-            setTeams([...teams, response.data])
+            await createTeam(newTeamName)
+            await fetchTeams()
             setNewTeamName('')
         } catch (error) {
             console.error('Failed to create team', error)
@@ -340,8 +341,9 @@ export default function SettingsPage() {
 
                                 <form onSubmit={handleUpdateOffice} className="space-y-6">
                                     <div>
-                                        <label className={`${styles.label} block text-xs uppercase tracking-widest pl-1 mb-2`}>会社名 / 事業所名</label>
+                                        <label htmlFor="officeName" className={`${styles.label} block text-xs uppercase tracking-widest pl-1 mb-2`}>会社名 / 事業所名</label>
                                         <input
+                                            id="officeName"
                                             type="text"
                                             className={`${styles.input} w-full py-3 px-4`}
                                             value={officeName}
