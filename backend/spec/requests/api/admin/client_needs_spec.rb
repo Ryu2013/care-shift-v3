@@ -15,7 +15,7 @@ RSpec.describe "管理者向け利用者ニーズAPI", type: :request do
       get "/api/admin/client_needs", params: { client_id: client.id }
 
       expect(response).to have_http_status(:ok)
-      expect(json.map { |row| row["id"] }).to eq([need.id])
+      expect(json.map { |row| row["id"] }).to eq([ need.id ])
     end
 
     it "別事業所の利用者には not_found を返す" do

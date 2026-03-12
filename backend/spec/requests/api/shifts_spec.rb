@@ -16,7 +16,7 @@ RSpec.describe "共通シフトAPI", type: :request do
       get "/api/shifts", params: { date: "2025-11" }
 
       expect(response).to have_http_status(:ok)
-      expect(json.map { |row| row["id"] }).to eq([target.id])
+      expect(json.map { |row| row["id"] }).to eq([ target.id ])
     end
 
     it "管理者は user_id 指定で他ユーザーのシフト一覧を返せる" do
@@ -26,7 +26,7 @@ RSpec.describe "共通シフトAPI", type: :request do
       get "/api/shifts", params: { user_id: employee.id, date: "2025-11" }
 
       expect(response).to have_http_status(:ok)
-      expect(json.map { |row| row["id"] }).to eq([target.id])
+      expect(json.map { |row| row["id"] }).to eq([ target.id ])
     end
 
     it "従業員が他ユーザーを指定すると forbidden を返す" do

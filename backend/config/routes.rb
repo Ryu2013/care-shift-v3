@@ -67,5 +67,4 @@ Rails.application.routes.draw do
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/api/letter_opener"
   end
-
 end

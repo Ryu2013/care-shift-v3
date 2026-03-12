@@ -28,7 +28,7 @@ RSpec.describe "管理者向けユーザーAPI", type: :request do
       get "/api/admin/users", params: { team_id: other_team.id }
 
       expect(response).to have_http_status(:ok)
-      expect(json.map { |row| row["name"] }).to eq(["A User"])
+      expect(json.map { |row| row["name"] }).to eq([ "A User" ])
     end
   end
 

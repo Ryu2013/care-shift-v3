@@ -29,7 +29,7 @@ RSpec.describe "従業員向けシフトAPI", type: :request do
       get "/api/employee/shifts", params: { user_id: employee.id, date: "2025-11" }
 
       expect(response).to have_http_status(:ok)
-      expect(json["shifts"].values.flatten.map { |row| row["id"] }).to eq([shift.id])
+      expect(json["shifts"].values.flatten.map { |row| row["id"] }).to eq([ shift.id ])
     end
   end
 

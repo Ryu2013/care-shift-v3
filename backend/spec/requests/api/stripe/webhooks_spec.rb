@@ -20,7 +20,7 @@ RSpec.describe "Stripe Webhook API", type: :request do
       status: status,
       cancel_at_period_end: cancel_at_period_end,
       cancel_at: cancel_at,
-      items: instance_double("StripeItems", data: [instance_double("StripeItem", current_period_end: period_end)])
+      items: instance_double("StripeItems", data: [ instance_double("StripeItem", current_period_end: period_end) ])
     ).tap do |subscription|
       allow(Stripe::Subscription).to receive(:retrieve).with(id).and_return(subscription)
     end
@@ -30,7 +30,7 @@ RSpec.describe "Stripe Webhook API", type: :request do
     details = instance_double("SubscriptionItemDetails", subscription: subscription_id)
     parent = instance_double("InvoiceLineParent", subscription_item_details: details)
     line = instance_double("InvoiceLine", parent: parent)
-    instance_double("StripeInvoice", lines: instance_double("InvoiceLines", data: [line]))
+    instance_double("StripeInvoice", lines: instance_double("InvoiceLines", data: [ line ]))
   end
 
   it "`checkout.session.completed` で事業所の状態を更新する" do

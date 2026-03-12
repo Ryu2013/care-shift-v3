@@ -20,8 +20,8 @@ RSpec.describe "管理者向け勤務状態API", type: :request do
       expect(response).to have_http_status(:ok)
       expect(json["work_count"]).to eq(1)
       expect(json["not_work_count"]).to eq(1)
-      expect(json["shifts"].map { |row| row["client_id"] }.uniq).to eq([client.id])
-      expect(json["shifts"].map { |row| row.dig("client", "name") }.uniq).to eq(["A Client"])
+      expect(json["shifts"].map { |row| row["client_id"] }.uniq).to eq([ client.id ])
+      expect(json["shifts"].map { |row| row.dig("client", "name") }.uniq).to eq([ "A Client" ])
     end
 
     it "team_id と date で絞り込める" do
@@ -32,7 +32,7 @@ RSpec.describe "管理者向け勤務状態API", type: :request do
       get "/api/admin/work_statuses", params: { team_id: other_team.id, date: "2025-11-10" }
 
       expect(response).to have_http_status(:ok)
-      expect(json["shifts"].map { |row| row["id"] }).to eq([target_shift.id])
+      expect(json["shifts"].map { |row| row["id"] }).to eq([ target_shift.id ])
       expect(json["date"]).to eq("2025-11-10")
     end
   end
