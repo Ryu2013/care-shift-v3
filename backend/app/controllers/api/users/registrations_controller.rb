@@ -17,7 +17,7 @@ class Api::Users::RegistrationsController < Devise::RegistrationsController
     if resource.persisted?
       render json: UserSerializer.new(resource), status: :created
     else
-      render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: resource.errors.full_messages }, status: :unprocessable_content
     end
   end
 end

@@ -9,7 +9,7 @@ class Api::Users::UnlocksController < Devise::UnlocksController
     if successfully_sent?(resource)
       render json: { message: I18n.t("devise.unlocks.send_instructions") }, status: :ok
     else
-      render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: resource.errors.full_messages }, status: :unprocessable_content
     end
   end
 

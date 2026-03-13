@@ -15,7 +15,7 @@ class Api::Admin::ClientsController < Api::Admin::AuthorizationController
     if client.save
       render json: ClientSerializer.new(client), status: :created
     else
-      render json: { errors: client.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: client.errors.full_messages }, status: :unprocessable_content
     end
   end
 
@@ -23,7 +23,7 @@ class Api::Admin::ClientsController < Api::Admin::AuthorizationController
     if @client.update(client_params)
       render json: ClientSerializer.new(@client)
     else
-      render json: { errors: @client.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @client.errors.full_messages }, status: :unprocessable_content
     end
   end
 

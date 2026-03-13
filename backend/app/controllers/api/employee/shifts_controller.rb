@@ -26,7 +26,7 @@ class Api::Employee::ShiftsController < Api::AuthorizationController
     if shift.update(shift_params)
       render json: shift
     else
-      render json: { errors: shift.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: shift.errors.full_messages }, status: :unprocessable_content
     end
   end
 

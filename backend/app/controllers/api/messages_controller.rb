@@ -14,7 +14,7 @@ class Api::MessagesController < Api::AuthorizationController
       ActionCable.server.broadcast("room_#{message.room_id}", MessageSerializer.new(message).as_json)
       render json: MessageSerializer.new(message), status: :created
     else
-      render json: { errors: message.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: message.errors.full_messages }, status: :unprocessable_content
     end
   end
 

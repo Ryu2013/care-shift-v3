@@ -19,7 +19,7 @@ class Api::RoomsController < Api::AuthorizationController
       end
       render json: RoomSerializer.new(room), status: :created
     rescue ActiveRecord::RecordInvalid => e
-      render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: e.record.errors.full_messages }, status: :unprocessable_content
     end
   end
 
@@ -27,7 +27,7 @@ class Api::RoomsController < Api::AuthorizationController
     if @room.update(room_params)
       render json: RoomSerializer.new(@room)
     else
-      render json: { errors: @room.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @room.errors.full_messages }, status: :unprocessable_content
     end
   end
 

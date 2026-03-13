@@ -10,7 +10,7 @@ import type { Client, Team, ShiftType } from '../types'
 interface ClientFormModalProps {
     isOpen: boolean
     onClose: () => void
-    onSuccess: () => void
+    onSuccess: () => void | Promise<unknown>
     initialTeamId?: number | ''
     client?: Client
 }
@@ -65,18 +65,18 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
 
     const createMutation = useMutation({
         mutationFn: createClient,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['clients'] })
-            onSuccess()
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['clients'] })
+            await onSuccess()
             onClose()
         }
     })
 
     const updateMutation = useMutation({
         mutationFn: ({ id, data }: { id: number, data: Partial<Client> }) => updateClient(id, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['clients'] })
-            onSuccess()
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['clients'] })
+            await onSuccess()
             onClose()
         }
     })
@@ -188,8 +188,9 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                 <div className="p-6 space-y-6">
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">部署（チーム） <span className="text-red-500">*</span></label>
+                            <label htmlFor="clientTeamId" className="block text-sm font-bold text-gray-700">部署（チーム） <span className="text-red-500">*</span></label>
                             <select
+                                id="clientTeamId"
                                 value={teamId}
                                 onChange={(e) => setTeamId(e.target.value ? Number(e.target.value) : '')}
                                 required
@@ -203,8 +204,9 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                         </div>
 
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">お名前 <span className="text-red-500">*</span></label>
+                            <label htmlFor="clientName" className="block text-sm font-bold text-gray-700">お名前 <span className="text-red-500">*</span></label>
                             <input
+                                id="clientName"
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
@@ -215,8 +217,9 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                         </div>
 
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">住所</label>
+                            <label htmlFor="clientAddress" className="block text-sm font-bold text-gray-700">住所</label>
                             <input
+                                id="clientAddress"
                                 type="text"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}

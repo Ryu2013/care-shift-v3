@@ -10,7 +10,7 @@ class Api::Admin::ClientNeedsController < Api::Admin::AuthorizationController
     if need.save
       render json: ClientNeedSerializer.new(need), status: :created
     else
-      render json: { errors: need.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: need.errors.full_messages }, status: :unprocessable_content
     end
   end
 

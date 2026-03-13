@@ -11,9 +11,10 @@ Rails.application.routes.draw do
     unlocks: "api/users/unlocks"
   }
 
-  namespace :api do
-    get "csrf", to: "csrf#index"
+  mount ActionCable.server => "/api/cable"
 
+  namespace :api do
+    # 管理者用
     namespace :admin do
       resources :teams, only: %i[index create update destroy]
       resources :users, only: %i[index update destroy]
@@ -31,29 +32,39 @@ Rails.application.routes.draw do
       end
     end
 
+    # 従業員用
+    namespace :employee do
+      resources :shifts, only: %i[index update]
+    end
+
+    # 共通
+    resources :users, only: %i[index]
+    resources :shifts, only: %i[index update]
+
     resources :rooms, only: %i[index show create update destroy] do
       resources :messages, only: %i[index create]
       resources :entries, only: %i[create destroy], shallow: true
     end
-    get "me", to: "me#show"
-    resources :users, only: [ :index ]
-    resources :shifts, only: [ :index, :update ]
 
     resource :two_factor, only: [] do
       get :setup
       post :confirm
     end
 
-    namespace :employee do
-      resources :shifts, only: %i[index update]
+    get "csrf", to: "csrf#index"
+    get "me", to: "me#show"
+    post "stripe/webhook", to: "stripe/webhooks#create"
+
+    # E2Eテスト用
+    if Rails.env.development? || Rails.env.test?
+      namespace :test_support do
+        resources :users, only: :create
+        resources :work_status_scenarios, only: :create
+      end
     end
   end
-
-  post "/api/stripe/webhook", to: "api/stripe/webhooks#create"
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/api/letter_opener"
   end
-
-  mount ActionCable.server => "/api/cable"
 end
