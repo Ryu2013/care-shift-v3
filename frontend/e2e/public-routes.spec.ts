@@ -36,7 +36,7 @@ test.describe('public routes', () => {
     await page.locator('input[type="password"]').first().fill('wrong-password')
     await page.getByRole('button', { name: 'ログイン', exact: true }).click()
 
-    await expect(page.getByText(/Unprocessable Content|アカウントがロックされています|メールアドレスまたはパスワードが正しくありません/)).toBeVisible()
+    await expect(page.getByText(/Unprocessable Content|アカウントが存在しないか、またはロックされています|メールアドレスまたはパスワードが正しくありません/)).toBeVisible()
   })
 
   test('unauthenticated users are redirected from private routes to login', async ({ page }) => {

@@ -9,14 +9,14 @@ class Api::Users::SessionsController < Devise::SessionsController
         if user.validate_otp(params.dig(:user, :otp_attempt))# Userモデルの自作メソッド
           super
         else
-          render json: { error: "二段階認証コードが正しくありません" }, status: :unauthorized
+          render json: { errors: [ "二段階認証コードが正しくありません" ] }, status: :unauthorized
         end
       else
         user.valid_for_authentication? { false } # Deviseメソッドでログイン失敗回数を増やす
-        render json: { error: "メールアドレスまたはパスワードが正しくありません" }, status: :unauthorized
+        render json: { errors: [ "メールアドレスまたはパスワードが正しくありません" ] }, status: :unauthorized
       end
     else
-      render json: { error: "アカウントがロックされています" }, status: :unauthorized
+      render json: { errors: [ "アカウントが存在しないか、またはロックされています" ] }, status: :unauthorized
     end
   end
 

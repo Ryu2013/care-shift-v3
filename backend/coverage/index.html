@@ -13,7 +13,7 @@
       <img src="./assets/0.13.2/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" class="hide">
-      <div class="timestamp">Generated <abbr class="timeago" title="2026-03-12T17:46:40+09:00">2026-03-12T17:46:40+09:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2026-03-14T16:42:41+09:00">2026-03-14T16:42:41+09:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -3863,7 +3863,7 @@
 
             
 
-            <code class="ruby">      return render json: { error: &quot;サブスクリプションが有効ではありません&quot; }, status: :payment_required</code>
+            <code class="ruby">      return render json: { errors: [ &quot;サブスクリプションが有効ではありません&quot; ] }, status: :payment_required</code>
           </li>
         </div>
       
@@ -6113,7 +6113,7 @@
 
             
 
-            <code class="ruby">    render json: { error: &quot;Not found&quot; }, status: :not_found</code>
+            <code class="ruby">    render json: { errors: [ &quot;Not found&quot; ] }, status: :not_found</code>
           </li>
         </div>
       
@@ -6157,7 +6157,7 @@
 
             
 
-            <code class="ruby">    render json: { error: &quot;Forbidden&quot; }, status: :forbidden</code>
+            <code class="ruby">    render json: { errors: [ &quot;Forbidden&quot; ] }, status: :forbidden</code>
           </li>
         </div>
       
@@ -10856,7 +10856,7 @@
 
             
 
-            <code class="ruby">      render json: { error: &quot;認証コードが正しくありません&quot; }, status: :unprocessable_content</code>
+            <code class="ruby">      render json: { errors: [ &quot;認証コードが正しくありません&quot; ] }, status: :unprocessable_content</code>
           </li>
         </div>
       
@@ -11936,7 +11936,7 @@
 
             
 
-            <code class="ruby">      render json: { error: resource.errors.full_messages }, status: :unprocessable_content</code>
+            <code class="ruby">      render json: { errors: resource.errors.full_messages }, status: :unprocessable_content</code>
           </li>
         </div>
       
@@ -12180,7 +12180,7 @@
 
             
 
-            <code class="ruby">      render json: { error: resource.errors.full_messages }, status: :unprocessable_content</code>
+            <code class="ruby">      render json: { errors: resource.errors.full_messages }, status: :unprocessable_content</code>
           </li>
         </div>
       
@@ -12666,7 +12666,7 @@
 
             
 
-            <code class="ruby">          render json: { error: &quot;二段階認証コードが正しくありません&quot; }, status: :unauthorized</code>
+            <code class="ruby">          render json: { errors: [ &quot;二段階認証コードが正しくありません&quot; ] }, status: :unauthorized</code>
           </li>
         </div>
       
@@ -12710,7 +12710,7 @@
 
             
 
-            <code class="ruby">        render json: { error: &quot;メールアドレスまたはパスワードが正しくありません&quot; }, status: :unauthorized</code>
+            <code class="ruby">        render json: { errors: [ &quot;メールアドレスまたはパスワードが正しくありません&quot; ] }, status: :unauthorized</code>
           </li>
         </div>
       
@@ -12742,7 +12742,7 @@
 
             
 
-            <code class="ruby">      render json: { error: &quot;アカウントがロックされています&quot; }, status: :unauthorized</code>
+            <code class="ruby">      render json: { errors: [ &quot;アカウントが存在しないか、またはロックされています&quot; ] }, status: :unauthorized</code>
           </li>
         </div>
       

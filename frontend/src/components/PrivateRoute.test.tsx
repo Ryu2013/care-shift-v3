@@ -12,7 +12,7 @@ import { useCurrentUser } from '../hooks/useCurrentUser'
 const mockedUseCurrentUser = vi.mocked(useCurrentUser)
 
 describe('PrivateRoute', () => {
-  it('shows a loading state while the current user is being fetched', () => {
+  it('ユーザー取得中は読み込み表示を出す', () => {
     mockedUseCurrentUser.mockReturnValue({
       data: undefined,
       isLoading: true,
@@ -23,7 +23,7 @@ describe('PrivateRoute', () => {
     expect(screen.getByText('読み込み中...')).toBeInTheDocument()
   })
 
-  it('renders children for authenticated users', () => {
+  it('認証済みユーザーには子要素を表示する', () => {
     mockedUseCurrentUser.mockReturnValue({
       data: { id: 1, name: 'Admin', email: 'admin@example.com', role: 'admin', office_id: 1, team_id: 1, address: null },
       isLoading: false,
@@ -34,7 +34,7 @@ describe('PrivateRoute', () => {
     expect(screen.getByText('protected')).toBeInTheDocument()
   })
 
-  it('redirects unauthenticated users to login', () => {
+  it('未認証ユーザーはログイン画面へ遷移させる', () => {
     mockedUseCurrentUser.mockReturnValue({
       data: null,
       isLoading: false,

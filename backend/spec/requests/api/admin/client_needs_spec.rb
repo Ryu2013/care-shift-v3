@@ -25,7 +25,7 @@ RSpec.describe "管理者向け利用者ニーズAPI", type: :request do
       get "/api/admin/client_needs", params: { client_id: other_client.id }
 
       expect(response).to have_http_status(:not_found)
-      expect(json["error"]).to eq("Not found")
+      expect(json["errors"]).to eq([ "Not found" ])
     end
   end
 

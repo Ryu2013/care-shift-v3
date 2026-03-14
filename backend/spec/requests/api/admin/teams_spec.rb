@@ -22,7 +22,7 @@ RSpec.describe "管理者向けチームAPI", type: :request do
       get "/api/admin/teams"
 
       expect(response).to have_http_status(:forbidden)
-      expect(json["error"]).to eq("Forbidden")
+      expect(json["errors"]).to eq([ "Forbidden" ])
     end
   end
 

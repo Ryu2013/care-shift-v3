@@ -31,7 +31,7 @@ RSpec.describe "ユーザーセッションAPI", type: :request do
       post "/api/users/sign_in", params: { user: { email: user.email, password: "wrong-password" } }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:unauthorized)
-      expect(json["error"]).to be_present
+      expect(json["errors"]).to be_present
     end
 
     it "不正な OTP では unauthorized を返す" do
@@ -41,7 +41,7 @@ RSpec.describe "ユーザーセッションAPI", type: :request do
       post "/api/users/sign_in", params: { user: { email: user.email, password: password, otp_attempt: "000000" } }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:unauthorized)
-      expect(json["error"]).to be_present
+      expect(json["errors"]).to be_present
     end
 
     it "ロック済みアカウントでは unauthorized を返す" do
@@ -51,7 +51,7 @@ RSpec.describe "ユーザーセッションAPI", type: :request do
       post "/api/users/sign_in", params: { user: { email: user.email, password: password } }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:unauthorized)
-      expect(json["error"]).to eq("アカウントがロックされています")
+      expect(json["errors"]).to eq([ "アカウントが存在しないか、またはロックされています" ])
     end
   end
 
