@@ -103,11 +103,11 @@ const HomePage: React.FC = () => {
             {/* --- メインビジュアル --- */}
             <section className={`${styles.heroSection} pt-28 pb-16 px-6 md:px-12 text-center`}>
                 <div className="max-w-4xl mx-auto flex flex-col items-center gap-10">
-                    <div className="relative inline-block mt-6 md:mt-10">
+                    <div className="relative mt-6 w-full md:mt-10">
                         <div className={`absolute top-0 left-0 -mt-6 md:-mt-10 ml-0 md:-ml-4 text-2xl md:text-5xl font-bold tracking-widest whitespace-nowrap z-10 ${styles.heroTitle}`}>
-                            <FadeInText text={"訪問介護の\n無料AIシフト作成ツール"} />
+                            <FadeInText text={"訪問介護\n重度訪問介護\n業務効率化アプリ"} />
                         </div>
-                        <img src={titleImg} alt="タイトル" className={styles.heroTitleImage} />
+                        <img src={titleImg} alt="タイトル" className={`${styles.heroTitleImage} mt-10 md:mt-0`} />
                     </div>
 
                     <div className={`${styles.heroFeaturesContainer} flex flex-wrap justify-center gap-6 md:gap-12 py-6 px-4 w-full`}>
