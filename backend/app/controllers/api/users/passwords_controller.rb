@@ -9,7 +9,7 @@ class Api::Users::PasswordsController < Devise::PasswordsController
     if successfully_sent?(resource)
       render json: { message: "パスワード再設定用のメールを送信しました" }, status: :ok
     else
-      render json: { errors: resource.errors.full_messages }, status: :unprocessable_content
+      render json: { error: resource.errors.full_messages }, status: :unprocessable_content
     end
   end
 
@@ -31,7 +31,7 @@ class Api::Users::PasswordsController < Devise::PasswordsController
         render json: { message: "パスワードが正常に変更されました" }, status: :ok
       end
     else
-      render json: { errors: resource.errors.full_messages }, status: :unprocessable_content
+      render json: { error: resource.errors.full_messages }, status: :unprocessable_content
     end
   end
 end

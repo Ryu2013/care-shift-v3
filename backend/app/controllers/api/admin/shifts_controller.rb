@@ -10,7 +10,7 @@ class Api::Admin::ShiftsController < Api::Admin::AuthorizationController
 
   def create
     unless current_user.office.subscription_active?
-      return render json: { errors: [ "サブスクリプションが有効ではありません" ] }, status: :payment_required
+      return render json: { error: "サブスクリプションが有効ではありません" }, status: :payment_required
     end
     shift = current_user.office.shifts.build(shift_params)
     if shift.save

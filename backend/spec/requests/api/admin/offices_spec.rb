@@ -21,7 +21,7 @@ RSpec.describe "管理者向け事業所API", type: :request do
       get "/api/admin/office"
 
       expect(response).to have_http_status(:forbidden)
-      expect(json["errors"]).to eq([ "Forbidden" ])
+      expect(json["error"]).to eq("Forbidden")
     end
   end
 

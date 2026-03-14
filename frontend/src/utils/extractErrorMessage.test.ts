@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { extractErrorMessage } from './extractErrorMessage'
 
 describe('extractErrorMessage', () => {
-  it('response.data.errors を改行区切りで返す', () => {
+  it('returns joined errors from response.data.errors', () => {
     expect(
       extractErrorMessage(
         {
@@ -17,7 +17,7 @@ describe('extractErrorMessage', () => {
     ).toBe('error1\nerror2')
   })
 
-  it('使えるメッセージがないときは fallback を返す', () => {
+  it('returns the fallback when no usable message exists', () => {
     expect(extractErrorMessage({}, 'fallback')).toBe('fallback')
   })
 })

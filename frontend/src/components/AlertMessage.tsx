@@ -21,8 +21,10 @@ export default function AlertMessage({ type, message, className = '' }: AlertMes
         const data = message.response.data;
         if (Array.isArray(data.errors) && data.errors.length > 0) {
             displayMessage = data.errors.join('\n');
+        } else if (Array.isArray(data.error) && data.error.length > 0) {
+            displayMessage = data.error.join('\n');
         } else {
-            displayMessage = data.message || JSON.stringify(data);
+            displayMessage = data.error || data.message || JSON.stringify(data);
         }
     } else if (message instanceof Error) {
         // 通常のJSエラーオブジェクト

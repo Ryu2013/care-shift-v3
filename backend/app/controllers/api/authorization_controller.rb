@@ -7,10 +7,10 @@ class Api::AuthorizationController < ApplicationController
   private
 
   def not_found
-    render json: { errors: [ "Not found" ] }, status: :not_found
+    render json: { error: "Not found" }, status: :not_found
   end
 
   def forbidden
-    render json: { errors: [ "Forbidden" ] }, status: :forbidden
+    render json: { error: "Forbidden" }, status: :forbidden
   end
 end

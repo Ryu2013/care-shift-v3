@@ -24,7 +24,7 @@ describe('apiClient', () => {
     })
   })
 
-  it('cookie の csrf token をリクエストヘッダーに設定する', async () => {
+  it('adds the csrf token from cookies to request headers', async () => {
     document.cookie = 'XSRF-TOKEN=test-token'
 
     const requestInterceptor = getRequestInterceptor()
@@ -33,7 +33,7 @@ describe('apiClient', () => {
     expect(config?.headers['X-CSRF-Token']).toBe('test-token')
   })
 
-  it('csrf cookie がないときはヘッダーを変更しない', async () => {
+  it('leaves headers untouched when the csrf cookie is missing', async () => {
     const requestInterceptor = getRequestInterceptor()
     const config = await requestInterceptor.fulfilled(buildConfig())
 

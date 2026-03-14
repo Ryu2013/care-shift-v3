@@ -15,7 +15,7 @@ RSpec.describe "パスワード再設定API", type: :request do
       post "/api/users/password", params: { user: { email: "" } }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:unprocessable_content)
-      expect(json["errors"]).to be_present
+      expect(json["error"]).to be_present
     end
   end
 
@@ -46,7 +46,7 @@ RSpec.describe "パスワード再設定API", type: :request do
       }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:unprocessable_content)
-      expect(json["errors"]).to be_present
+      expect(json["error"]).to be_present
     end
   end
 end
