@@ -1,6 +1,6 @@
 # ケアシフト V3 | 重度訪問介護事業向け業務効率化 SaaS
 
-[![Image from Gyazo](https://i.gyazo.com/d29524a6cd8609463222520a117a0ab3.png)](https://gyazo.com/d29524a6cd8609463222520a117a0ab3)
+![ケアシフト](https://i.gyazo.com/d29524a6cd8609463222520a117a0ab3.png)
 
 **ケアシフト**は、重度訪問介護事業所の管理業務を効率化する SaaS です。
 
