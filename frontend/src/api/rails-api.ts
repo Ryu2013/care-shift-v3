@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { ensureCsrfToken, getCsrfToken } from './csrf'
 
 const apiClient = axios.create({
   baseURL: '/api',
@@ -9,15 +10,16 @@ const apiClient = axios.create({
   withCredentials: true, // Cookie セッション送信
 })
 
-// CSRFトークンをRailsのcookieから取得してヘッダーに付与
-apiClient.interceptors.request.use((config) => {
-  const token = document.cookie
-    .split('; ')
-    .find((row) => row.startsWith('XSRF-TOKEN='))
-    ?.split('=')[1]
-  if (token) {
-    config.headers['X-CSRF-Token'] = decodeURIComponent(token)
+const UNSAFE_METHODS = new Set([ 'post', 'put', 'patch', 'delete' ])
+
+apiClient.interceptors.request.use(async (config) => {
+  const method = config.method?.toLowerCase()
+
+  if (method && UNSAFE_METHODS.has(method)) {
+    const token = getCsrfToken() ?? await ensureCsrfToken()
+    config.headers['X-CSRF-Token'] = token
   }
+
   return config
 })
 

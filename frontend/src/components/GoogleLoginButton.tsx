@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import apiClient from '../api/rails-api'
+import { ensureCsrfToken, getCsrfToken } from '../api/csrf'
 
 interface GoogleLoginButtonProps {
     buttonText?: string
@@ -18,7 +18,7 @@ export default function GoogleLoginButton({
         // Initialize CSRF token
         const fetchCsrf = async () => {
             try {
-                await apiClient.get('/csrf')
+                await ensureCsrfToken()
             } catch (e) {
                 console.error('Failed to initialize CSRF token', e)
             } finally {
@@ -30,10 +30,7 @@ export default function GoogleLoginButton({
 
     const handleGoogleSignIn = (e: React.MouseEvent) => {
         e.preventDefault()
-        const csrfToken = document.cookie
-            .split('; ')
-            .find((row) => row.startsWith('XSRF-TOKEN='))
-            ?.split('=')[1]
+        const csrfToken = getCsrfToken()
 
         const form = document.createElement('form')
         form.method = 'POST'
@@ -43,7 +40,7 @@ export default function GoogleLoginButton({
             const csrfInput = document.createElement('input')
             csrfInput.type = 'hidden'
             csrfInput.name = 'authenticity_token'
-            csrfInput.value = decodeURIComponent(csrfToken)
+            csrfInput.value = csrfToken
             form.appendChild(csrfInput)
         }
 
