@@ -35,7 +35,7 @@ RSpec.describe "共通シフトAPI", type: :request do
       get "/api/shifts", params: { user_id: admin.id, date: "2025-11" }
 
       expect(response).to have_http_status(:forbidden)
-      expect(json["error"]).to eq("Forbidden")
+      expect(json["errors"]).to eq([ "Forbidden" ])
     end
   end
 
@@ -67,7 +67,7 @@ RSpec.describe "共通シフトAPI", type: :request do
       patch "/api/shifts/#{shift.id}", params: { shift: { work_status: "work" } }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:forbidden)
-      expect(json["error"]).to eq("Forbidden")
+      expect(json["errors"]).to eq([ "Forbidden" ])
     end
   end
 end
