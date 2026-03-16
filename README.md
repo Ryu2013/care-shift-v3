@@ -119,21 +119,25 @@ API 通信は Axios を利用し、interceptor によって CSRF Token を自動
 ---
 
 ## インフラ
+
 **AWS（EC2 / ALB / S3 / CloudFront / DynamoDB / SSM）**
 
 インフラは AWS 上に構築しています。
 
-主な構成
+### 主な構成
 
-- EC2 : アプリケーションサーバー
-- ALB : 負荷分散
-- CloudFront : CDN
-- S3 : 静的アセット / ActiveStorage
-- DynamoDB : Terraform State Lock
-- SSM : シークレット管理
+- **EC2** : アプリケーションサーバー
+- **ALB** : 負荷分散
+- **CloudFront** : CDN  
+  厳格な **Content Security Policy（CSP）** を付与し、  
+  JavaScript / CSS / フォント / 通信先を必要最小限に制限することで、  
+  XSS などを考慮したフロントエンド配信を行っています。
+- **S3** : 静的アセット / Active Storage
+- **DynamoDB** : Terraform State Lock
+- **SSM** : シークレット管理
 
 CI およびローカル環境からは **AssumeRole** を利用し、  
-認証情報をコードや環境変数に持たない **シークレットレス運用** を意識しています。
+認証情報をコードや環境変数に保持しない **シークレットレス運用** を行っています。
 
 ---
 

@@ -1,3 +1,25 @@
+resource "aws_cloudfront_response_headers_policy" "frontend_csp" {
+  name    = "${var.project}-frontend-csp"
+  comment = "CSP for frontend assets served by CloudFront"
+
+  security_headers_config {
+    content_security_policy {
+      override = true
+      content_security_policy = join(" ", [
+        "default-src 'self';",
+        "script-src 'self';",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
+        "img-src 'self';",
+        "font-src 'self' https://fonts.gstatic.com;",
+        "connect-src 'self' https://www.ryuuichi-app.com wss://www.ryuuichi-app.com;",
+        "object-src 'none';",
+        "base-uri 'self';",
+        "frame-ancestors 'self';",
+      ])
+    }
+  }
+}
+
 resource "aws_cloudfront_distribution" "main" {
   enabled         = true
   aliases         = ["www.ryuuichi-app.com"]
@@ -30,12 +52,13 @@ resource "aws_cloudfront_distribution" "main" {
 
   # デフォルト → S3（フロントエンド）
   default_cache_behavior {
-    target_origin_id       = "s3-frontend"
-    viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    compress               = true
-    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+    target_origin_id           = "s3-frontend"
+    viewer_protocol_policy     = "redirect-to-https"
+    allowed_methods            = ["GET", "HEAD"]
+    cached_methods             = ["GET", "HEAD"]
+    compress                   = true
+    cache_policy_id            = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.frontend_csp.id
   }
 
   # /api/* → ALB（キャッシュ無効・全ヘッダー転送）
