@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/rails-api';
 import type { User } from '../../types';
@@ -81,11 +81,11 @@ const features: FeatureSectionProps[] = [
     },
 ];
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const checkAuth = async () => {
+        async function checkAuth() {
             try {
                 const res = await api.get<User>('/me');
                 if (res.data.role === 'admin') {
@@ -96,7 +96,8 @@ const HomePage: React.FC = () => {
             } catch {
                 // 未ログイン状態
             }
-        };
+        }
+
         checkAuth();
 
         const observer = new IntersectionObserver((entries) => {

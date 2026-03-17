@@ -1,7 +1,3 @@
-/* =========================================
-  ベースレイアウトの上書きと構造（モジュールレイヤー）
-   ========================================= */
-
 /* ヘッダー */
 .header {
     background-color: var(--white-color);
@@ -36,8 +32,6 @@
 .navLinkSignup:hover {
     opacity: 0.8;
 }
-
-/* ハンバーガーボタンは HamburgerMenuButton コンポーネントに分離されました */
 
 .mobileNavLink {
     font-size: 1.25rem;
@@ -132,11 +126,8 @@
 .featureImg {
     width: 100%;
     border-radius: 1.5rem;
-    /* rounded-3xl */
     box-shadow: var(--shadow-2xl);
-    /* 共通変数として定義されていれば */
     border: 4px solid #1f2937;
-    /* border-gray-800 */
 }
 
 .featureTitleHighlight {
@@ -192,10 +183,6 @@
 
 .footerLinksContainer {
     color: var(--black-color);
-}
-
-.footerLinkGroup {
-    /* ユーティリティクラス経由で処理 */
 }
 
 .footerLink {

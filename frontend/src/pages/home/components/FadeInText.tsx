@@ -5,7 +5,7 @@ interface FadeInTextProps {
     text: string;
 }
 
-export const FadeInText: React.FC<FadeInTextProps> = ({ text }) => {
+export function FadeInText({ text }: FadeInTextProps) {
     return (
         <div className={styles.container}>
             {text.split('').map((char, index) => (
@@ -17,10 +17,10 @@ export const FadeInText: React.FC<FadeInTextProps> = ({ text }) => {
                         className={styles.char}
                         style={{ animationDelay: `${index * 0.08}s` }}
                     >
-                        {char === ' ' ? '\u00A0' : char}
+                        {char}
                     </span>
                 )
             ))}
         </div>
     );
-};
+}
