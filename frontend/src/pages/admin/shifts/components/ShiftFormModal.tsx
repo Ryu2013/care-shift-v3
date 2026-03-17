@@ -5,6 +5,7 @@ import { getClients } from '../../../../api/clients'
 import { createShift, updateShift, generateMonthlyShifts, deleteShift } from '../../../../api/shifts'
 import type { ShiftType, User, Shift, Client } from '../../../../types'
 import { useEffect } from 'react'
+import styles from './ShiftFormModal.module.css'
 
 interface ShiftFormModalProps {
     isOpen: boolean
@@ -128,11 +129,11 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
     if (!isOpen) return null
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-fade-in-up">
-                <div className="flex items-center justify-between p-6 border-b">
-                    <h2 className="text-xl font-bold text-gray-800">シフトを{shift ? '編集' : '登録'}</h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
+        <div className={`${styles.backdrop} fixed inset-0 z-50 flex items-center justify-center p-4`}>
+            <div className={`${styles.modal} w-full max-w-md overflow-hidden animate-fade-in-up`}>
+                <div className={`${styles.header} flex items-center justify-between p-6`}>
+                    <h2 className={`${styles.title} text-xl`}>シフトを{shift ? '編集' : '登録'}</h2>
+                    <button onClick={onClose} className={styles.closeButton}>
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -149,7 +150,7 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
                                     }
                                 }}
                                 disabled={generateMutation.isPending}
-                                className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-lg transition-colors disabled:opacity-50"
+                                className={`${styles.generateButton} w-full py-2 px-4`}
                             >
                                 {generateMutation.isPending ? '生成中...' : '今月のシフト自動生成'}
                             </button>
@@ -158,11 +159,11 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">担当従業員</label>
+                            <label className={`${styles.label} block text-sm`}>担当従業員</label>
                             <select
                                 value={userId}
                                 onChange={(e) => setUserId(e.target.value ? Number(e.target.value) : '')}
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
+                                className={`${styles.field} w-full px-4 py-2`}
                             >
                                 <option value="">担当従業員を選択</option>
                                 {filteredUsers?.map((user: User) => (
@@ -170,18 +171,18 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
                                 ))}
                             </select>
                             {currentClient && filteredUsers.length === 0 && (
-                                <p className="text-sm text-red-500 mt-1">
+                                <p className={`${styles.errorText} text-sm mt-1`}>
                                     ※ 顧客画面で担当従業員を割り当ててください
                                 </p>
                             )}
                         </div>
 
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">シフト種別</label>
+                            <label className={`${styles.label} block text-sm`}>シフト種別</label>
                             <select
                                 value={shiftType}
                                 onChange={(e) => setShiftType(e.target.value as ShiftType)}
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
+                                className={`${styles.field} w-full px-4 py-2`}
                             >
                                 <option value="day">日勤</option>
                                 <option value="night">夜勤</option>
@@ -191,45 +192,45 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1">
-                                <label className="block text-sm font-bold text-gray-700">開始時間</label>
+                                <label className={`${styles.label} block text-sm`}>開始時間</label>
                                 <input
                                     type="time"
                                     value={startTime}
                                     onChange={(e) => setStartTime(e.target.value)}
                                     required
-                                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
+                                    className={`${styles.field} w-full px-4 py-2`}
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="block text-sm font-bold text-gray-700">終了時間</label>
+                                <label className={`${styles.label} block text-sm`}>終了時間</label>
                                 <input
                                     type="time"
                                     value={endTime}
                                     onChange={(e) => setEndTime(e.target.value)}
                                     required
-                                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
+                                    className={`${styles.field} w-full px-4 py-2`}
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">日付</label>
+                            <label className={`${styles.label} block text-sm`}>日付</label>
                             <input
                                 type="date"
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
                                 required
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
+                                className={`${styles.field} w-full px-4 py-2`}
                             />
                         </div>
 
                         <div className="space-y-1">
-                            <label className="block text-sm font-bold text-gray-700">備考</label>
+                            <label className={`${styles.label} block text-sm`}>備考</label>
                             <input
                                 type="text"
                                 value={note}
                                 onChange={(e) => setNote(e.target.value)}
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
+                                className={`${styles.field} w-full px-4 py-2`}
                             />
                         </div>
 
@@ -237,7 +238,7 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
                             <button
                                 type="submit"
                                 disabled={createMutation.isPending || updateMutation.isPending || deleteMutation.isPending}
-                                className="w-full py-3 bg-[#5daaf5] hover:bg-[#4a90e2] text-white font-bold rounded-full shadow-lg transition-all active:transform active:scale-95 disabled:opacity-50"
+                                className={`${styles.submitButton} w-full py-3`}
                             >
                                 {createMutation.isPending || updateMutation.isPending ? '保存中...' : (shift ? '更新する' : '登録する')}
                             </button>
@@ -250,7 +251,7 @@ export default function ShiftFormModal({ isOpen, onClose, onSuccess, teamId, cli
                                             deleteMutation.mutate(shift.id)
                                         }
                                     }}
-                                    className="w-full py-2 bg-white border-2 border-red-500 text-red-500 hover:bg-red-50 font-bold rounded-full shadow-sm transition-all active:transform active:scale-95 disabled:opacity-50"
+                                    className={`${styles.deleteButton} w-full py-2`}
                                 >
                                     {deleteMutation.isPending ? '削除中...' : '削除する'}
                                 </button>

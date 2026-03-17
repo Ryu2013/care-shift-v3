@@ -10,14 +10,6 @@ import interactionPlugin from '@fullcalendar/interaction'
 import type { Shift, User } from '../../types'
 import { Header } from '../../components/Header'
 
-const formatTime = (timeString: string) => {
-    if (timeString.includes('T')) {
-        const match = timeString.match(/T(\d{2}:\d{2})/)
-        return match ? match[1] : timeString.substring(0, 5)
-    }
-    return timeString.substring(0, 5)
-}
-
 export default function UserShiftsPage() {
     const queryClient = useQueryClient()
     const { data: currentUser } = useCurrentUser()
@@ -67,8 +59,8 @@ export default function UserShiftsPage() {
 
         return shifts.map((shift: Shift) => {
             const clientName = shift.client?.name || "利用者未定"
-            const startTimeStr = formatTime(shift.start_time)
-            const endTimeStr = formatTime(shift.end_time)
+            const startTimeStr = shift.start_time
+            const endTimeStr = shift.end_time
             const title = clientName
             const isWorking = shift.work_status === 'work' || String(shift.work_status) === '1'
 
@@ -131,8 +123,8 @@ export default function UserShiftsPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             {todaysShifts.map(shift => {
                                 const isWorking = shift.work_status === 'work' || String(shift.work_status) === '1'
-                                const startTimeStr = formatTime(shift.start_time)
-                                const endTimeStr = formatTime(shift.end_time)
+                                const startTimeStr = shift.start_time
+                                const endTimeStr = shift.end_time
                                 return (
                                     <div key={shift.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-white rounded-lg border border-gray-100 shadow-sm">
                                         <div>
