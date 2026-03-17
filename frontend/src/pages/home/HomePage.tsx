@@ -4,8 +4,11 @@ import api from '../../api/rails-api';
 import type { User } from '../../types';
 import styles from './HomePage.module.css';
 import { FadeInText } from './components/FadeInText';
+import FeatureSection, { type FeatureSectionProps } from './components/FeatureSection';
+import featureSectionStyles from './components/FeatureSection.module.css';
 import { HamburgerMenuButton } from '../../components/HamburgerMenuButton';
 import GoogleLoginButton from '../../components/GoogleLoginButton';
+// 画像
 import logoImg from '../../assets/logo.png';
 import titleImg from '../../assets/title.png';
 import calendarImg from '../../assets/calendar.png';
@@ -31,6 +34,52 @@ const ResponsiveIcon = () => (
         <path d="M2 10h2"></path>
     </svg>
 );
+
+const features: FeatureSectionProps[] = [
+    {
+        title: '2クリックで',
+        highlightText: '簡単にシフト登録!',
+        descriptionLines: ['担当者を選んでポチッとするだけ。', 'PCの大画面でも、スマホのタッチ操作でも', '直感的に登録完了します。'],
+        imageItems: [
+            { src: shiftsImg, alt: 'シフト画面背景', className: styles.featureImg },
+            { src: clientNeedImg, alt: '担当者選択ポップアップ', className: 'absolute -bottom-6 -right-6 w-3/5 rounded-lg shadow-2xl border border-gray-100' },
+        ],
+        imageLayout: 'flex-1 relative w-full',
+        imageFrame: `${featureSectionStyles.featureFrame} max-w-md transform hover:rotate-1`,
+    },
+    {
+        title: '勤怠管理も',
+        highlightText: 'らくらく!',
+        descriptionLines: ['出勤状況が一目瞭然。', '管理の手間を大幅に削減します。'],
+        imageItems: [{ src: workStatusesImg, alt: '出勤状況管理', className: styles.featureImg }],
+        reverse: true,
+        background: true,
+        imageFrame: `${featureSectionStyles.featureFrame} max-w-sm transform hover:-rotate-1`,
+    },
+    {
+        title: '業務連絡も',
+        highlightText: '簡単！',
+        descriptionLines: ['チャット機能も搭載', '色々なアプリを行ったり来たりする必要はもうありません。'],
+        imageItems: [{ src: chatViewImg, alt: 'チャット画面', className: styles.featureImg }],
+        imageFrame: `${featureSectionStyles.featureFrame} max-w-sm transform hover:rotate-1`,
+    },
+    {
+        title: 'ワンタップで',
+        highlightText: '出勤らくらく!',
+        descriptionLines: ['ボタン一つで本日担当のお宅まで', 'ナビゲーション致します。'],
+        imageItems: [{ src: navViewImg, alt: 'ナビゲーション画面', className: styles.featureImg }],
+        reverse: true,
+        background: true,
+        imageFrame: `${featureSectionStyles.featureFrame} max-w-sm transform hover:-rotate-1`,
+    },
+    {
+        title: '担当従業員の',
+        highlightText: '登録も簡単！',
+        descriptionLines: ['お客様の家から近い順に', '従業員が表示され、迷う時間が無くなります。'],
+        imageItems: [{ src: shift4Img, alt: '人員配置画面', className: styles.featureImg }],
+        imageFrame: `${featureSectionStyles.featureFrame} max-w-sm transform hover:rotate-1`,
+    },
+];
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
@@ -154,81 +203,19 @@ const HomePage: React.FC = () => {
                 </div>
             </section>
 
-            {/* --- 特徴1: シフト登録 --- */}
-            <section className={`${styles.featureSection} py-20 px-6 md:px-12`}>
-                <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-20">
-                    <div className={`flex-1 ${styles.scrollTrigger}`}>
-                        <h2 className={`${styles.featureTitle} mb-6`}>2クリックで<br /><span className={styles.featureTitleHighlight}>簡単にシフト登録!</span></h2>
-                        <p className={`${styles.featureDesc} text-lg`}>担当者を選んでポチッとするだけ。<br />PCの大画面でも、スマホのタッチ操作でも<br />直感的に登録完了します。</p>
-                    </div>
-                    <div className={`flex-1 relative w-full ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
-                        <div className="w-full max-w-md ml-auto mr-auto md:mr-0 transform hover:rotate-1 transition-transform duration-500">
-                            <img src={shiftsImg} alt="シフト画面背景" className={styles.featureImg} />
-                            <img src={clientNeedImg} alt="担当者選択ポップアップ" className="absolute -bottom-6 -right-6 w-3/5 rounded-lg shadow-2xl border border-gray-100" />
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* --- 特徴2: 勤怠管理 --- */}
-            <section className={`${styles.featureSectionAlt} py-20 px-6 md:px-12 bg-opacity-50`}>
-                <div className="max-w-5xl mx-auto flex flex-col md:flex-row-reverse items-center gap-12 md:gap-20">
-                    <div className={`flex-1 ${styles.scrollTrigger}`}>
-                        <h2 className={`${styles.featureTitle} mb-6`}>勤怠管理も<br /><span className={styles.featureTitleHighlight}>らくらく!</span></h2>
-                        <p className={`${styles.featureDesc} text-lg`}>出勤状況が一目瞭然。<br />管理の手間を大幅に削減します。</p>
-                    </div>
-                    <div className={`flex-1 w-full ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
-                        <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:-rotate-1 transition-transform duration-500">
-                            <img src={workStatusesImg} alt="出勤状況管理" className={styles.featureImg} />
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* --- 特徴3: 業務連絡 --- */}
-            <section className={`${styles.featureSection} py-20 px-6 md:px-12`}>
-                <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-20">
-                    <div className={`flex-1 ${styles.scrollTrigger}`}>
-                        <h2 className={`${styles.featureTitle} mb-6`}>業務連絡も<br /><span className={styles.featureTitleHighlight}>簡単！</span></h2>
-                        <p className={`${styles.featureDesc} text-lg`}>チャット機能も搭載<br />色々なアプリを行ったり来たりする必要はもうありません。</p>
-                    </div>
-                    <div className={`flex-1 w-full flex justify-center ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
-                        <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:rotate-1 transition-transform duration-500">
-                            <img src={chatViewImg} alt="チャット画面" className={styles.featureImg} />
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* --- 特徴4: ナビゲーション --- */}
-            <section className={`${styles.featureSectionAlt} py-20 px-6 md:px-12 bg-opacity-50`}>
-                <div className="max-w-5xl mx-auto flex flex-col md:flex-row-reverse items-center gap-12 md:gap-20">
-                    <div className={`flex-1 ${styles.scrollTrigger}`}>
-                        <h2 className={`${styles.featureTitle} mb-6`}>ワンタップで<br /><span className={styles.featureTitleHighlight}>出勤らくらく!</span></h2>
-                        <p className={`${styles.featureDesc} text-lg`}>ボタン一つで本日担当のお宅まで<br />ナビゲーション致します。</p>
-                    </div>
-                    <div className={`flex-1 w-full flex justify-center ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
-                        <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:-rotate-1 transition-transform duration-500">
-                            <img src={navViewImg} alt="ナビゲーション画面" className={styles.featureImg} />
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* --- 特徴5: 人員配置 --- */}
-            <section className={`${styles.featureSection} py-20 px-6 md:px-12`}>
-                <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-20">
-                    <div className={`flex-1 ${styles.scrollTrigger}`}>
-                        <h2 className={`${styles.featureTitle} mb-6`}>担当従業員の<br /><span className={styles.featureTitleHighlight}>登録も簡単！</span></h2>
-                        <p className={`${styles.featureDesc} text-lg`}>お客様の家から近い順に<br />従業員が表示され、迷う時間が無くなります。</p>
-                    </div>
-                    <div className={`flex-1 w-full ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
-                        <div className="w-full max-w-sm ml-auto mr-auto md:mr-0 transform hover:rotate-1 transition-transform duration-500">
-                            <img src={shift4Img} alt="人員配置画面" className={styles.featureImg} />
-                        </div>
-                    </div>
-                </div>
-            </section>
+            {features.map((feature) => (
+                <FeatureSection
+                    key={`${feature.title}-${feature.highlightText}`}
+                    title={feature.title}
+                    highlightText={feature.highlightText}
+                    descriptionLines={feature.descriptionLines}
+                    imageItems={feature.imageItems}
+                    reverse={feature.reverse}
+                    background={feature.background}
+                    imageLayout={feature.imageLayout}
+                    imageFrame={feature.imageFrame}
+                />
+            ))}
 
             {/* --- コスト＆デバイス訴求セクション --- */}
             <section className={`${styles.pricingSection} py-24 px-6 md:px-12 relative overflow-hidden`}>
