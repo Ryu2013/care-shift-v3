@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getUsers } from '../api/users'
-import { getClients } from '../api/clients'
-import { createShift, updateShift, generateMonthlyShifts, deleteShift } from '../api/shifts'
-import type { ShiftType, User, Shift, Client } from '../types'
+import { getUsers } from '../../../../api/users'
+import { getClients } from '../../../../api/clients'
+import { createShift, updateShift, generateMonthlyShifts, deleteShift } from '../../../../api/shifts'
+import type { ShiftType, User, Shift, Client } from '../../../../types'
 import { useEffect } from 'react'
 
 interface ShiftFormModalProps {

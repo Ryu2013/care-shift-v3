@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, Link } from 'react-router-dom'
-import { getUsers } from '../api/users'
-import { getTeams } from '../api/teams'
-import type { User, Team } from '../types'
-import UserFormModal from '../components/UserFormModal'
+import { getUsers } from '../../../api/users'
+import { getTeams } from '../../../api/teams'
+import type { User, Team } from '../../../types'
+import UserFormModal from './components/UserFormModal'
 
 export default function UsersPage() {
   const navigate = useNavigate()

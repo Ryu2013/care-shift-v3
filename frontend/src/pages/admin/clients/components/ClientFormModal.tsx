@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { createClient, updateClient } from '../api/clients'
-import { getTeams } from '../api/teams'
-import { getUsers } from '../api/users'
-import { getClientNeeds, createClientNeed, deleteClientNeed } from '../api/client_needs'
-import { createUserClient, deleteUserClient } from '../api/user_clients'
-import type { Client, Team, ShiftType } from '../types'
+import { createClient, updateClient } from '../../../../api/clients'
+import { getTeams } from '../../../../api/teams'
+import { getUsers } from '../../../../api/users'
+import { getClientNeeds, createClientNeed, deleteClientNeed } from '../../../../api/client_needs'
+import { createUserClient, deleteUserClient } from '../../../../api/user_clients'
+import type { Client, Team, ShiftType } from '../../../../types'
 
 interface ClientFormModalProps {
     isOpen: boolean

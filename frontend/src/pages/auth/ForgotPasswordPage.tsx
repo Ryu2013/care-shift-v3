@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { requestPasswordReset } from '../api/auth'
-import AlertMessage from '../components/AlertMessage'
+import { requestPasswordReset } from '../../api/auth'
+import AlertMessage from '../../components/AlertMessage'
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('')

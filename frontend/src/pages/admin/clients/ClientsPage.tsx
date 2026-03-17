@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { getClients } from '../api/clients'
-import { getTeams } from '../api/teams'
-import type { Client, Team } from '../types'
-import ClientFormModal from '../components/ClientFormModal'
-import { Header } from '../components/Header'
+import { getClients } from '../../../api/clients'
+import { getTeams } from '../../../api/teams'
+import type { Client, Team } from '../../../types'
+import ClientFormModal from './components/ClientFormModal'
+import { Header } from '../../../components/Header'
 
 export default function ClientsPage() {
   const [selectedTeamId, setSelectedTeamId] = useState<number | undefined>(undefined)
@@ -128,4 +128,3 @@ export default function ClientsPage() {
     </div>
   )
 }
-

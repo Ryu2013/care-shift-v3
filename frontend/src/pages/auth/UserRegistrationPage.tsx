@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { signUp } from '../api/auth'
-import GoogleLoginButton from '../components/GoogleLoginButton'
-import { extractErrorMessage } from '../utils/extractErrorMessage'
+import { signUp } from '../../api/auth'
+import GoogleLoginButton from '../../components/GoogleLoginButton'
+import { extractErrorMessage } from '../../utils/extractErrorMessage'
 
 export default function UserRegistrationPage() {
     const navigate = useNavigate()

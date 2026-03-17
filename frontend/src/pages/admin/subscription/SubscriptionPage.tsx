@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Header } from '../components/Header'
-import { subscribe } from '../api/subscription'
+import { Header } from '../../../components/Header'
+import { subscribe } from '../../../api/subscription'
 import styles from './SubscriptionPage.module.css'
 
 export default function SubscriptionPage() {

@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getRoom, updateRoom } from '../api/rooms'
-import { getMessages, createMessage } from '../api/messages'
-import { entryApi } from '../api/entries'
-import { getOfficeUsers } from '../api/users'
-import { cable } from '../api/cable'
-import { useCurrentUser } from '../hooks/useCurrentUser'
+import { getRoom, updateRoom } from '../../../api/rooms'
+import { getMessages, createMessage } from '../../../api/messages'
+import { entryApi } from '../../../api/entries'
+import { getOfficeUsers } from '../../../api/users'
+import { cable } from '../../../api/cable'
+import { useCurrentUser } from '../../../hooks/useCurrentUser'
 import styles from './RoomDetailPage.module.css'
 
 export default function RoomDetailPage() {

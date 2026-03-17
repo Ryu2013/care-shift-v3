@@ -1,10 +1,10 @@
-import { createPortalSession } from '../api/subscription'
+import { createPortalSession } from '../../api/subscription'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { getOffice, updateOffice } from '../api/office'
-import { getTeams, createTeam, updateTeam, deleteTeam } from '../api/teams'
-import type { Office, Team } from '../types'
-import { Header } from '../components/Header'
+import { getOffice, updateOffice } from '../../api/office'
+import { getTeams, createTeam, updateTeam, deleteTeam } from '../../api/teams'
+import type { Office, Team } from '../../types'
+import { Header } from '../../components/Header'
 import styles from './SettingsPage.module.css'
 
 export default function SettingsPage() {

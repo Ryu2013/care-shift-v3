@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
-import { signIn } from '../api/auth'
-import apiClient from '../api/rails-api'
-import type { User } from '../types'
-import AlertMessage from '../components/AlertMessage'
-import GoogleLoginButton from '../components/GoogleLoginButton'
-import { extractErrorMessage } from '../utils/extractErrorMessage'
+import { signIn } from '../../api/auth'
+import apiClient from '../../api/rails-api'
+import type { User } from '../../types'
+import AlertMessage from '../../components/AlertMessage'
+import GoogleLoginButton from '../../components/GoogleLoginButton'
+import { extractErrorMessage } from '../../utils/extractErrorMessage'
 
 export default function LoginPage() {
   const navigate = useNavigate()

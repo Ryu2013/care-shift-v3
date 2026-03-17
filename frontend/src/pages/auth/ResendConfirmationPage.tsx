@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { resendConfirmation } from '../api/auth'
-import AlertMessage from '../components/AlertMessage'
+import { resendConfirmation } from '../../api/auth'
+import AlertMessage from '../../components/AlertMessage'
 
 export default function ResendConfirmationPage() {
     const [email, setEmail] = useState('')

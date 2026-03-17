@@ -1,14 +1,14 @@
 import { useState, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
-import { getUserShifts, updateUserShiftStatus } from '../api/shifts'
-import { getOfficeUsers } from '../api/users'
-import { useCurrentUser } from '../hooks/useCurrentUser'
+import { getUserShifts, updateUserShiftStatus } from '../../api/shifts'
+import { getOfficeUsers } from '../../api/users'
+import { useCurrentUser } from '../../hooks/useCurrentUser'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import type { Shift, User } from '../types'
-import { Header } from '../components/Header'
+import type { Shift, User } from '../../types'
+import { Header } from '../../components/Header'
 
 const formatTime = (timeString: string) => {
     if (timeString.includes('T')) {

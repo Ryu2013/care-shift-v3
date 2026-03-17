@@ -1,15 +1,15 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getShifts, updateShift } from '../api/shifts'
+import { getShifts, updateShift } from '../../../api/shifts'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { getTeams } from '../api/teams'
-import { getClients } from '../api/clients'
-import { getUsers } from '../api/users'
-import type { Shift, Team, Client, User } from '../types'
-import ShiftFormModal from '../components/ShiftFormModal'
-import { Header } from '../components/Header'
+import { getTeams } from '../../../api/teams'
+import { getClients } from '../../../api/clients'
+import { getUsers } from '../../../api/users'
+import type { Shift, Team, Client, User } from '../../../types'
+import ShiftFormModal from './components/ShiftFormModal'
+import { Header } from '../../../components/Header'
 
 const formatTime = (timeString: string) => {
   if (timeString.includes('T')) {

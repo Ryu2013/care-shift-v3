@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import apiClient from '../api/rails-api'
-import { getTeams } from '../api/teams'
-import type { Team } from '../types'
-import { Header } from '../components/Header'
+import apiClient from '../../../api/rails-api'
+import { getTeams } from '../../../api/teams'
+import type { Team } from '../../../types'
+import { Header } from '../../../components/Header'
 import styles from './WorkStatusesPage.module.css'
 
 export default function WorkStatusesPage() {

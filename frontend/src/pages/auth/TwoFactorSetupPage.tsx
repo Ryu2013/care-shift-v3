@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { getTwoFactorSetup, confirmTwoFactor } from '../api/auth'
+import { getTwoFactorSetup, confirmTwoFactor } from '../../api/auth'
 import { QRCodeSVG } from 'qrcode.react'
-import { Header } from '../components/Header'
+import { Header } from '../../components/Header'
 import styles from './TwoFactorSetupPage.module.css'
 
 export default function TwoFactorSetupPage() {

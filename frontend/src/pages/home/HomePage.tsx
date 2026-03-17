@@ -1,25 +1,25 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../api/rails-api';
-import type { User } from '../types';
+import api from '../../api/rails-api';
+import type { User } from '../../types';
 import styles from './HomePage.module.css';
-import { FadeInText } from '../components/FadeInText';
-import { HamburgerMenuButton } from '../components/HamburgerMenuButton';
-import GoogleLoginButton from '../components/GoogleLoginButton';
-import logoImg from '../assets/logo.png';
-import titleImg from '../assets/title.png';
-import calendarImg from '../assets/calendar.png';
-import clockImg from '../assets/clock.png';
-import chatImg from '../assets/chat.png';
-import naviImg from '../assets/navi.png';
-import humanImg from '../assets/human.png';
-import shiftsImg from '../assets/shifts.png';
-import clientNeedImg from '../assets/client_need.png';
-import workStatusesImg from '../assets/work_statuses.png';
-import chatViewImg from '../assets/chat_view.png';
-import navViewImg from '../assets/nav_view.png';
-import shift4Img from '../assets/shift4.png';
-import footerTitleImg from '../assets/footer_title.png';
+import { FadeInText } from './components/FadeInText';
+import { HamburgerMenuButton } from '../../components/HamburgerMenuButton';
+import GoogleLoginButton from '../../components/GoogleLoginButton';
+import logoImg from '../../assets/logo.png';
+import titleImg from '../../assets/title.png';
+import calendarImg from '../../assets/calendar.png';
+import clockImg from '../../assets/clock.png';
+import chatImg from '../../assets/chat.png';
+import naviImg from '../../assets/navi.png';
+import humanImg from '../../assets/human.png';
+import shiftsImg from '../../assets/shifts.png';
+import clientNeedImg from '../../assets/client_need.png';
+import workStatusesImg from '../../assets/work_statuses.png';
+import chatViewImg from '../../assets/chat_view.png';
+import navViewImg from '../../assets/nav_view.png';
+import shift4Img from '../../assets/shift4.png';
+import footerTitleImg from '../../assets/footer_title.png';
 
 
 const ResponsiveIcon = () => (
