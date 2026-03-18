@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateUser } from '../../../../api/users'
 import { getTeams } from '../../../../api/teams'
 import type { User, Team, Role } from '../../../../types'
+import styles from './UserFormModal.module.css'
 
 interface UserFormModalProps {
     isOpen: boolean
@@ -73,11 +74,11 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
     if (!isOpen || !user) return null
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-fade-in-up">
-                <div className="flex items-center justify-between p-6 border-b">
-                    <h2 className="text-xl font-bold text-gray-800">スタッフ情報を編集</h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
+        <div className={`${styles.backdrop} fixed inset-0 z-50 flex items-center justify-center p-4`}>
+            <div className={`${styles.modal} w-full max-w-md overflow-hidden animate-fade-in-up`}>
+                <div className={`${styles.header} flex items-center justify-between p-6`}>
+                    <h2 className={`${styles.title} text-xl`}>スタッフ情報を編集</h2>
+                    <button onClick={onClose} className={styles.closeButton}>
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -87,7 +88,7 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
                 <div className="p-6 space-y-6">
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-1">
-                            <label htmlFor="userName" className="block text-sm font-bold text-gray-700">お名前 <span className="text-red-500">*</span></label>
+                            <label htmlFor="userName" className={`${styles.label} block text-sm`}>お名前 <span className={styles.required}>*</span></label>
                             <input
                                 id="userName"
                                 type="text"
@@ -95,12 +96,12 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
                                 onChange={(e) => setName(e.target.value)}
                                 required
                                 placeholder="例：山田 太郎"
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
+                                className={`${styles.field} w-full px-4 py-2`}
                             />
                         </div>
 
                         <div className="space-y-1">
-                            <label htmlFor="userEmail" className="block text-sm font-bold text-gray-700">メールアドレス <span className="text-red-500">*</span></label>
+                            <label htmlFor="userEmail" className={`${styles.label} block text-sm`}>メールアドレス <span className={styles.required}>*</span></label>
                             <input
                                 id="userEmail"
                                 type="email"
@@ -108,30 +109,30 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                                 placeholder="例：example@mail.com"
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
+                                className={`${styles.field} w-full px-4 py-2`}
                             />
                         </div>
 
                         <div className="space-y-1">
-                            <label htmlFor="userAddress" className="block text-sm font-bold text-gray-700">住所</label>
+                            <label htmlFor="userAddress" className={`${styles.label} block text-sm`}>住所</label>
                             <input
                                 id="userAddress"
                                 type="text"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 placeholder="例：東京都渋谷区..."
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
+                                className={`${styles.field} w-full px-4 py-2`}
                             />
                         </div>
 
                         <div className="space-y-1">
-                            <label htmlFor="userTeamId" className="block text-sm font-bold text-gray-700">部署（チーム） <span className="text-red-500">*</span></label>
+                            <label htmlFor="userTeamId" className={`${styles.label} block text-sm`}>部署（チーム） <span className={styles.required}>*</span></label>
                             <select
                                 id="userTeamId"
                                 value={teamId}
                                 onChange={(e) => setTeamId(e.target.value ? Number(e.target.value) : '')}
                                 required
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all bg-white"
+                                className={`${styles.field} w-full px-4 py-2`}
                             >
                                 <option value="">部署を選択</option>
                                 {teams?.map((t: Team) => (
@@ -141,13 +142,13 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
                         </div>
 
                         <div className="space-y-1">
-                            <label htmlFor="userRole" className="block text-sm font-bold text-gray-700">権限 <span className="text-red-500">*</span></label>
+                            <label htmlFor="userRole" className={`${styles.label} block text-sm`}>権限 <span className={styles.required}>*</span></label>
                             <select
                                 id="userRole"
                                 value={role}
                                 onChange={(e) => setRole(e.target.value as Role)}
                                 required
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all bg-white"
+                                className={`${styles.field} w-full px-4 py-2`}
                             >
                                 <option value="employee">スタッフ</option>
                                 <option value="admin">管理者</option>
@@ -158,7 +159,7 @@ export default function UserFormModal({ isOpen, onClose, onSuccess, user }: User
                             <button
                                 type="submit"
                                 disabled={updateMutation.isPending}
-                                className="w-full py-3 bg-[#5daaf5] hover:bg-[#4a90e2] text-white font-bold rounded-full shadow-lg transition-all active:transform active:scale-95 disabled:opacity-50"
+                                className={`${styles.submitButton} w-full py-3`}
                             >
                                 {updateMutation.isPending ? '保存中...' : '更新する'}
                             </button>

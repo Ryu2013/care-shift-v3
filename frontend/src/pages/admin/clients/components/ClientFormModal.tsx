@@ -6,6 +6,7 @@ import { getUsers } from '../../../../api/users'
 import { getClientNeeds, createClientNeed, deleteClientNeed } from '../../../../api/client_needs'
 import { createUserClient, deleteUserClient } from '../../../../api/user_clients'
 import type { Client, Team, ShiftType } from '../../../../types'
+import styles from './ClientFormModal.module.css'
 
 interface ClientFormModalProps {
     isOpen: boolean
@@ -174,11 +175,11 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden animate-fade-in-up my-auto">
-                <div className="flex items-center justify-between p-6 border-b">
-                    <h2 className="text-xl font-bold text-gray-800">利用者を{client ? '編集' : '登録'}</h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
+        <div className={`${styles.backdrop} fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto`}>
+            <div className={`${styles.modal} w-full max-w-2xl overflow-hidden animate-fade-in-up my-auto`}>
+                <div className={`${styles.header} flex items-center justify-between p-6`}>
+                    <h2 className={`${styles.title} text-xl`}>利用者を{client ? '編集' : '登録'}</h2>
+                    <button onClick={onClose} className={styles.closeButton}>
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -188,13 +189,13 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                 <div className="p-6 space-y-6">
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-1">
-                            <label htmlFor="clientTeamId" className="block text-sm font-bold text-gray-700">部署（チーム） <span className="text-red-500">*</span></label>
+                            <label htmlFor="clientTeamId" className={`${styles.label} block text-sm`}>部署（チーム） <span className={styles.required}>*</span></label>
                             <select
                                 id="clientTeamId"
                                 value={teamId}
                                 onChange={(e) => setTeamId(e.target.value ? Number(e.target.value) : '')}
                                 required
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all bg-white"
+                                className={`${styles.field} w-full px-4 py-2`}
                             >
                                 <option value="">部署を選択</option>
                                 {teams?.map((t: Team) => (
@@ -204,7 +205,7 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                         </div>
 
                         <div className="space-y-1">
-                            <label htmlFor="clientName" className="block text-sm font-bold text-gray-700">お名前 <span className="text-red-500">*</span></label>
+                            <label htmlFor="clientName" className={`${styles.label} block text-sm`}>お名前 <span className={styles.required}>*</span></label>
                             <input
                                 id="clientName"
                                 type="text"
@@ -212,19 +213,19 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                                 onChange={(e) => setName(e.target.value)}
                                 required
                                 placeholder="例：山田 太郎"
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
+                                className={`${styles.field} w-full px-4 py-2`}
                             />
                         </div>
 
                         <div className="space-y-1">
-                            <label htmlFor="clientAddress" className="block text-sm font-bold text-gray-700">住所</label>
+                            <label htmlFor="clientAddress" className={`${styles.label} block text-sm`}>住所</label>
                             <input
                                 id="clientAddress"
                                 type="text"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 placeholder="例：東京都渋谷区..."
-                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 transition-all"
+                                className={`${styles.field} w-full px-4 py-2`}
                             />
                         </div>
 
@@ -232,7 +233,7 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                             <button
                                 type="submit"
                                 disabled={createMutation.isPending || updateMutation.isPending}
-                                className="w-full py-3 bg-[#5daaf5] hover:bg-[#4a90e2] text-white font-bold rounded-full shadow-lg transition-all active:transform active:scale-95 disabled:opacity-50"
+                                className={`${styles.submitButton} w-full py-3`}
                             >
                                 {createMutation.isPending || updateMutation.isPending ? '保存中...' : (client ? '更新する' : '登録する')}
                             </button>
@@ -240,9 +241,9 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                     </form>
 
                     {client && (
-                        <div className="mt-8 pt-6 border-t border-gray-200">
-                            <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                <svg className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div className={`${styles.section} mt-8 pt-6`}>
+                            <h3 className={`${styles.sectionTitle} text-lg mb-4 flex items-center gap-2`}>
+                                <svg className={`${styles.sectionIcon} w-5 h-5`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                                 週間基本シフト要件
@@ -251,17 +252,17 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                             {/* Need List */}
                             <div className="space-y-3 mb-6 max-h-[300px] overflow-y-auto pr-2">
                                 {clientNeeds?.length === 0 ? (
-                                    <p className="text-sm text-gray-500 text-center py-4 bg-gray-50 rounded-lg">基本シフト要件は登録されていません</p>
+                                    <p className={`${styles.emptyBox} text-sm text-center py-4`}>基本シフト要件は登録されていません</p>
                                 ) : (
                                     clientNeeds?.map((need) => {
                                         const formatTime = (t: string) => t.substring(11, 16)
                                         return (
-                                            <div key={need.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
+                                            <div key={need.id} className={`${styles.listRow} flex items-center justify-between p-3`}>
                                                 <div className="flex flex-wrap items-center gap-2 md:gap-4 text-sm px-2">
-                                                    <span className="font-bold text-gray-700 w-10 text-center bg-white px-2 py-1 rounded shadow-sm">{weekLabels[need.week]}</span>
-                                                    <span className="text-gray-600 font-mono bg-white px-2 py-1 rounded shadow-sm">{formatTime(need.start_time)} - {formatTime(need.end_time)}</span>
-                                                    <span className="text-blue-600 font-bold text-xs bg-blue-50 px-2 py-1 rounded border border-blue-100">{shiftTypeLabels[need.shift_type as keyof typeof shiftTypeLabels]}</span>
-                                                    <span className="font-bold text-gray-700">{need.slots}枠</span>
+                                                    <span className={`${styles.weekdayBadge} w-10 text-center px-2 py-1`}>{weekLabels[need.week]}</span>
+                                                    <span className={`${styles.timeBadge} font-mono px-2 py-1`}>{formatTime(need.start_time)} - {formatTime(need.end_time)}</span>
+                                                    <span className={`${styles.typeBadge} text-xs px-2 py-1`}>{shiftTypeLabels[need.shift_type as keyof typeof shiftTypeLabels]}</span>
+                                                    <span className={styles.slotsText}>{need.slots}枠</span>
                                                 </div>
                                                 <button
                                                     onClick={() => {
@@ -270,7 +271,7 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                                                         }
                                                     }}
                                                     disabled={deleteNeedMutation.isPending}
-                                                    className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors flex-shrink-0"
+                                                    className={`${styles.iconButton} p-2 flex-shrink-0`}
                                                 >
                                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -283,39 +284,39 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                             </div>
 
                             {/* Add Need Form */}
-                            <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                                <h4 className="text-sm font-bold text-gray-700 mb-3">要件の追加</h4>
+                            <div className={`${styles.subPanel} p-4`}>
+                                <h4 className={`${styles.subPanelTitle} text-sm mb-3`}>要件の追加</h4>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 items-end">
                                     <div className="space-y-1">
-                                        <label className="block text-xs font-bold text-gray-600">曜日</label>
-                                        <select value={needWeek} onChange={e => setNeedWeek(e.target.value)} className="w-full text-sm px-2 py-1.5 rounded border border-gray-300">
+                                        <label className={`${styles.miniLabel} block text-xs`}>曜日</label>
+                                        <select value={needWeek} onChange={e => setNeedWeek(e.target.value)} className={`${styles.miniField} w-full text-sm px-2 py-1.5`}>
                                             {Object.entries(weekLabels).map(([k, v]) => <option key={k} value={k}>{v}曜</option>)}
                                         </select>
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="block text-xs font-bold text-gray-600">開始</label>
-                                        <input type="time" value={needStartTime} onChange={e => setNeedStartTime(e.target.value)} className="w-full text-sm px-2 py-1.5 rounded border border-gray-300" />
+                                        <label className={`${styles.miniLabel} block text-xs`}>開始</label>
+                                        <input type="time" value={needStartTime} onChange={e => setNeedStartTime(e.target.value)} className={`${styles.miniField} w-full text-sm px-2 py-1.5`} />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="block text-xs font-bold text-gray-600">終了</label>
-                                        <input type="time" value={needEndTime} onChange={e => setNeedEndTime(e.target.value)} className="w-full text-sm px-2 py-1.5 rounded border border-gray-300" />
+                                        <label className={`${styles.miniLabel} block text-xs`}>終了</label>
+                                        <input type="time" value={needEndTime} onChange={e => setNeedEndTime(e.target.value)} className={`${styles.miniField} w-full text-sm px-2 py-1.5`} />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="block text-xs font-bold text-gray-600">種別</label>
-                                        <select value={needShiftType} onChange={e => setNeedShiftType(e.target.value as ShiftType)} className="w-full text-sm px-2 py-1.5 rounded border border-gray-300">
+                                        <label className={`${styles.miniLabel} block text-xs`}>種別</label>
+                                        <select value={needShiftType} onChange={e => setNeedShiftType(e.target.value as ShiftType)} className={`${styles.miniField} w-full text-sm px-2 py-1.5`}>
                                             {Object.entries(shiftTypeLabels).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                                         </select>
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="block text-xs font-bold text-gray-600">枠数</label>
-                                        <input type="number" min="1" max="10" value={needSlots} onChange={e => setNeedSlots(Number(e.target.value))} className="w-full text-sm px-2 py-1.5 rounded border border-gray-300 text-center" />
+                                        <label className={`${styles.miniLabel} block text-xs`}>枠数</label>
+                                        <input type="number" min="1" max="10" value={needSlots} onChange={e => setNeedSlots(Number(e.target.value))} className={`${styles.miniField} w-full text-sm px-2 py-1.5 text-center`} />
                                     </div>
                                     <div>
                                         <button
                                             type="button"
                                             onClick={handleAddNeed}
                                             disabled={createNeedMutation.isPending}
-                                            className="w-full py-1.5 px-2 bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold rounded shadow-sm text-sm transition-colors border border-blue-200 disabled:opacity-50"
+                                            className={`${styles.smallActionButton} w-full py-1.5 px-2 text-sm`}
                                         >
                                             {createNeedMutation.isPending ? '...' : '+ 追加'}
                                         </button>
@@ -326,9 +327,9 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                     )}
 
                     {client && (
-                        <div className="mt-8 pt-6 border-t border-gray-200">
-                            <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                <svg className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div className={`${styles.section} mt-8 pt-6`}>
+                            <h3 className={`${styles.sectionTitle} text-lg mb-4 flex items-center gap-2`}>
+                                <svg className={`${styles.sectionIcon} w-5 h-5`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                 </svg>
                                 担当従業員
@@ -337,11 +338,11 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                             {/* Assigned Users List */}
                             <div className="space-y-3 mb-6 max-h-[300px] overflow-y-auto pr-2">
                                 {!client.user_clients || client.user_clients.length === 0 ? (
-                                    <p className="text-sm text-gray-500 text-center py-4 bg-gray-50 rounded-lg">担当従業員は割り当てられていません</p>
+                                    <p className={`${styles.emptyBox} text-sm text-center py-4`}>担当従業員は割り当てられていません</p>
                                 ) : (
                                     client.user_clients.map((uc) => (
-                                        <div key={uc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
-                                            <span className="font-bold text-gray-700 px-2">{uc.user_name}</span>
+                                        <div key={uc.id} className={`${styles.listRow} flex items-center justify-between p-3`}>
+                                            <span className={`${styles.assignedUserName} px-2`}>{uc.user_name}</span>
                                             <button
                                                 onClick={() => {
                                                     if (window.confirm(`${uc.user_name}さんを担当から外しますか？`)) {
@@ -349,7 +350,7 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                                                     }
                                                 }}
                                                 disabled={deleteUserClientMutation.isPending}
-                                                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors flex-shrink-0"
+                                                className={`${styles.iconButton} p-2 flex-shrink-0`}
                                             >
                                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -361,13 +362,13 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                             </div>
 
                             {/* Add User Client Form */}
-                            <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                                <h4 className="text-sm font-bold text-gray-700 mb-3">担当者の追加</h4>
+                            <div className={`${styles.subPanel} p-4`}>
+                                <h4 className={`${styles.subPanelTitle} text-sm mb-3`}>担当者の追加</h4>
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <select
                                         value={selectedUserId}
                                         onChange={e => setSelectedUserId(e.target.value ? Number(e.target.value) : '')}
-                                        className="flex-1 text-sm px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-400"
+                                        className={`${styles.miniField} flex-1 text-sm px-3 py-2 rounded-lg`}
                                     >
                                         <option value="">（未割り当ての従業員から選択）</option>
                                         {teamUsers
@@ -380,7 +381,7 @@ export default function ClientFormModal({ isOpen, onClose, onSuccess, initialTea
                                         type="button"
                                         onClick={handleAddUserClient}
                                         disabled={!selectedUserId || createUserClientMutation.isPending}
-                                        className="py-2 px-6 bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold rounded-lg shadow-sm text-sm transition-colors border border-blue-200 disabled:opacity-50"
+                                        className={`${styles.assignButton} py-2 px-6 text-sm`}
                                     >
                                         {createUserClientMutation.isPending ? '...' : '追加'}
                                     </button>

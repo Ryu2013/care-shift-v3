@@ -5,6 +5,7 @@ import { getUsers } from '../../../api/users'
 import { getTeams } from '../../../api/teams'
 import type { User, Team } from '../../../types'
 import UserFormModal from './components/UserFormModal'
+import styles from './UsersPage.module.css'
 
 export default function UsersPage() {
   const navigate = useNavigate()
@@ -23,15 +24,15 @@ export default function UsersPage() {
   })
 
   return (
-    <div className="min-h-screen bg-[#f5f6f8]">
+    <div className={`${styles.page} min-h-screen`}>
       {/* Header Area */}
       <div className="p-4 flex items-center gap-4">
-        <button onClick={() => navigate('/shifts')} className="hover:opacity-80 transition-opacity">
-          <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button onClick={() => navigate('/shifts')} className={styles.backButton}>
+          <svg className={`${styles.backIcon} w-8 h-8`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
         </button>
-        <h1 className="text-2xl font-bold text-gray-800">
+        <h1 className={`${styles.pageTitle} text-2xl`}>
           {teams?.find(t => t.id === selectedTeamId)?.name || '全部署'}
         </h1>
       </div>
@@ -42,7 +43,7 @@ export default function UsersPage() {
           <select
             value={selectedTeamId}
             onChange={(e) => setSelectedTeamId(e.target.value ? Number(e.target.value) : '')}
-            className="w-full max-w-xs border-2 border-gray-200 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none transition-all text-gray-700 font-medium"
+            className={`${styles.teamSelect} w-full max-w-xs p-2`}
           >
             <option value="">部署を変更</option>
             {teams?.map((team: Team) => (
@@ -53,17 +54,17 @@ export default function UsersPage() {
 
         {/* Action Bar & Toggle */}
         <div className="flex items-center justify-between gap-4">
-          <button className="px-6 py-2 bg-[#5daaf5] hover:bg-[#4a90e2] text-white font-bold rounded-full shadow-md transition-all active:scale-95">
+          <button className={`${styles.inviteButton} px-6 py-2`}>
             新規招待
           </button>
 
-          <div className="flex bg-gray-200 rounded-full p-1 shadow-inner">
-            <div className="px-6 py-1.5 rounded-full text-sm font-bold bg-white text-blue-600 shadow-sm">
+          <div className={`${styles.toggleWrapper} flex p-1`}>
+            <div className={`${styles.toggleActive} px-6 py-1.5 text-sm`}>
               従業員
             </div>
             <Link
               to="/clients"
-              className="px-6 py-1.5 rounded-full text-sm font-bold transition-all text-gray-500 hover:text-gray-700"
+              className={`${styles.toggleLink} px-6 py-1.5 rounded-full text-sm transition-all`}
             >
               顧客
             </Link>
@@ -73,9 +74,9 @@ export default function UsersPage() {
         {/* User List */}
         <div className="space-y-4">
           {isLoading ? (
-            <div className="text-center py-10 text-gray-500 font-medium">読み込み中...</div>
+            <div className={`${styles.emptyText} text-center py-10`}>読み込み中...</div>
           ) : users?.length === 0 ? (
-            <div className="text-center py-10 text-gray-500 font-medium">スタッフが登録されていません</div>
+            <div className={`${styles.emptyText} text-center py-10`}>スタッフが登録されていません</div>
           ) : (
             users?.map((user: User) => (
               <div
@@ -84,25 +85,25 @@ export default function UsersPage() {
                   setSelectedUser(user)
                   setIsModalOpen(true)
                 }}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer group"
+                className={`${styles.userCard} p-6 group`}
               >
                 <div className="flex justify-between items-start">
                   <div className="space-y-2">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-xs font-bold text-gray-400">名前</span>
-                      <span className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors uppercase">
+                      <span className={`${styles.metaLabel} text-xs`}>名前</span>
+                      <span className={`${styles.nameValue} text-lg`}>
                         {user.name}
                       </span>
                     </div>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-xs font-bold text-gray-400">住所</span>
-                      <span className="text-gray-600 font-medium">
+                      <span className={`${styles.metaLabel} text-xs`}>住所</span>
+                      <span className={styles.addressValue}>
                         {user.address || '未登録'}
                       </span>
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${user.role === 'admin' ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-500'}`}>
+                    <span className={`${styles.roleBadge} ${user.role === 'admin' ? styles.adminBadge : styles.employeeBadge} text-[10px] px-2 py-0.5`}>
                       {user.role === 'admin' ? '管理者' : 'スタッフ'}
                     </span>
                     <button
@@ -110,7 +111,7 @@ export default function UsersPage() {
                         e.stopPropagation() // Prevent modal from opening
                         navigate(`/user-shifts?user_id=${user.id}`)
                       }}
-                      className="px-3 py-1 text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-200"
+                      className={`${styles.shiftButton} px-3 py-1 text-xs`}
                     >
                       シフト確認
                     </button>

@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
+import AnalyticsTracker from './components/AnalyticsTracker'
 import { useCurrentUser } from './hooks/useCurrentUser'
 import Layout from './components/Layout'
 import HomePage from './pages/home/HomePage'
@@ -44,34 +45,37 @@ function RootRedirect() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<UserRegistrationPage />} />
-      <Route path="/password-reset" element={<ForgotPasswordPage />} />
-      <Route path="/password-reset/edit" element={<ResetPasswordPage />} />
-      <Route path="/resend-confirmation" element={<ResendConfirmationPage />} />
-      <Route path="/unlock" element={<AccountUnlockPage />} />
-      <Route path="/how-to-use" element={<HowToUseLayout />}>
-        <Route index element={<HowToUsePage />} />
-        <Route path="registration" element={<HowToUseRegistrationPage />} />
-        <Route path="login" element={<HowToUseLoginPage />} />
-        <Route path="shift-creation" element={<HowToUseShiftCreationPage />} />
-        <Route path="attendance" element={<HowToUseAttendancePage />} />
-        <Route path="chat" element={<HowToUseChatPage />} />
-      </Route>
-      <Route path="/shifts" element={<PrivateLayout><ShiftsPage /></PrivateLayout>} />
-      <Route path="/clients" element={<PrivateLayout><ClientsPage /></PrivateLayout>} />
-      <Route path="/users" element={<PrivateLayout><UsersPage /></PrivateLayout>} />
-      <Route path="/work-statuses" element={<PrivateLayout><WorkStatusesPage /></PrivateLayout>} />
-      <Route path="/rooms" element={<PrivateLayout><RoomsPage /></PrivateLayout>} />
-      <Route path="/rooms/:id" element={<PrivateLayout><RoomDetailPage /></PrivateLayout>} />
-      <Route path="/user-shifts" element={<PrivateLayout><UserShiftsPage /></PrivateLayout>} />
-      <Route path="/settings" element={<PrivateLayout><SettingsPage /></PrivateLayout>} />
-      <Route path="/two-factor-setup" element={<PrivateLayout><TwoFactorSetupPage /></PrivateLayout>} />
-      <Route path="/subscription" element={<PrivateLayout><SubscriptionPage /></PrivateLayout>} />
-      <Route path="*" element={<RootRedirect />} />
-    </Routes>
+    <>
+      <AnalyticsTracker />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<UserRegistrationPage />} />
+        <Route path="/password-reset" element={<ForgotPasswordPage />} />
+        <Route path="/password-reset/edit" element={<ResetPasswordPage />} />
+        <Route path="/resend-confirmation" element={<ResendConfirmationPage />} />
+        <Route path="/unlock" element={<AccountUnlockPage />} />
+        <Route path="/how-to-use" element={<HowToUseLayout />}>
+          <Route index element={<HowToUsePage />} />
+          <Route path="registration" element={<HowToUseRegistrationPage />} />
+          <Route path="login" element={<HowToUseLoginPage />} />
+          <Route path="shift-creation" element={<HowToUseShiftCreationPage />} />
+          <Route path="attendance" element={<HowToUseAttendancePage />} />
+          <Route path="chat" element={<HowToUseChatPage />} />
+        </Route>
+        <Route path="/shifts" element={<PrivateLayout><ShiftsPage /></PrivateLayout>} />
+        <Route path="/clients" element={<PrivateLayout><ClientsPage /></PrivateLayout>} />
+        <Route path="/users" element={<PrivateLayout><UsersPage /></PrivateLayout>} />
+        <Route path="/work-statuses" element={<PrivateLayout><WorkStatusesPage /></PrivateLayout>} />
+        <Route path="/rooms" element={<PrivateLayout><RoomsPage /></PrivateLayout>} />
+        <Route path="/rooms/:id" element={<PrivateLayout><RoomDetailPage /></PrivateLayout>} />
+        <Route path="/user-shifts" element={<PrivateLayout><UserShiftsPage /></PrivateLayout>} />
+        <Route path="/settings" element={<PrivateLayout><SettingsPage /></PrivateLayout>} />
+        <Route path="/two-factor-setup" element={<PrivateLayout><TwoFactorSetupPage /></PrivateLayout>} />
+        <Route path="/subscription" element={<PrivateLayout><SubscriptionPage /></PrivateLayout>} />
+        <Route path="*" element={<RootRedirect />} />
+      </Routes>
+    </>
   )
 }
 

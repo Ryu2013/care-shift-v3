@@ -50,9 +50,9 @@ export default function UserShiftsPage() {
     // 今日のシフトを抽出 (YYYY-MM-DD 文字列による比較)
     const todayStr = new Date().toLocaleDateString('ja-JP').split('/').map((s, i) => i > 0 ? s.padStart(2, '0') : s).join('-')
     const todaysShifts = useMemo(() => {
-        if (!shifts || currentUser?.id !== targetUserId) return []
+        if (!shifts) return []
         return shifts.filter((s: Shift) => s.date === todayStr)
-    }, [shifts, todayStr, currentUser, targetUserId])
+    }, [shifts, todayStr])
 
     // FullCalendar 用のイベント配列を生成
     const calendarEvents = useMemo(() => {

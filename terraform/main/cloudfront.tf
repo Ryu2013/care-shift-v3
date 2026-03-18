@@ -7,11 +7,11 @@ resource "aws_cloudfront_response_headers_policy" "frontend_csp" {
       override = true
       content_security_policy = join(" ", [
         "default-src 'self';",
-        "script-src 'self';",
+        "script-src 'self' https://www.googletagmanager.com;",
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
-        "img-src 'self';",
+        "img-src 'self' https://www.google-analytics.com;",
         "font-src 'self' https://fonts.gstatic.com;",
-        "connect-src 'self' https://www.ryuuichi-app.com wss://www.ryuuichi-app.com;",
+        "connect-src 'self' https://www.ryuuichi-app.com wss://www.ryuuichi-app.com https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com;",
         "object-src 'none';",
         "base-uri 'self';",
         "frame-ancestors 'self';",
