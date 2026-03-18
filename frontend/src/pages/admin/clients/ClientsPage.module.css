@@ -1,0 +1,103 @@
+.page {
+  background: #f5f6f8;
+}
+
+.pageTitle {
+  color: var(--black-dark);
+  font-weight: 700;
+}
+
+.teamSelect {
+  color: var(--black-color);
+  font-weight: 500;
+  border: 2px solid rgb(229 231 235);
+  border-radius: 0.5rem;
+  outline: none;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.teamSelect:focus {
+  border-color: var(--blue-color);
+  box-shadow: 0 0 0 2px rgb(96 165 250 / 0.35);
+}
+
+.createButton {
+  background: var(--blue-color);
+  color: white;
+  font-weight: 700;
+  border-radius: 9999px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  transition: all 0.2s ease;
+}
+
+.createButton:hover {
+  background: var(--blue-dark);
+}
+
+.createButton:active {
+  transform: scale(0.95);
+}
+
+.toggleWrapper {
+  background: rgb(229 231 235);
+  border-radius: 9999px;
+  box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+}
+
+.toggleLink {
+  color: rgb(107 114 128);
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.toggleLink:hover {
+  color: var(--black-color);
+}
+
+.toggleActive {
+  background: white;
+  color: #2563eb;
+  font-weight: 700;
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.emptyText {
+  color: var(--black-color);
+  font-weight: 500;
+}
+
+.clientCard {
+  background: white;
+  border: 1px solid rgb(243 244 246);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  transition: box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.clientCard:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.metaLabel {
+  color: rgb(156 163 175);
+  font-weight: 700;
+}
+
+.nameValue {
+  color: var(--black-dark);
+  font-weight: 700;
+  transition: color 0.2s ease;
+  text-transform: uppercase;
+}
+
+.clientCard:hover .nameValue {
+  color: #2563eb;
+}
+
+.addressValue {
+  color: var(--black-color);
+  font-weight: 500;
+}

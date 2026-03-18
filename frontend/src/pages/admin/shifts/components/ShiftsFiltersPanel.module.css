@@ -1,0 +1,61 @@
+.panel {
+  background: rgb(255 255 255 / 0.8);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  border-radius: 0.75rem;
+  border: 1px solid rgb(255 255 255 / 0.5);
+}
+
+.select {
+  background: rgb(255 255 255 / 0.9);
+  border: 1px solid rgb(229 231 235 / 0.8);
+  border-radius: 0.75rem;
+  outline: none;
+  color: var(--black-dark);
+}
+
+.select:focus {
+  border-color: var(--blue-color);
+  box-shadow: 0 0 0 2px rgb(105 197 255 / 0.35);
+}
+
+.createButton {
+  color: white;
+  background: var(--blue-color);
+  border-radius: 9999px;
+  font-weight: 700;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.createButton:hover {
+  background: var(--blue-dark);
+  transform: translateY(-2px);
+}
+
+.legendItem {
+  font-weight: 700;
+  border-top-right-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.legendDay {
+  background: rgb(241 148 148 / 0.9);
+  border-color: var(--red-dark);
+}
+
+.legendNight {
+  background: rgb(180 226 255 / 0.9);
+  border-color: var(--blue-color);
+}
+
+.legendEscort {
+  background: rgb(200 247 197 / 0.9);
+  border-color: var(--green-dark);
+}
+
+.legendUnassigned {
+  background: rgb(224 224 224 / 0.9);
+  border-color: var(--black-color);
+  color: var(--black-dark);
+}

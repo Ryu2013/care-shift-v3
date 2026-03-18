@@ -19,7 +19,7 @@ class Api::TwoFactorsController < Api::AuthorizationController
       )
       render json: { message: "二段階認証を有効にしました" }
     else
-      render json: { error: "認証コードが正しくありません" }, status: :unprocessable_content
+      render json: { errors: [ "認証コードが正しくありません" ] }, status: :unprocessable_content
     end
   end
 

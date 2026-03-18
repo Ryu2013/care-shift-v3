@@ -59,7 +59,7 @@ RSpec.describe "管理者向けシフトAPI", type: :request do
       }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:payment_required)
-      expect(json["error"]).to be_present
+      expect(json["errors"]).to eq([ "サブスクリプションが有効ではありません" ])
     end
   end
 

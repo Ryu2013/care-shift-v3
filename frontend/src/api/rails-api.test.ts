@@ -1,6 +1,7 @@
 import { AxiosHeaders, type InternalAxiosRequestConfig } from 'axios'
-import { describe, expect, it, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import apiClient from './rails-api'
+import * as csrf from './csrf'
 
 describe('apiClient', () => {
   const getRequestInterceptor = () => {
@@ -18,24 +19,39 @@ describe('apiClient', () => {
   } as InternalAxiosRequestConfig)
 
   beforeEach(() => {
-    Object.defineProperty(document, 'cookie', {
-      writable: true,
-      value: '',
-    })
+    csrf.setCsrfToken(null)
+    vi.restoreAllMocks()
   })
 
-  it('adds the csrf token from cookies to request headers', async () => {
-    document.cookie = 'XSRF-TOKEN=test-token'
-
+  it('adds the csrf token to unsafe request headers', async () => {
+    csrf.setCsrfToken('test-token')
     const requestInterceptor = getRequestInterceptor()
-    const config = await requestInterceptor.fulfilled(buildConfig())
+    const config = await requestInterceptor.fulfilled({
+      ...buildConfig(),
+      method: 'post',
+    })
 
     expect(config?.headers['X-CSRF-Token']).toBe('test-token')
   })
 
-  it('leaves headers untouched when the csrf cookie is missing', async () => {
+  it('fetches a csrf token when an unsafe request has none cached', async () => {
+    vi.spyOn(csrf, 'ensureCsrfToken').mockResolvedValue('fetched-token')
+
     const requestInterceptor = getRequestInterceptor()
-    const config = await requestInterceptor.fulfilled(buildConfig())
+    const config = await requestInterceptor.fulfilled({
+      ...buildConfig(),
+      method: 'patch',
+    })
+
+    expect(config?.headers['X-CSRF-Token']).toBe('fetched-token')
+  })
+
+  it('leaves safe requests untouched', async () => {
+    const requestInterceptor = getRequestInterceptor()
+    const config = await requestInterceptor.fulfilled({
+      ...buildConfig(),
+      method: 'get',
+    })
 
     expect(config?.headers['X-CSRF-Token']).toBeUndefined()
   })

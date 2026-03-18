@@ -1,0 +1,100 @@
+.backdrop {
+  background: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.header {
+  border-bottom: 1px solid rgb(229 231 235);
+}
+
+.title {
+  color: var(--black-dark);
+  font-weight: 700;
+}
+
+.closeButton {
+  color: var(--black-color);
+  transition: color 0.2s ease;
+}
+
+.closeButton:hover {
+  color: var(--black-dark);
+}
+
+.generateButton {
+  background: var(--bg-color);
+  color: var(--black-dark);
+  font-weight: 700;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.generateButton:hover {
+  background: rgb(229 231 235);
+}
+
+.generateButton:disabled,
+.submitButton:disabled,
+.deleteButton:disabled {
+  opacity: 0.5;
+}
+
+.label {
+  color: var(--black-dark);
+  font-weight: 700;
+}
+
+.field {
+  border: 2px solid rgb(229 231 235);
+  border-radius: 0.5rem;
+  transition: border-color 0.2s ease;
+  outline: none;
+  color: var(--black-dark);
+  background: white;
+}
+
+.field:focus {
+  border-color: var(--blue-color);
+}
+
+.errorText {
+  color: var(--red-dark);
+}
+
+.submitButton {
+  color: white;
+  background: var(--blue-color);
+  font-weight: 700;
+  border-radius: 9999px;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.submitButton:hover {
+  background: var(--blue-dark);
+}
+
+.submitButton:active,
+.deleteButton:active {
+  transform: scale(0.95);
+}
+
+.deleteButton {
+  background: white;
+  color: var(--red-dark);
+  font-weight: 700;
+  border: 2px solid var(--red-dark);
+  border-radius: 9999px;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.deleteButton:hover {
+  background: rgb(254 242 242);
+}

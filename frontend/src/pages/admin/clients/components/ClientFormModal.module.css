@@ -1,0 +1,195 @@
+.backdrop {
+  background: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.header {
+  border-bottom: 1px solid rgb(229 231 235);
+}
+
+.title {
+  color: var(--black-dark);
+  font-weight: 700;
+}
+
+.closeButton {
+  color: rgb(156 163 175);
+  transition: color 0.2s ease;
+}
+
+.closeButton:hover {
+  color: var(--black-color);
+}
+
+.label {
+  color: #444;
+  font-weight: 700;
+}
+
+.required {
+  color: var(--red-dark);
+}
+
+.field {
+  border: 2px solid rgb(229 231 235);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  outline: none;
+  background: white;
+}
+
+.field:focus {
+  border-color: var(--blue-color);
+}
+
+.submitButton {
+  background: var(--blue-color);
+  color: white;
+  font-weight: 700;
+  border-radius: 9999px;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  transition: all 0.2s ease;
+}
+
+.submitButton:hover {
+  background: var(--blue-dark);
+}
+
+.submitButton:active {
+  transform: scale(0.95);
+}
+
+.submitButton:disabled,
+.smallActionButton:disabled,
+.iconButton:disabled,
+.assignButton:disabled {
+  opacity: 0.5;
+}
+
+.section {
+  border-top: 1px solid rgb(229 231 235);
+}
+
+.sectionTitle {
+  color: var(--black-dark);
+  font-weight: 700;
+}
+
+.sectionIcon {
+  color: var(--blue-color);
+}
+
+.emptyBox {
+  background: rgb(249 250 251);
+  color: var(--black-color);
+  border-radius: 0.5rem;
+}
+
+.listRow {
+  background: rgb(249 250 251);
+  border: 1px solid rgb(243 244 246);
+  border-radius: 0.75rem;
+}
+
+.weekdayBadge {
+  background: white;
+  color: var(--black-color);
+  font-weight: 700;
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.timeBadge {
+  background: white;
+  color: var(--black-color);
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.typeBadge {
+  background: rgb(239 246 255);
+  color: #2563eb;
+  font-weight: 700;
+  border: 1px solid rgb(219 234 254);
+  border-radius: 0.25rem;
+}
+
+.slotsText {
+  color: var(--black-color);
+  font-weight: 700;
+}
+
+.iconButton {
+  color: rgb(248 113 113);
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.iconButton:hover {
+  color: var(--red-dark);
+  background: rgb(254 242 242);
+}
+
+.subPanel {
+  background: rgb(249 250 251);
+  border: 1px solid rgb(229 231 235);
+  border-radius: 0.75rem;
+}
+
+.subPanelTitle {
+  color: var(--black-color);
+  font-weight: 700;
+}
+
+.miniLabel {
+  color: var(--black-color);
+  font-weight: 700;
+}
+
+.miniField {
+  border: 1px solid rgb(209 213 219);
+  border-radius: 0.25rem;
+  background: white;
+}
+
+.miniField:focus {
+  outline: none;
+  border-color: var(--blue-color);
+}
+
+.smallActionButton {
+  background: rgb(219 234 254);
+  color: #1d4ed8;
+  font-weight: 700;
+  border: 1px solid rgb(191 219 254);
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.smallActionButton:hover {
+  background: rgb(191 219 254);
+}
+
+.assignedUserName {
+  color: var(--black-color);
+  font-weight: 700;
+}
+
+.assignButton {
+  background: rgb(219 234 254);
+  color: #1d4ed8;
+  font-weight: 700;
+  border: 1px solid rgb(191 219 254);
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.assignButton:hover {
+  background: rgb(191 219 254);
+}

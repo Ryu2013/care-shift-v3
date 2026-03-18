@@ -25,13 +25,22 @@ RSpec.describe "ユーザーセッションAPI", type: :request do
       expect(json["role"]).to eq("employee")
     end
 
+    it "remember_me が有効なときは remember cookie を発行する" do
+      user = create(:user, confirmed_at: Time.current, password: password, password_confirmation: password, otp_required_for_login: false)
+
+      post "/api/users/sign_in", params: { user: { email: user.email, password: password, remember_me: true } }, headers: csrf_headers, as: :json
+
+      expect(response).to have_http_status(:ok)
+      expect(Array(response.headers["Set-Cookie"]).join("\n")).to include("remember_user_token")
+    end
+
     it "不正なパスワードでは unauthorized を返す" do
       user = create(:user, confirmed_at: Time.current, password: password, password_confirmation: password)
 
       post "/api/users/sign_in", params: { user: { email: user.email, password: "wrong-password" } }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:unauthorized)
-      expect(json["error"]).to be_present
+      expect(json["errors"]).to be_present
     end
 
     it "不正な OTP では unauthorized を返す" do
@@ -41,7 +50,7 @@ RSpec.describe "ユーザーセッションAPI", type: :request do
       post "/api/users/sign_in", params: { user: { email: user.email, password: password, otp_attempt: "000000" } }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:unauthorized)
-      expect(json["error"]).to be_present
+      expect(json["errors"]).to be_present
     end
 
     it "ロック済みアカウントでは unauthorized を返す" do
@@ -51,7 +60,7 @@ RSpec.describe "ユーザーセッションAPI", type: :request do
       post "/api/users/sign_in", params: { user: { email: user.email, password: password } }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:unauthorized)
-      expect(json["error"]).to eq("アカウントがロックされています")
+      expect(json["errors"]).to eq([ "アカウントが存在しません、またはロックされています" ])
     end
   end
 

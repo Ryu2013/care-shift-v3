@@ -35,7 +35,7 @@ RSpec.describe "二要素認証API", type: :request do
       post "/api/two_factor/confirm", params: { otp_attempt: "000000" }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:unprocessable_content)
-      expect(json["error"]).to be_present
+      expect(json["errors"]).to eq([ "認証コードが正しくありません" ])
     end
   end
 end

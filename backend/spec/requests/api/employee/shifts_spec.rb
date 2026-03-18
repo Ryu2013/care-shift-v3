@@ -51,7 +51,7 @@ RSpec.describe "従業員向けシフトAPI", type: :request do
       get "/api/employee/shifts", params: { user_id: other_user.id, date: "2025-11" }
 
       expect(response).to have_http_status(:not_found)
-      expect(json["error"]).to eq("Not found")
+      expect(json["errors"]).to eq([ "Not found" ])
     end
   end
 end

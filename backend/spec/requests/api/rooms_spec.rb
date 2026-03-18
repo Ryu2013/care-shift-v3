@@ -39,7 +39,7 @@ RSpec.describe "ルームAPI", type: :request do
       get "/api/rooms/#{room.id}"
 
       expect(response).to have_http_status(:not_found)
-      expect(json["error"]).to eq("Not found")
+      expect(json["errors"]).to eq([ "Not found" ])
     end
   end
 
@@ -75,7 +75,7 @@ RSpec.describe "ルームAPI", type: :request do
       patch "/api/rooms/#{room.id}", params: { room: { name: "New Name" } }, headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:not_found)
-      expect(json["error"]).to eq("Not found")
+      expect(json["errors"]).to eq([ "Not found" ])
     end
   end
 
@@ -99,7 +99,7 @@ RSpec.describe "ルームAPI", type: :request do
       delete "/api/rooms/#{room.id}", headers: csrf_headers, as: :json
 
       expect(response).to have_http_status(:not_found)
-      expect(json["error"]).to eq("Not found")
+      expect(json["errors"]).to eq([ "Not found" ])
     end
   end
 end

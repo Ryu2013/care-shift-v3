@@ -6,7 +6,7 @@ module RequestHelpers
   def csrf_headers
     get "/api/csrf"
     {
-      "X-CSRF-Token" => cookies["XSRF-TOKEN"],
+      "X-CSRF-Token" => json["csrf_token"],
       "ACCEPT" => "application/json"
     }
   end
