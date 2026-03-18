@@ -9,6 +9,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import type { Shift, User } from '../../types'
 import { Header } from '../../components/Header'
+import styles from './UserShiftsPage.module.css'
 
 export default function UserShiftsPage() {
     const queryClient = useQueryClient()
@@ -96,28 +97,28 @@ export default function UserShiftsPage() {
         <div className="min-h-[100vh]">
             <Header />
 
-            <div className="p-4 pt-20 mx-auto max-w-7xl">
-                <div className="bg-white/80 backdrop-blur-sm shadow-sm rounded-xl p-4 mb-4 border border-white/50 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className={`${styles.content} p-4 pt-20 mx-auto max-w-7xl`}>
+                <div className={`${styles.summaryCard} p-4 mb-4 flex flex-col md:flex-row items-center justify-between gap-4`}>
                     <div className="flex items-center gap-4">
-                        <h2 className="text-xl font-bold text-gray-800">
+                        <h2 className={`${styles.heading} text-xl`}>
                             {targetUser ? `${targetUser.name} さんのシフト` : (isLoading ? '読み込み中...' : 'ユーザーが指定されていません')}
                         </h2>
                     </div>
 
                     {/* Legend */}
                     <div className="flex flex-wrap justify-center gap-3">
-                        <div className="px-3 py-1.5 text-xm font-bold rounded-tr-lg border-l-4 bg-[#F19494]/90 border-[#E35B5B] shadow-sm">日勤</div>
-                        <div className="px-3 py-1.5 text-xm font-bold rounded-tr-lg border-l-4 bg-[#B4E2FF]/90 border-[#69C5FF] shadow-sm">夜勤</div>
-                        <div className="px-3 py-1.5 text-xm font-bold rounded-tr-lg border-l-4 bg-[#C8F7C5]/90 border-[#4CAF50] shadow-sm">同行</div>
-                        <div className="px-3 py-1.5 text-xm font-bold rounded-tr-lg border-l-4 bg-[#E0E0E0]/90 border-[#A0A0A0] shadow-sm">未配置</div>
+                        <div className={`${styles.legendItem} ${styles.legendDay} px-3 py-1.5 text-xm border-l-4`}>日勤</div>
+                        <div className={`${styles.legendItem} ${styles.legendNight} px-3 py-1.5 text-xm border-l-4`}>夜勤</div>
+                        <div className={`${styles.legendItem} ${styles.legendEscort} px-3 py-1.5 text-xm border-l-4`}>同行</div>
+                        <div className={`${styles.legendItem} ${styles.legendUnassigned} px-3 py-1.5 text-xm border-l-4`}>未配置</div>
                     </div>
                 </div>
 
                 {/* 本日のシフトステータス切り替えエリア */}
                 {todaysShifts.length > 0 && (
-                    <div className="mb-4 bg-white/80 backdrop-blur-sm shadow-sm rounded-xl p-4 border border-[#5daaf5]/30 flex flex-col gap-3">
-                        <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                            <svg className="w-5 h-5 text-[#5daaf5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <div className={`${styles.todayPanel} mb-4 p-4 flex flex-col gap-3`}>
+                        <h3 className={`${styles.heading} flex items-center gap-2`}>
+                            <svg className={`${styles.todayIcon} w-5 h-5`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             本日のシフト
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -126,12 +127,12 @@ export default function UserShiftsPage() {
                                 const startTimeStr = shift.start_time
                                 const endTimeStr = shift.end_time
                                 return (
-                                    <div key={shift.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-white rounded-lg border border-gray-100 shadow-sm">
+                                    <div key={shift.id} className={`${styles.shiftCard} flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3`}>
                                         <div>
-                                            <div className="font-bold text-gray-800 text-sm">
+                                            <div className={`${styles.shiftClientName} text-sm`}>
                                                 {shift.client?.name || '利用者未定'}
                                             </div>
-                                            <div className="text-gray-500 text-xs font-mono">
+                                            <div className={`${styles.shiftTime} text-xs font-mono`}>
                                                 {startTimeStr} - {endTimeStr}
                                             </div>
                                         </div>
@@ -141,7 +142,7 @@ export default function UserShiftsPage() {
                                                     href={`https://www.google.com/maps/dir/?api=1&destination=${shift.client.latitude},${shift.client.longitude}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="px-4 py-2 rounded-full font-bold text-sm transition-all shadow-sm flex items-center justify-center gap-2 bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:-translate-y-0.5 hover:shadow-md"
+                                                    className={`${styles.routeButton} px-4 py-2 text-sm flex items-center justify-center gap-2`}
                                                 >
                                                     <svg className="w-4 h-4 ml-0.5" viewBox="0 0 34 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M17 0C7.6 0 0 7.6 0 17C0 27.6 14.9 46.3 15.6 47.1C16.3 48.2 17.7 48.2 18.5 47.1C19.1 46.3 34 27.6 34 17C34 7.6 26.4 0 17 0Z" fill="#34A853" />
@@ -157,12 +158,13 @@ export default function UserShiftsPage() {
                                                 onClick={() => handleToggleWorkStatus(shift.id)}
                                                 disabled={mutation.isPending || isWorking}
                                                 className={`
-                                                    px-5 py-2 rounded-full font-bold text-sm transition-all shadow-sm
+                                                    ${styles.workButton}
                                                     flex items-center justify-center gap-2 min-w-[120px]
                                                     ${isWorking
-                                                        ? 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'
-                                                        : 'bg-[#5daaf5] text-white hover:bg-[#4a90e2] hover:-translate-y-0.5 hover:shadow-md'
+                                                        ? styles.workButtonDone
+                                                        : styles.workButtonReady
                                                     }
+                                                    px-5 py-2 text-sm
                                                 `}
                                             >
                                                 {mutation.isPending ? '更新中...' : (isWorking ? '出勤済み' : '出勤する')}
@@ -176,7 +178,7 @@ export default function UserShiftsPage() {
                 )}
 
                 {targetUserId && (
-                    <div className="calendar-container shadow-sm rounded-xl overflow-hidden bg-[var(--white-color)] border border-gray-200/60 p-2 mt-2">
+                    <div className={`${styles.calendarCard} calendar-container overflow-hidden p-2 mt-2`}>
                         <FullCalendar
                             plugins={[dayGridPlugin, interactionPlugin]}
                             initialView="dayGridMonth"
@@ -202,14 +204,14 @@ export default function UserShiftsPage() {
                                 const { startTimeStr, endTimeStr, isWorking } = arg.event.extendedProps;
                                 return (
                                     <div
-                                        className="w-full text-[0.65rem] sm:text-[0.7rem] px-1 py-0.5 leading-tight font-bold border-l-[3px] break-words whitespace-normal"
+                                        className={`${styles.eventCard} w-full text-[0.65rem] sm:text-[0.7rem] px-1 py-0.5 leading-tight border-l-[3px] break-words whitespace-normal`}
                                         style={{ borderColor: arg.event.borderColor }}
                                     >
                                         <div className="mb-0.5">{arg.event.title}</div>
-                                        <div className="text-[0.55rem] sm:text-[0.6rem] font-normal leading-none">{startTimeStr}</div>
-                                        <div className="text-[0.55rem] sm:text-[0.6rem] font-normal leading-none">{endTimeStr}</div>
+                                        <div className={`${styles.eventTime} text-[0.55rem] sm:text-[0.6rem] leading-none`}>{startTimeStr}</div>
+                                        <div className={`${styles.eventTime} text-[0.55rem] sm:text-[0.6rem] leading-none`}>{endTimeStr}</div>
                                         {isWorking && (
-                                            <div className="mt-0.5 text-[0.55rem] font-bold text-white bg-[#5daaf5] px-1 py-0.5 rounded-sm inline-block">
+                                            <div className={`${styles.workedBadge} mt-0.5 text-[0.55rem] px-1 py-0.5 inline-block`}>
                                                 出勤済み
                                             </div>
                                         )}

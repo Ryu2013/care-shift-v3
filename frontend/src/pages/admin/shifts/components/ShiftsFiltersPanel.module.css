@@ -11,16 +11,17 @@
   border: 1px solid rgb(229 231 235 / 0.8);
   border-radius: 0.75rem;
   outline: none;
+  color: var(--black-dark);
 }
 
 .select:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 2px rgb(96 165 250 / 0.35);
+  border-color: var(--blue-color);
+  box-shadow: 0 0 0 2px rgb(105 197 255 / 0.35);
 }
 
 .createButton {
-  color: #fff;
-  background: #5daaf5;
+  color: white;
+  background: var(--blue-color);
   border-radius: 9999px;
   font-weight: 700;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -28,7 +29,7 @@
 }
 
 .createButton:hover {
-  background: #4a90e2;
+  background: var(--blue-dark);
   transform: translateY(-2px);
 }
 
@@ -40,20 +41,21 @@
 
 .legendDay {
   background: rgb(241 148 148 / 0.9);
-  border-color: #e35b5b;
+  border-color: var(--red-dark);
 }
 
 .legendNight {
   background: rgb(180 226 255 / 0.9);
-  border-color: #69c5ff;
+  border-color: var(--blue-color);
 }
 
 .legendEscort {
   background: rgb(200 247 197 / 0.9);
-  border-color: #4caf50;
+  border-color: var(--green-dark);
 }
 
 .legendUnassigned {
   background: rgb(224 224 224 / 0.9);
-  border-color: #a0a0a0;
+  border-color: var(--black-color);
+  color: var(--black-dark);
 }

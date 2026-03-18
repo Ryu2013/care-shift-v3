@@ -1,0 +1,134 @@
+.content {
+  isolation: isolate;
+}
+
+.summaryCard {
+  background: rgb(255 255 255 / 0.8);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgb(255 255 255 / 0.5);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.heading {
+  color: var(--black-dark);
+  font-weight: 700;
+}
+
+.legendItem {
+  font-weight: 700;
+  border-top-right-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.legendDay {
+  background: rgb(241 148 148 / 0.9);
+  border-color: var(--red-dark);
+}
+
+.legendNight {
+  background: rgb(180 226 255 / 0.9);
+  border-color: var(--blue-color);
+}
+
+.legendEscort {
+  background: rgb(200 247 197 / 0.9);
+  border-color: var(--green-dark);
+}
+
+.legendUnassigned {
+  background: rgb(224 224 224 / 0.9);
+  border-color: var(--black-color);
+  color: var(--black-dark);
+}
+
+.todayPanel {
+  background: rgb(255 255 255 / 0.8);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgb(105 197 255 / 0.3);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.todayIcon {
+  color: var(--blue-color);
+}
+
+.shiftCard {
+  background: white;
+  border: 1px solid rgb(243 244 246);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.shiftClientName {
+  color: var(--black-dark);
+  font-weight: 700;
+}
+
+.shiftTime {
+  color: var(--black-color);
+}
+
+.routeButton {
+  background: white;
+  color: var(--black-dark);
+  border: 1px solid rgb(229 231 235);
+  border-radius: 9999px;
+  font-weight: 700;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.routeButton:hover {
+  background: rgb(249 250 251);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.workButton {
+  border-radius: 9999px;
+  font-weight: 700;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.workButtonReady {
+  background: var(--blue-color);
+  color: white;
+}
+
+.workButtonReady:hover {
+  background: var(--blue-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.workButtonDone {
+  background: rgb(243 244 246);
+  color: rgb(156 163 175);
+  border: 1px solid rgb(229 231 235);
+  cursor: not-allowed;
+}
+
+.calendarCard {
+  background: var(--white-color);
+  border: 1px solid rgb(229 231 235 / 0.6);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.eventCard {
+  font-weight: 700;
+}
+
+.eventTime {
+  font-weight: 400;
+}
+
+.workedBadge {
+  background: var(--blue-color);
+  color: white;
+  font-weight: 700;
+  border-radius: 0.125rem;
+}

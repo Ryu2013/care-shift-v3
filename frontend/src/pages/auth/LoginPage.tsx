@@ -7,6 +7,7 @@ import type { User } from '../../types'
 import AlertMessage from '../../components/AlertMessage'
 import GoogleLoginButton from '../../components/GoogleLoginButton'
 import { extractErrorMessage } from '../../utils/extractErrorMessage'
+import styles from './LoginPage.module.css'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -88,11 +89,11 @@ export default function LoginPage() {
     <div className="min-h-[100vh] flex items-center justify-center p-8">
 
 
-      <div className="w-full max-w-[480px] p-10 rounded-2xl bg-white/40 backdrop-blur-[3px] border border-[#eef2f6] shadow-sm transition-all animate-fade-in-up">
+      <div className={`${styles.card} w-full max-w-[480px] p-10 transition-all animate-fade-in-up`}>
 
         <div className="text-center mb-8">
-          <h2 className="text-[#333] text-[1.8rem] font-bold mb-2">ログイン</h2>
-          <p className="text-[#888] mb-0 text-[0.9rem] leading-snug">お疲れ様です。<br />アカウントにログインしてください。</p>
+          <h2 className={`${styles.title} text-[1.8rem] mb-2`}>ログイン</h2>
+          <p className={`${styles.description} mb-0 text-[0.9rem] leading-snug`}>お疲れ様です。<br />アカウントにログインしてください。</p>
         </div>
 
         <AlertMessage type="success" message={successMsg} />
@@ -100,7 +101,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="block text-[0.9rem] font-bold text-[#444]">
+            <label className={`${styles.label} block text-[0.9rem]`}>
               メールアドレス
             </label>
             <input
@@ -111,12 +112,12 @@ export default function LoginPage() {
               autoComplete="email"
               autoFocus
               placeholder="example@email.com"
-              className="w-full px-4 py-3 text-base border-2 border-[#e1e4e8] rounded-lg bg-[#fafbfc] transition-all duration-200 focus:outline-none focus:border-[#5daaf5] focus:bg-white focus:ring-[3px] focus:ring-[#5daaf5]/10"
+              className={`${styles.input} w-full px-4 py-3 text-base`}
             />
           </div>
 
           <div className="space-y-2">
-            <label className="block text-[0.9rem] font-bold text-[#444]">
+            <label className={`${styles.label} block text-[0.9rem]`}>
               パスワード
             </label>
             <input
@@ -125,12 +126,12 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
-              className="w-full px-4 py-3 text-base border-2 border-[#e1e4e8] rounded-lg bg-[#fafbfc] transition-all duration-200 focus:outline-none focus:border-[#5daaf5] focus:bg-white focus:ring-[3px] focus:ring-[#5daaf5]/10"
+              className={`${styles.input} w-full px-4 py-3 text-base`}
             />
           </div>
 
           <div className="space-y-2">
-            <label className="block text-[0.9rem] font-bold text-[#444]">
+            <label className={`${styles.label} block text-[0.9rem]`}>
               二段階認証コード (設定済みの場合)
             </label>
             <input
@@ -141,7 +142,7 @@ export default function LoginPage() {
               inputMode="numeric"
               pattern="[0-9]*"
               placeholder="6桁のコード"
-              className="w-full px-4 py-3 text-base border-2 border-[#e1e4e8] rounded-lg bg-[#fafbfc] transition-all duration-200 focus:outline-none focus:border-[#5daaf5] focus:bg-white focus:ring-[3px] focus:ring-[#5daaf5]/10"
+              className={`${styles.input} w-full px-4 py-3 text-base`}
             />
           </div>
 
@@ -152,9 +153,9 @@ export default function LoginPage() {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-[#5daaf5] focus:ring-[#5daaf5]"
+              className={`${styles.checkbox} h-4 w-4 rounded border-gray-300`}
             />
-            <label htmlFor="remember-me" className="ml-2 block text-sm text-[#666] cursor-pointer">
+            <label htmlFor="remember-me" className={`${styles.checkboxLabel} ml-2 block text-sm cursor-pointer`}>
               ログイン状態を保存する
             </label>
           </div>
@@ -163,7 +164,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center bg-[#5daaf5] text-white font-bold py-3.5 px-4 rounded-full text-[1.1rem] transition-all duration-200 hover:bg-[#4a90e2] hover:-translate-y-0.5 disabled:opacity-50 cursor-pointer"
+              className={`${styles.submitButton} w-full flex justify-center py-3.5 px-4 text-[1.1rem] cursor-pointer`}
             >
               {loading ? 'ログイン中...' : 'ログイン'}
             </button>
@@ -172,9 +173,9 @@ export default function LoginPage() {
 
         {/* Divider */}
         <div className="flex items-center my-6">
-          <div className="flex-1 border-t border-[#e1e4e8]"></div>
-          <span className="px-4 text-[#999] text-[0.9rem]">または</span>
-          <div className="flex-1 border-t border-[#e1e4e8]"></div>
+          <div className={`${styles.dividerLine} flex-1 border-t`}></div>
+          <span className={`${styles.dividerText} px-4 text-[0.9rem]`}>または</span>
+          <div className={`${styles.dividerLine} flex-1 border-t`}></div>
         </div>
 
         {/* Google Login */}
@@ -184,22 +185,22 @@ export default function LoginPage() {
 
         {/* Footer Links */}
         <div className="text-center text-[0.9rem]">
-          <span className="text-[#888] text-[0.85rem]">アカウントをお持ちでないですか？</span><br />
-          <Link to="/register" className="text-[#5daaf5] font-bold no-underline hover:underline inline-block mt-1">
+          <span className={`${styles.mutedText} text-[0.85rem]`}>アカウントをお持ちでないですか？</span><br />
+          <Link to="/register" className={`${styles.primaryLink} inline-block mt-1`}>
             新規登録はこちら
           </Link>
           <div className="mt-2 text-[0.85rem]">
-            <Link to="/password-reset" className="text-[#888] no-underline hover:text-[#5daaf5]">
+            <Link to="/password-reset" className={styles.secondaryLink}>
               パスワードをお忘れの場合
             </Link>
           </div>
           <div className="mt-2 text-[0.85rem]">
-            <Link to="/resend-confirmation" className="text-[#888] no-underline hover:text-[#5daaf5]">
+            <Link to="/resend-confirmation" className={styles.secondaryLink}>
               確認メールが届いていない場合
             </Link>
           </div>
           <div className="mt-2 text-[0.85rem]">
-            <Link to="/unlock" className="text-[#888] no-underline hover:text-[#5daaf5]">
+            <Link to="/unlock" className={styles.secondaryLink}>
               アカウントがロックされた場合
             </Link>
           </div>
