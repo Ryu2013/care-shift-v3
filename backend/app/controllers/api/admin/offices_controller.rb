@@ -14,6 +14,6 @@ class Api::Admin::OfficesController < Api::Admin::AuthorizationController
   private
 
   def office_params
-    params.require(:office).permit(:name)
+    params.require(:office).permit(:name, :monthly_day_off_limit, :request_deadline_day)
   end
 end

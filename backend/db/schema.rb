@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_27_004622) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_23_000000) do
   create_table "client_needs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "client_id", null: false
     t.bigint "office_id", null: false
@@ -36,6 +36,30 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_27_004622) do
     t.datetime "updated_at", null: false
     t.index ["office_id"], name: "index_clients_on_office_id"
     t.index ["team_id"], name: "index_clients_on_team_id"
+  end
+
+  create_table "day_off_dates", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "office_id", null: false
+    t.bigint "day_off_month_id", null: false
+    t.date "request_date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["day_off_month_id", "request_date"], name: "index_day_off_dates_on_month_and_date", unique: true
+    t.index ["day_off_month_id"], name: "index_day_off_dates_on_day_off_month_id"
+    t.index ["office_id", "request_date"], name: "index_day_off_dates_on_office_and_date"
+    t.index ["office_id"], name: "index_day_off_dates_on_office_id"
+  end
+
+  create_table "day_off_months", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "office_id", null: false
+    t.bigint "user_id", null: false
+    t.date "target_month", null: false
+    t.datetime "submitted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["office_id", "user_id", "target_month"], name: "index_day_off_months_on_office_user_month", unique: true
+    t.index ["office_id"], name: "index_day_off_months_on_office_id"
+    t.index ["user_id"], name: "index_day_off_months_on_user_id"
   end
 
   create_table "entries", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -72,6 +96,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_27_004622) do
     t.boolean "cancel_at_period_end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "monthly_day_off_limit", default: 3, null: false
+    t.integer "request_deadline_day", default: 20, null: false
   end
 
   create_table "rooms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -172,6 +198,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_27_004622) do
   add_foreign_key "client_needs", "offices"
   add_foreign_key "clients", "offices"
   add_foreign_key "clients", "teams"
+  add_foreign_key "day_off_dates", "day_off_months"
+  add_foreign_key "day_off_dates", "offices"
+  add_foreign_key "day_off_months", "offices"
+  add_foreign_key "day_off_months", "users"
   add_foreign_key "entries", "offices"
   add_foreign_key "entries", "rooms"
   add_foreign_key "entries", "users"

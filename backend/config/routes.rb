@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       resources :users, only: %i[index update destroy]
       resources :clients, only: %i[index create update destroy]
       resources :client_needs, only: %i[index create destroy]
+      resources :day_off_months, only: %i[index]
       resources :user_clients, only: %i[create destroy]
       resources :shifts, only: %i[index create update destroy] do
         post :generate_monthly, on: :collection
@@ -35,6 +36,7 @@ Rails.application.routes.draw do
     # 従業員用
     namespace :employee do
       resources :shifts, only: %i[index update]
+      resources :day_off_months, only: %i[index create]
     end
 
     # 共通

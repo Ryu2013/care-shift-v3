@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_many :user_clients, dependent: :destroy
   has_many :clients, through: :user_clients
   has_many :shifts, dependent: :nullify
+  has_many :day_off_months, dependent: :destroy
   has_many :entries, dependent: :destroy
   has_many :rooms, through: :entries
   has_many :messages, dependent: :destroy
