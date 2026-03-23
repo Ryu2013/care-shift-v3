@@ -1,0 +1,139 @@
+.page {
+  min-height: 100vh;
+}
+
+.content {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 96px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.filtersCard,
+.listCard {
+  border: 1px solid rgba(105, 197, 255, 0.22);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 18px 50px rgba(74, 144, 226, 0.08);
+  padding: 24px;
+}
+
+.filtersCard h1 {
+  margin: 0 0 8px;
+  color: var(--black-dark);
+}
+
+.filtersCard p,
+.emptyText,
+.noteText {
+  color: var(--black-color);
+}
+
+.filtersGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.filtersGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filtersGrid span,
+.summaryGrid dt {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--black-dark);
+}
+
+.filtersGrid input,
+.filtersGrid select {
+  border: 1px solid rgba(105, 197, 255, 0.35);
+  border-radius: 14px;
+  padding: 11px 12px;
+  background: white;
+}
+
+.recordList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.recordCard {
+  border-radius: 20px;
+  background: rgba(105, 197, 255, 0.08);
+  padding: 20px;
+}
+
+.recordMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.recordMeta h2 {
+  margin: 0 0 6px;
+  color: var(--black-dark);
+  font-size: 1.06rem;
+}
+
+.recordMeta p,
+.summaryGrid dd {
+  margin: 0;
+  color: var(--black-color);
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.recordActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.recordActions button {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, var(--blue-color), var(--blue-dark));
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submittedBadge,
+.draftBadge {
+  height: fit-content;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.submittedBadge {
+  background: rgba(76, 175, 80, 0.15);
+  color: #2c7a34;
+}
+
+.draftBadge {
+  background: rgba(241, 148, 148, 0.18);
+  color: var(--red-dark);
+}
+
+@media (max-width: 960px) {
+  .filtersGrid,
+  .recordList,
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,144 @@
+.page {
+  min-height: 100vh;
+}
+
+.content {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 96px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hero,
+.listSection {
+  border: 1px solid rgba(105, 197, 255, 0.22);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 18px 50px rgba(74, 144, 226, 0.08);
+  padding: 24px;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: end;
+}
+
+.hero h1 {
+  margin: 0 0 8px;
+  color: var(--black-dark);
+}
+
+.hero p,
+.noteText,
+.emptyText {
+  color: var(--black-color);
+}
+
+.monthField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.monthField span,
+.metaRow span {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--black-dark);
+}
+
+.monthField input {
+  border: 1px solid rgba(105, 197, 255, 0.35);
+  border-radius: 14px;
+  padding: 11px 12px;
+  background: white;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card {
+  border-radius: 20px;
+  background: rgba(105, 197, 255, 0.08);
+  padding: 20px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cardHeader h2 {
+  margin: 0 0 6px;
+  color: var(--black-dark);
+}
+
+.cardHeader p,
+.metaRow strong {
+  margin: 0;
+  color: var(--black-color);
+}
+
+.metaRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.metaRow div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cardActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cardActions button {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, var(--blue-color), var(--blue-dark));
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submittedBadge,
+.draftBadge {
+  height: fit-content;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.submittedBadge {
+  background: rgba(76, 175, 80, 0.15);
+  color: #2c7a34;
+}
+
+.draftBadge {
+  background: rgba(241, 148, 148, 0.18);
+  color: var(--red-dark);
+}
+
+@media (max-width: 720px) {
+  .hero,
+  .cardHeader,
+  .metaRow {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+}

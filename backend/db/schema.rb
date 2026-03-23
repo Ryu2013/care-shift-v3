@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_23_000000) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_23_010100) do
   create_table "client_needs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "client_id", null: false
     t.bigint "office_id", null: false
@@ -106,6 +106,37 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_23_000000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["office_id"], name: "index_rooms_on_office_id"
+  end
+
+  create_table "service_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "shift_id", null: false, comment: "対象シフト"
+    t.bigint "service_type_id", null: false, comment: "サービス種別"
+    t.boolean "is_first_visit", default: false, null: false, comment: "特定加算（初回）"
+    t.boolean "is_emergency", default: false, null: false, comment: "特定加算（緊急）"
+    t.boolean "schedule_changed", default: false, null: false, comment: "予定変更の有無"
+    t.integer "appearance_status", default: 0, null: false, comment: "顔色（0:良, 1:不良）"
+    t.boolean "has_sweating", default: false, null: false, comment: "発汗の有無"
+    t.decimal "body_temperature", precision: 4, scale: 1, comment: "体温（℃）"
+    t.integer "systolic_bp", comment: "血圧（収縮期 / 上）"
+    t.integer "diastolic_bp", comment: "血圧（拡張期 / 下）"
+    t.boolean "environment_preparation", default: false, null: false, comment: "環境整備"
+    t.boolean "consultation_support", default: false, null: false, comment: "相談援助"
+    t.boolean "information_collection_and_provision", default: false, null: false, comment: "情報収集・提供"
+    t.boolean "record_checked", default: false, null: false, comment: "記録実施"
+    t.text "note", comment: "特記事項・備考"
+    t.datetime "submitted_at", comment: "提出日時"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["service_type_id"], name: "index_service_records_on_service_type_id"
+    t.index ["shift_id"], name: "index_service_records_on_shift_id", unique: true
+  end
+
+  create_table "service_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "office_id", null: false, comment: "事業所"
+    t.string "name", null: false, comment: "サービス種別名"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["office_id"], name: "index_service_types_on_office_id"
   end
 
   create_table "shifts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -209,6 +240,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_23_000000) do
   add_foreign_key "messages", "rooms"
   add_foreign_key "messages", "users"
   add_foreign_key "rooms", "offices"
+  add_foreign_key "service_records", "service_types"
+  add_foreign_key "service_records", "shifts"
+  add_foreign_key "service_types", "offices"
   add_foreign_key "shifts", "clients"
   add_foreign_key "shifts", "offices"
   add_foreign_key "shifts", "users"

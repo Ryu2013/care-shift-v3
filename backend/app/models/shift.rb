@@ -2,6 +2,7 @@ class Shift < ApplicationRecord
   belongs_to :office
   belongs_to :client
   belongs_to :user, optional: true
+  has_one :service_record, dependent: :destroy
 
   validates :start_time, :end_time, :date, presence: true
   validate :user_unique_per_date, if: -> { user_id.present? && date.present? }

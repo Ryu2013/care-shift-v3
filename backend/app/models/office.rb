@@ -9,11 +9,13 @@ class Office < ApplicationRecord
   has_many :teams, dependent: :destroy
   has_many :user_clients, dependent: :destroy
   has_many :client_needs, dependent: :destroy
+  has_many :service_types, dependent: :destroy
   has_many :day_off_months, dependent: :destroy
   has_many :day_off_dates, dependent: :destroy
   has_many :rooms, dependent: :destroy
   has_many :entries, through: :rooms
   has_many :messages, through: :rooms
+  has_many :service_records, through: :shifts
 
   def day_off_deadline_for(target_month)
     month = target_month.beginning_of_month
