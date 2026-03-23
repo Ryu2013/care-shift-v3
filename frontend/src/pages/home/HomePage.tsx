@@ -23,7 +23,8 @@ import chatViewImg from '../../assets/chat_view.png';
 import navViewImg from '../../assets/nav_view.png';
 import shift4Img from '../../assets/shift4.png';
 import footerTitleImg from '../../assets/footer_title.png';
-
+import dayoffImg from '../../assets/dayoff.png';
+import dayofficonImg from '../../assets/dayofficon.png';
 
 const ResponsiveIcon = () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-16 h-16 mx-auto mb-4 text-[#69C5FF]">
@@ -78,6 +79,15 @@ const features: FeatureSectionProps[] = [
         descriptionLines: ['お客様の家から近い順に', '従業員が表示され、迷う時間が無くなります。'],
         imageItems: [{ src: shift4Img, alt: '人員配置画面', className: styles.featureImg }],
         imageFrame: `${featureSectionStyles.featureFrame} max-w-sm transform hover:rotate-1`,
+    },
+    {
+        title: '希望休の申請も確認も',
+        highlightText: 'らくらく!',
+        descriptionLines: ['希望休の申請も確認も', 'アプリ一つで完結！'],
+        imageItems: [{ src: dayoffImg, alt: '希望休画面', className: styles.featureImg }],
+        reverse: true,
+        background: true,
+        imageFrame: `${featureSectionStyles.featureFrame} max-w-sm transform hover:-rotate-1`,
     },
 ];
 
@@ -160,6 +170,19 @@ const HomePage = () => {
                         <img src={titleImg} alt="タイトル" className={`${styles.heroTitleImage} mt-10 md:mt-0`} />
                     </div>
 
+                    <div className={styles.heroHighlights}>
+                        <div className={styles.heroHighlightCard}>
+                            <p className={styles.heroHighlightLabel}>料金</p>
+                            <p className={styles.heroHighlightValue}>0円から始められる</p>
+                            <p className={styles.heroHighlightText}>日本一低コストで続けやすい</p>
+                        </div>
+                        <div className={styles.heroHighlightCard}>
+                            <p className={styles.heroHighlightLabel}>サポート</p>
+                            <p className={styles.heroHighlightValue}>導入前後も安心サポート</p>
+                            <p className={styles.heroHighlightText}>使い始めの不安を減らし、現場への定着を支えます。</p>
+                        </div>
+                    </div>
+
                     <div className={`${styles.heroFeaturesContainer} flex flex-wrap justify-center gap-6 md:gap-12 py-6 px-4 w-full`}>
                         <div className="flex flex-col items-center gap-2 w-20">
                             <img src={calendarImg} alt="シフト管理" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
@@ -181,13 +204,15 @@ const HomePage = () => {
                             <img src={humanImg} alt="人員配置" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
                             <span className={`${styles.heroFeatureItem} text-sm font-bold`}>人員配置</span>
                         </div>
+                        <div className="flex flex-col items-center gap-2 w-20">
+                            <img src={dayofficonImg} alt="希望休" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
+                            <span className={`${styles.heroFeatureItem} text-sm font-bold`}>希望休</span>
+                        </div>
                     </div>
-
-                    <p className={`${styles.heroText} font-medium`}>複雑な管理業務を。<br className="md:hidden" />PCでもスマートフォンでも簡単に。</p>
 
                     <div className="flex flex-col items-center gap-4 w-full max-w-sm mt-4">
                         <Link to="/register" className={`${styles.btnPrimary} w-full py-4 text-center text-lg shadow-md hover:shadow-lg`}>
-                            新規登録
+                            無料で始める
                         </Link>
                         <GoogleLoginButton
                             buttonText="Googleで登録"
@@ -199,6 +224,39 @@ const HomePage = () => {
                             および<br className="md:hidden" />
                             <a href="/privacy_policy" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700 mx-1">プライバシーポリシー</a>
                             に同意したものとみなします。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-20 px-6 md:px-12">
+                <div className={`max-w-5xl mx-auto ${styles.problemSection} ${styles.scrollTrigger}`}>
+                    <div className={styles.problemHeading}>
+                        <p className={styles.problemLabel}>こんなお悩みありませんか？</p>
+                    </div>
+
+                    <div className={styles.problemGrid}>
+                        <div className={styles.problemCard}>
+                            <p className={styles.problemCardTitle}>アプリは導入したいけどコストが高い</p>
+                            <p className={styles.problemCardText}>
+                                ケアシフトは5人までならずっと0円！<br />
+                                5人以降も1人あたり300円で業界最安値で利用できます！<br />
+                                例: 10人なら月額1,500円で利用できます。
+                            </p>
+                        </div>
+                        <div className={styles.problemCard}>
+                            <p className={styles.problemCardTitle}>アプリが複雑で難しい</p>
+                            <p className={styles.problemCardText}>
+                                ケアシフトは業界一分かりやすいデザインを心がけています。直感的な操作で誰でも簡単に使うことができます。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className={styles.problemClosing}>
+                        <h2 className={styles.problemTitle}>低コストで、誰でもすぐ使える！</h2>
+                        <p className={styles.problemLead}>
+                            時間とお金をもっと現場に使いたい。
+                            そんな想いからケアシフトは出来ました。
                         </p>
                     </div>
                 </div>

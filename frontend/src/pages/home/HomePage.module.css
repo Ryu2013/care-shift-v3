@@ -98,6 +98,51 @@
     line-height: 1.6;
 }
 
+.heroHighlights {
+    width: 100%;
+    max-width: 48rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.heroHighlightCard {
+    background-color: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(31, 41, 55, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    padding: 1rem 1.25rem;
+    text-align: left;
+}
+
+.heroHighlightLabel {
+    color: var(--blue-dark);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+}
+
+.heroHighlightValue {
+    color: var(--black-dark);
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.heroHighlightText {
+    color: var(--black-color);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-top: 0.35rem;
+}
+
+@media (max-width: 767px) {
+    .heroHighlights {
+        grid-template-columns: 1fr;
+    }
+}
+
 .btnPrimary {
     background-color: var(--red-color);
     color: white;
@@ -132,6 +177,90 @@
 
 .featureTitleHighlight {
     color: var(--red-color);
+}
+
+.problemSection {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 251, 255, 0.98) 100%);
+    border: 1px solid rgba(105, 197, 255, 0.18);
+    border-radius: 28px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    padding: 2rem;
+}
+
+.problemHeading {
+    max-width: 42rem;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.problemLabel {
+    color: var(--blue-dark);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.problemTitle {
+    color: var(--black-dark);
+    font-size: clamp(1.6rem, 2vw, 2.1rem);
+    font-weight: 700;
+    line-height: 1.6;
+    margin-top: 0.75rem;
+}
+
+.problemLead {
+    color: var(--black-color);
+    line-height: 1.9;
+    margin-top: 1rem;
+}
+
+.problemClosing {
+    max-width: 42rem;
+    margin: 2rem auto 0;
+    text-align: center;
+}
+
+.problemGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+    max-width: 52rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.problemCard {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(31, 41, 55, 0.08);
+    border-radius: 20px;
+    padding: 1.25rem;
+    text-align: left;
+}
+
+.problemCardTitle {
+    color: var(--black-dark);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.6;
+}
+
+.problemCardText {
+    color: var(--black-color);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    margin-top: 0.6rem;
+}
+
+@media (max-width: 767px) {
+    .problemSection {
+        padding: 1.5rem;
+        border-radius: 24px;
+    }
+
+    .problemGrid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* 料金・デバイス訴求セクション */
