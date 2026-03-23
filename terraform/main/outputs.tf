@@ -20,3 +20,8 @@ output "acm_alb_validation_records" {
     }
   }
 }
+
+output "active_storage_bucket_name" {
+  description = "Active Storage 用 S3 バケット名"
+  value       = aws_s3_bucket.active_storage.bucket
+}

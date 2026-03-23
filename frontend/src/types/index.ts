@@ -87,16 +87,217 @@ export interface ServiceRecord {
   body_temperature: number | null
   systolic_bp: number | null
   diastolic_bp: number | null
+  toilet_assist: boolean
+  portable_toilet_assist: boolean
+  diaper_change: boolean
+  pad_change: boolean
+  linen_change: boolean
+  perineal_cleaning: boolean
+  urinal_washing: boolean
+  urine_count: number | null
+  urine_amount: number | null
+  stool_count: number | null
+  stool_status: string | null
+  posture_support: boolean
+  meal_assist_full: boolean
+  meal_assist_partial: boolean
+  water_intake: number | null
+  meal_completed: boolean
+  meal_leftover: boolean
+  bathing_assist: boolean
+  shower_bath: boolean
+  hair_wash: boolean
+  partial_bath_hand: boolean
+  partial_bath_foot: boolean
+  full_body_cleaning: boolean
+  partial_cleaning: boolean
+  face_wash: boolean
+  oral_care: boolean
+  dressing_assist: boolean
+  nail_care: boolean
+  ear_care: boolean
+  hair_care: boolean
+  beard_shave: boolean
+  makeup: boolean
+  position_change: boolean
+  transfer_assist: boolean
+  mobility_assist: boolean
+  outing_preparation: boolean
+  outing_accompaniment: boolean
+  commute_assist: boolean
+  shopping_assist: boolean
+  wake_up_assist: boolean
+  bedtime_assist: boolean
+  medication_support: boolean
+  medication_application: boolean
+  suction: boolean
+  enema: boolean
+  tube_feeding: boolean
+  hospital_assist: boolean
+  watch_over: boolean
+  independence_cleaning_support: boolean
+  independence_laundry_support: boolean
+  independence_bed_make_support: boolean
+  independence_clothing_arrangement_support: boolean
+  independence_cooking_support: boolean
+  independence_shopping_support: boolean
+  voice_toilet_meal: boolean
+  voice_hygiene: boolean
+  voice_hospital: boolean
+  voice_sleep: boolean
+  voice_medication: boolean
+  cleaning_room: boolean
+  cleaning_toilet: boolean
+  cleaning_portable_toilet: boolean
+  cleaning_table: boolean
+  cleaning_kitchen: boolean
+  cleaning_bathroom: boolean
+  cleaning_entrance: boolean
+  garbage_disposal: boolean
+  laundry_wash: boolean
+  laundry_dry: boolean
+  laundry_store: boolean
+  laundry_iron: boolean
+  bed_make: boolean
+  sheet_change: boolean
+  futon_dry: boolean
+  clothing_arrangement: boolean
+  clothing_repair: boolean
+  cooking: boolean
+  cooking_preparation: boolean
+  meal_serving: boolean
+  menu_note: string | null
+  shopping_daily_goods: boolean
+  medicine_pickup: boolean
+  money_advance: number | null
+  money_spent: number | null
+  money_change: number | null
+  shopping_detail: string | null
   environment_preparation: boolean
   consultation_support: boolean
   information_collection_and_provision: boolean
   record_checked: boolean
   note: string | null
+  special_note: string | null
+  instruction_note: string | null
+  report_note: string | null
+  image_file: string | null
+  image_url: string | null
   submitted_at: string | null
   created_at: string
   updated_at: string
   service_type: ServiceType
   shift: ServiceRecordShiftSummary
+}
+
+export interface ServiceRecordInput {
+  shift_id?: number
+  service_type_id: number
+  is_first_visit: boolean
+  is_emergency: boolean
+  schedule_changed: boolean
+  appearance_status: AppearanceStatus
+  has_sweating: boolean
+  body_temperature: number | null
+  systolic_bp: number | null
+  diastolic_bp: number | null
+  toilet_assist: boolean
+  portable_toilet_assist: boolean
+  diaper_change: boolean
+  pad_change: boolean
+  linen_change: boolean
+  perineal_cleaning: boolean
+  urinal_washing: boolean
+  urine_count: number | null
+  urine_amount: number | null
+  stool_count: number | null
+  stool_status: string | null
+  posture_support: boolean
+  meal_assist_full: boolean
+  meal_assist_partial: boolean
+  water_intake: number | null
+  meal_completed: boolean
+  meal_leftover: boolean
+  bathing_assist: boolean
+  shower_bath: boolean
+  hair_wash: boolean
+  partial_bath_hand: boolean
+  partial_bath_foot: boolean
+  full_body_cleaning: boolean
+  partial_cleaning: boolean
+  face_wash: boolean
+  oral_care: boolean
+  dressing_assist: boolean
+  nail_care: boolean
+  ear_care: boolean
+  hair_care: boolean
+  beard_shave: boolean
+  makeup: boolean
+  position_change: boolean
+  transfer_assist: boolean
+  mobility_assist: boolean
+  outing_preparation: boolean
+  outing_accompaniment: boolean
+  commute_assist: boolean
+  shopping_assist: boolean
+  wake_up_assist: boolean
+  bedtime_assist: boolean
+  medication_support: boolean
+  medication_application: boolean
+  suction: boolean
+  enema: boolean
+  tube_feeding: boolean
+  hospital_assist: boolean
+  watch_over: boolean
+  independence_cleaning_support: boolean
+  independence_laundry_support: boolean
+  independence_bed_make_support: boolean
+  independence_clothing_arrangement_support: boolean
+  independence_cooking_support: boolean
+  independence_shopping_support: boolean
+  voice_toilet_meal: boolean
+  voice_hygiene: boolean
+  voice_hospital: boolean
+  voice_sleep: boolean
+  voice_medication: boolean
+  cleaning_room: boolean
+  cleaning_toilet: boolean
+  cleaning_portable_toilet: boolean
+  cleaning_table: boolean
+  cleaning_kitchen: boolean
+  cleaning_bathroom: boolean
+  cleaning_entrance: boolean
+  garbage_disposal: boolean
+  laundry_wash: boolean
+  laundry_dry: boolean
+  laundry_store: boolean
+  laundry_iron: boolean
+  bed_make: boolean
+  sheet_change: boolean
+  futon_dry: boolean
+  clothing_arrangement: boolean
+  clothing_repair: boolean
+  cooking: boolean
+  cooking_preparation: boolean
+  meal_serving: boolean
+  menu_note: string | null
+  shopping_daily_goods: boolean
+  medicine_pickup: boolean
+  money_advance: number | null
+  money_spent: number | null
+  money_change: number | null
+  shopping_detail: string | null
+  environment_preparation: boolean
+  consultation_support: boolean
+  information_collection_and_provision: boolean
+  record_checked: boolean
+  note: string | null
+  special_note: string | null
+  instruction_note: string | null
+  report_note: string | null
+  image_file: string | null
+  image?: File | null
+  submitted_at: string | null
 }
 
 export interface ClientNeed {

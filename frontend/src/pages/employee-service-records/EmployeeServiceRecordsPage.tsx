@@ -4,8 +4,8 @@ import { Header } from '../../components/Header'
 import { getUserShifts } from '../../api/shifts'
 import { createEmployeeServiceRecord, getEmployeeServiceRecords, updateEmployeeServiceRecord } from '../../api/service_records'
 import { getOfficeServiceTypes } from '../../api/service_types'
-import type { ServiceRecord, Shift } from '../../types'
-import ServiceRecordFormModal, { type ServiceRecordFormValues } from '../service-records/components/ServiceRecordFormModal'
+import type { ServiceRecord, ServiceRecordInput, Shift } from '../../types'
+import ServiceRecordFormModal from '../service-records/components/ServiceRecordFormModal'
 import styles from './EmployeeServiceRecordsPage.module.css'
 
 function toMonthValue(date: Date) {
@@ -52,7 +52,7 @@ export default function EmployeeServiceRecordsPage() {
   })
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, values }: { id: number; values: Partial<ServiceRecordFormValues> }) =>
+    mutationFn: ({ id, values }: { id: number; values: Partial<ServiceRecordInput> }) =>
       updateEmployeeServiceRecord(id, values),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['employee-service-records'] })
@@ -79,7 +79,7 @@ export default function EmployeeServiceRecordsPage() {
     }))
   }, [recordsByShiftId, shiftsQuery.data])
 
-  async function handleSave(values: ServiceRecordFormValues, submitMode: 'draft' | 'submitted') {
+  async function handleSave(values: ServiceRecordInput, submitMode: 'draft' | 'submitted') {
     const payload = {
       ...values,
       note: values.note === '' ? null : values.note,
@@ -91,7 +91,7 @@ export default function EmployeeServiceRecordsPage() {
       return
     }
 
-    await createMutation.mutateAsync(payload as Required<ServiceRecordFormValues>)
+    await createMutation.mutateAsync(payload)
   }
 
   return (

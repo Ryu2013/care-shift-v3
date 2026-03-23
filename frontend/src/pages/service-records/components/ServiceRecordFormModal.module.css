@@ -58,6 +58,29 @@
   padding: 24px;
 }
 
+.tabList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tabButton,
+.activeTabButton {
+  border: 1px solid rgba(105, 197, 255, 0.26);
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--black-color);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.activeTabButton {
+  border-color: rgba(74, 144, 226, 0.45);
+  background: linear-gradient(135deg, rgba(105, 197, 255, 0.18), rgba(74, 144, 226, 0.16));
+  color: var(--blue-dark);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -97,6 +120,38 @@
   border-radius: 18px;
   background: rgba(105, 197, 255, 0.08);
   padding: 18px;
+}
+
+.placeholderSection {
+  border: 1px dashed rgba(105, 197, 255, 0.32);
+  border-radius: 18px;
+  background: rgba(105, 197, 255, 0.05);
+  padding: 24px;
+}
+
+.placeholderSection h3 {
+  margin: 0 0 8px;
+  color: var(--black-dark);
+}
+
+.placeholderSection p {
+  margin: 0;
+  color: var(--black-color);
+}
+
+.imageMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  color: var(--black-color);
+  font-size: 0.9rem;
+}
+
+.imageMeta a {
+  color: var(--blue-dark);
+  font-weight: 700;
+  text-decoration: none;
 }
 
 .section h3 {

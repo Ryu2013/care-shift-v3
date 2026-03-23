@@ -6,8 +6,8 @@ import { getClients } from '../../../api/clients'
 import { getUsers } from '../../../api/users'
 import { getAdminServiceRecords, updateAdminServiceRecord } from '../../../api/service_records'
 import { getAdminServiceTypes } from '../../../api/service_types'
-import type { Client, ServiceRecord, ServiceType, Team, User } from '../../../types'
-import ServiceRecordFormModal, { type ServiceRecordFormValues } from '../../service-records/components/ServiceRecordFormModal'
+import type { Client, ServiceRecord, ServiceRecordInput, ServiceType, Team, User } from '../../../types'
+import ServiceRecordFormModal from '../../service-records/components/ServiceRecordFormModal'
 import styles from './ServiceRecordsPage.module.css'
 
 function toMonthValue(date: Date) {
@@ -60,7 +60,7 @@ export default function ServiceRecordsPage() {
   })
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, values }: { id: number; values: Partial<ServiceRecordFormValues> }) =>
+    mutationFn: ({ id, values }: { id: number; values: Partial<ServiceRecordInput> }) =>
       updateAdminServiceRecord(id, values),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['admin-service-records'] })
@@ -78,7 +78,7 @@ export default function ServiceRecordsPage() {
     return users
   }, [users])
 
-  async function handleSave(values: ServiceRecordFormValues) {
+  async function handleSave(values: ServiceRecordInput) {
     if (!selectedRecord) return
 
     await updateMutation.mutateAsync({

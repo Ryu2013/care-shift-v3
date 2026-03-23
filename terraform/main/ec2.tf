@@ -27,6 +27,33 @@ resource "aws_iam_role_policy_attachment" "ec2_ssm" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
+resource "aws_iam_role_policy" "ec2_active_storage" {
+  name = "${var.project}-ec2-active-storage"
+  role = aws_iam_role.ec2_ssm.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket"
+        ]
+        Resource = aws_s3_bucket.active_storage.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = "${aws_s3_bucket.active_storage.arn}/*"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_instance_profile" "ec2_ssm" {
   name = "${var.project}-ec2-ssm"
   role = aws_iam_role.ec2_ssm.name
@@ -77,7 +104,10 @@ resource "aws_instance" "app" {
     volume_type = "gp3"
   }
 
-  user_data = file("${path.module}/user_data.sh")
+  user_data = templatefile("${path.module}/user_data.sh", {
+    active_storage_bucket = aws_s3_bucket.active_storage.bucket
+    aws_region            = var.aws_region
+  })
 
   tags = {
     Name = "${var.project}-app"

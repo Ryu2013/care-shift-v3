@@ -9,8 +9,8 @@ import { useCurrentUser } from '../../hooks/useCurrentUser'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import type { ServiceRecord, Shift, User } from '../../types'
-import ServiceRecordFormModal, { type ServiceRecordFormValues } from '../service-records/components/ServiceRecordFormModal'
+import type { ServiceRecord, ServiceRecordInput, Shift, User } from '../../types'
+import ServiceRecordFormModal from '../service-records/components/ServiceRecordFormModal'
 import { Header } from '../../components/Header'
 import styles from './UserShiftsPage.module.css'
 
@@ -67,7 +67,7 @@ export default function UserShiftsPage() {
     })
 
     const saveServiceRecordMutation = useMutation({
-        mutationFn: async ({ values, submitMode }: { values: ServiceRecordFormValues, submitMode: 'draft' | 'submitted' }) => {
+        mutationFn: async ({ values, submitMode }: { values: ServiceRecordInput, submitMode: 'draft' | 'submitted' }) => {
             const payload = {
                 ...values,
                 note: values.note === '' ? null : values.note,
@@ -80,7 +80,7 @@ export default function UserShiftsPage() {
                 return updateEmployeeServiceRecord(selectedServiceRecord.id, payload)
             }
 
-            return createEmployeeServiceRecord(payload as Required<ServiceRecordFormValues>)
+            return createEmployeeServiceRecord(payload)
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['employee-service-records', currentMonthValue] })
