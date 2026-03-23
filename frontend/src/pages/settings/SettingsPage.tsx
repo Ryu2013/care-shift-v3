@@ -15,6 +15,8 @@ export default function SettingsPage() {
     // Office State
     const [office, setOffice] = useState<Office | null>(null)
     const [officeName, setOfficeName] = useState('')
+    const [monthlyDayOffLimit, setMonthlyDayOffLimit] = useState('3')
+    const [requestDeadlineDay, setRequestDeadlineDay] = useState('20')
     const [isUpdatingOffice, setIsUpdatingOffice] = useState(false)
     const [officeMessage, setOfficeMessage] = useState({ type: '', text: '' })
     const [isRedirectingPortal, setIsRedirectingPortal] = useState(false)
@@ -69,6 +71,8 @@ export default function SettingsPage() {
             const response = await getOffice()
             setOffice(response.data)
             setOfficeName(currentName => currentName || response.data.name)
+            setMonthlyDayOffLimit(String(response.data.monthly_day_off_limit))
+            setRequestDeadlineDay(String(response.data.request_deadline_day))
         } catch (error) {
             console.error('Failed to fetch office', error)
         }
@@ -88,9 +92,15 @@ export default function SettingsPage() {
         setIsUpdatingOffice(true)
         setOfficeMessage({ type: '', text: '' })
         try {
-            const response = await updateOffice(officeName)
+            const response = await updateOffice({
+                name: officeName,
+                monthly_day_off_limit: Number(monthlyDayOffLimit),
+                request_deadline_day: Number(requestDeadlineDay),
+            })
             setOffice(response.data)
             setOfficeName(response.data.name)
+            setMonthlyDayOffLimit(String(response.data.monthly_day_off_limit))
+            setRequestDeadlineDay(String(response.data.request_deadline_day))
             setOfficeMessage({ type: 'success', text: '会社情報を更新しました。' })
         } catch (error) {
             setOfficeMessage({ type: 'error', text: '会社情報の更新に失敗しました。' })
@@ -350,6 +360,35 @@ export default function SettingsPage() {
                                             onChange={(e) => setOfficeName(e.target.value)}
                                             required
                                         />
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                        <div>
+                                            <label htmlFor="monthlyDayOffLimit" className={`${styles.label} block text-xs uppercase tracking-widest pl-1 mb-2`}>希望休上限</label>
+                                            <input
+                                                id="monthlyDayOffLimit"
+                                                type="number"
+                                                min="0"
+                                                className={`${styles.input} w-full py-3 px-4`}
+                                                value={monthlyDayOffLimit}
+                                                onChange={(e) => setMonthlyDayOffLimit(e.target.value)}
+                                                required
+                                            />
+                                            <p className="mt-2 text-xs text-gray-500">1か月に申請できる希望休日数です。</p>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="requestDeadlineDay" className={`${styles.label} block text-xs uppercase tracking-widest pl-1 mb-2`}>提出期限日</label>
+                                            <input
+                                                id="requestDeadlineDay"
+                                                type="number"
+                                                min="1"
+                                                max="31"
+                                                className={`${styles.input} w-full py-3 px-4`}
+                                                value={requestDeadlineDay}
+                                                onChange={(e) => setRequestDeadlineDay(e.target.value)}
+                                                required
+                                            />
+                                            <p className="mt-2 text-xs text-gray-500">31日がない月は自動で月末締めになります。</p>
+                                        </div>
                                     </div>
                                     <button type="submit" className={`w-full py-3 px-6 ${styles.btn} ${styles.btnPrimary}`} disabled={isUpdatingOffice}>
                                         {isUpdatingOffice ? '保存中...' : '情報を更新する'}

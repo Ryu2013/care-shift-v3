@@ -38,6 +38,7 @@ export const Header: React.FC<HeaderProps> = () => {
 
             <nav className="hidden xl:flex items-center gap-6">
                 <Link to={currentUser?.role === 'admin' ? "/shifts" : "/user-shifts"} className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">シフト表</Link>
+                <Link to={currentUser?.role === 'admin' ? "/admin-day-off-months" : "/day-off-months"} className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">希望休</Link>
                 <Link to="/rooms" className="font-bold text-gray-700 hover:text-[#5daaf5] transition-colors">チャット</Link>
                 {currentUser?.role === 'admin' && (
                     <>
@@ -54,6 +55,7 @@ export const Header: React.FC<HeaderProps> = () => {
             <HamburgerMenuButton className="xl:hidden">
                 <nav className="flex flex-col items-center gap-8 pt-20">
                     <Link to={currentUser?.role === 'admin' ? "/shifts" : "/user-shifts"} className="font-bold text-xl text-[#333]">シフト表</Link>
+                    <Link to={currentUser?.role === 'admin' ? "/admin-day-off-months" : "/day-off-months"} className="font-bold text-xl text-[#333]">希望休</Link>
                     <Link to="/rooms" className="font-bold text-xl text-[#333]">チャット</Link>
                     {currentUser?.role === 'admin' && (
                         <>

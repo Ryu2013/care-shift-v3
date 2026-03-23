@@ -15,6 +15,9 @@ export interface User {
 export interface Office {
   id: number
   name: string
+  monthly_day_off_limit: number
+  request_deadline_day: number
+  subscription_active?: boolean
   subscription_status: string | null
   current_period_end: string | null
   cancel_at_period_end: boolean | null
@@ -78,4 +81,26 @@ export interface Message {
   room_id: number
   created_at: string
   user?: User
+}
+
+export interface DayOffMonth {
+  id: number
+  office_id: number
+  user_id: number
+  target_month: string
+  submitted_at: string | null
+  request_dates: string[]
+  user?: {
+    id: number
+    name: string
+    team_id: number
+    team_name: string
+  } | null
+}
+
+export interface EmployeeDayOffMonthResponse {
+  office: Office
+  target_month: string
+  deadline_date: string
+  day_off_month: DayOffMonth | null
 }
