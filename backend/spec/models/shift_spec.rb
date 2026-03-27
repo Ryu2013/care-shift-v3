@@ -86,6 +86,24 @@ RSpec.describe Shift, type: :model do
       expect(shift).to be_invalid
       expect(shift.errors[:base]).to be_present
     end
+
+    it "別事業所の利用者は無効である" do
+      shift = build(:shift)
+      outside_client = create(:client)
+      shift.client = outside_client
+
+      expect(shift).to be_invalid
+      expect(shift.errors[:client]).to be_present
+    end
+
+    it "別事業所のユーザーは無効である" do
+      shift = build(:shift)
+      outside_user = create(:user, email: "outside-shift-model-#{SecureRandom.hex(4)}@example.com")
+      shift.user = outside_user
+
+      expect(shift).to be_invalid
+      expect(shift.errors[:user]).to be_present
+    end
   end
 
   describe "関連削除" do

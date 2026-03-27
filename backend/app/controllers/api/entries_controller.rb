@@ -1,7 +1,8 @@
 class Api::EntriesController < Api::AuthorizationController
   def create
     room = current_user.office.rooms.find(params[:room_id])
-    entry = room.entries.build(user_id: params[:user_id], office: current_user.office)
+    user = current_user.office.users.find(params[:user_id])
+    entry = room.entries.build(user: user, office: current_user.office)
     if entry.save
       render json: EntrySerializer.new(entry), status: :created
     else

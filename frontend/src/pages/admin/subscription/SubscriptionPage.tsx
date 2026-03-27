@@ -1,10 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Header } from '../../../components/Header'
 import { subscribe } from '../../../api/subscription'
+import { getOffice } from '../../../api/office'
 import styles from './SubscriptionPage.module.css'
 
 export default function SubscriptionPage() {
     const [isLoading, setIsLoading] = useState(false)
+    const [isStripeEnabled, setIsStripeEnabled] = useState<boolean | null>(null)
+
+    useEffect(() => {
+        async function fetchOffice() {
+            try {
+                const response = await getOffice()
+                setIsStripeEnabled(response.data.stripe_enabled)
+            } catch (error) {
+                console.error('Failed to fetch office', error)
+                setIsStripeEnabled(false)
+            }
+        }
+
+        fetchOffice()
+    }, [])
 
     const handleSubscribe = async () => {
         setIsLoading(true)
@@ -31,6 +47,15 @@ export default function SubscriptionPage() {
                 <div className={`${styles.container} p-8 sm:p-12`}>
                     <h1 className={`${styles.title} text-3xl text-center mb-12`}>プラン選択</h1>
 
+                    {isStripeEnabled === false && (
+                        <div className={`${styles.planCard} p-8 max-w-2xl mx-auto text-center`}>
+                            <p className={`${styles.planDescription} text-base`}>
+                                現在は完全無料でご利用いただけます。Stripe決済は停止中です。
+                            </p>
+                        </div>
+                    )}
+
+                    {isStripeEnabled && (
                     <div className="flex flex-col md:flex-row gap-8 justify-center items-stretch">
                         {/* Free Plan */}
                         <div className={`${styles.planCard} flex-1 max-w-sm flex flex-col w-full mx-auto`}>
@@ -84,6 +109,7 @@ export default function SubscriptionPage() {
                             </div>
                         </div>
                     </div>
+                    )}
                 </div>
             </div>
         </div>

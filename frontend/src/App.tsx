@@ -32,6 +32,9 @@ import AdminDayOffMonthsPage from './pages/day-off-months/AdminDayOffMonthsPage'
 import ServiceTypesPage from './pages/admin/service-types/ServiceTypesPage'
 import ServiceRecordsPage from './pages/admin/service-records/ServiceRecordsPage'
 import EmployeeServiceRecordsPage from './pages/employee-service-records/EmployeeServiceRecordsPage'
+import TermsPage from './pages/legal/TermsPage'
+import PrivacyPolicyPage from './pages/legal/PrivacyPolicyPage'
+import SpecifiedCommercialTransactionsPage from './pages/legal/SpecifiedCommercialTransactionsPage'
 
 function PrivateLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -60,6 +63,9 @@ function App() {
         <Route path="/password-reset/edit" element={<ResetPasswordPage />} />
         <Route path="/resend-confirmation" element={<ResendConfirmationPage />} />
         <Route path="/unlock" element={<AccountUnlockPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy_policy" element={<PrivacyPolicyPage />} />
+        <Route path="/specified_commercial_transactions" element={<SpecifiedCommercialTransactionsPage />} />
         <Route path="/how-to-use" element={<HowToUseLayout />}>
           <Route index element={<HowToUsePage />} />
           <Route path="registration" element={<HowToUseRegistrationPage />} />

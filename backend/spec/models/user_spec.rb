@@ -42,6 +42,15 @@ RSpec.describe User, type: :model do
       expect(user).to be_invalid
       expect(user.errors[:team]).to be_present
     end
+
+    it "別事業所のチームは無効である" do
+      user = build(:user)
+      outside_team = create(:team)
+      user.team = outside_team
+
+      expect(user).to be_invalid
+      expect(user.errors[:team]).to be_present
+    end
   end
 
   describe "関連削除" do

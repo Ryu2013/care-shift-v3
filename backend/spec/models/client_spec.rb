@@ -26,6 +26,15 @@ RSpec.describe Client, type: :model do
       expect(client).to be_invalid
       expect(client.errors[:team]).to be_present
     end
+
+    it "別事業所のチームは無効である" do
+      client = build(:client)
+      outside_team = create(:team)
+      client.team = outside_team
+
+      expect(client).to be_invalid
+      expect(client.errors[:team]).to be_present
+    end
   end
 
   describe "関連削除" do

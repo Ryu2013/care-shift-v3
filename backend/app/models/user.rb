@@ -21,6 +21,7 @@ class User < ApplicationRecord
   has_many :messages, dependent: :destroy
 
   validates :name, presence: true
+  validate :team_must_belong_to_same_office
 
   enum :role, { employee: 0, admin: 1 }
 
@@ -57,6 +58,13 @@ class User < ApplicationRecord
   end
 
   private
+
+  def team_must_belong_to_same_office
+    return unless office && team
+    return if team.office_id == office_id
+
+    errors.add(:team, "は同じ事業所のチームを指定してください")
+  end
 
   def validate_user_limit
     return unless office.present?
