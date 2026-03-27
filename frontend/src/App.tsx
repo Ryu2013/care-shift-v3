@@ -27,6 +27,11 @@ import ResetPasswordPage from './pages/auth/ResetPasswordPage'
 import ResendConfirmationPage from './pages/auth/ResendConfirmationPage'
 import AccountUnlockPage from './pages/auth/AccountUnlockPage'
 import UserShiftsPage from './pages/user-shifts/UserShiftsPage'
+import EmployeeDayOffMonthsPage from './pages/day-off-months/EmployeeDayOffMonthsPage'
+import AdminDayOffMonthsPage from './pages/day-off-months/AdminDayOffMonthsPage'
+import ServiceTypesPage from './pages/admin/service-types/ServiceTypesPage'
+import ServiceRecordsPage from './pages/admin/service-records/ServiceRecordsPage'
+import EmployeeServiceRecordsPage from './pages/employee-service-records/EmployeeServiceRecordsPage'
 
 function PrivateLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -67,9 +72,14 @@ function App() {
         <Route path="/clients" element={<PrivateLayout><ClientsPage /></PrivateLayout>} />
         <Route path="/users" element={<PrivateLayout><UsersPage /></PrivateLayout>} />
         <Route path="/work-statuses" element={<PrivateLayout><WorkStatusesPage /></PrivateLayout>} />
+        <Route path="/service-types" element={<PrivateLayout><ServiceTypesPage /></PrivateLayout>} />
+        <Route path="/service-records" element={<PrivateLayout><ServiceRecordsPage /></PrivateLayout>} />
         <Route path="/rooms" element={<PrivateLayout><RoomsPage /></PrivateLayout>} />
         <Route path="/rooms/:id" element={<PrivateLayout><RoomDetailPage /></PrivateLayout>} />
         <Route path="/user-shifts" element={<PrivateLayout><UserShiftsPage /></PrivateLayout>} />
+        <Route path="/employee-service-records" element={<PrivateLayout><EmployeeServiceRecordsPage /></PrivateLayout>} />
+        <Route path="/day-off-months" element={<PrivateLayout><EmployeeDayOffMonthsPage /></PrivateLayout>} />
+        <Route path="/admin-day-off-months" element={<PrivateLayout><AdminDayOffMonthsPage /></PrivateLayout>} />
         <Route path="/settings" element={<PrivateLayout><SettingsPage /></PrivateLayout>} />
         <Route path="/two-factor-setup" element={<PrivateLayout><TwoFactorSetupPage /></PrivateLayout>} />
         <Route path="/subscription" element={<PrivateLayout><SubscriptionPage /></PrivateLayout>} />

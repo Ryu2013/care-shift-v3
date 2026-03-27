@@ -59,6 +59,9 @@ Restart=always
 WantedBy=multi-user.target
 SERVICE
 
+echo "ACTIVE_STORAGE_BUCKET=${active_storage_bucket}" >> /etc/environment
+echo "ACTIVE_STORAGE_REGION=${aws_region}" >> /etc/environment
+
 systemctl daemon-reload
 systemctl enable puma
 # puma起動は /etc/environment に RAILS_MASTER_KEY を設定後に手動で行う

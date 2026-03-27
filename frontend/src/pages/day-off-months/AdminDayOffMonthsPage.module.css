@@ -1,0 +1,198 @@
+.page {
+  min-height: 100vh;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 1rem 2.5rem;
+}
+
+.heroCard {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(236, 249, 255, 0.92));
+  border-radius: 28px;
+  border: 1px solid rgba(105, 197, 255, 0.24);
+  box-shadow: 0 24px 55px rgba(29, 78, 132, 0.08);
+  padding: 1.25rem;
+}
+
+.heroHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.eyebrow {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #0369a1;
+}
+
+.pageTitle {
+  margin-top: 0.5rem;
+  font-size: 1.875rem;
+  font-weight: 900;
+  color: #1e293b;
+}
+
+.pageDescription {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 24px;
+  border: 1px solid rgba(105, 197, 255, 0.2);
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+}
+
+.filters {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.field {
+  border-radius: 14px;
+  border: 1px solid rgba(105, 197, 255, 0.38);
+  background: white;
+  color: var(--black-dark);
+  width: 100%;
+  padding: 0.75rem 1rem;
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--blue-color);
+  box-shadow: 0 0 0 3px rgba(105, 197, 255, 0.12);
+}
+
+.teamSection {
+  background: linear-gradient(180deg, rgba(247, 251, 255, 0.95), rgba(255, 255, 255, 0.96));
+  border: 1px solid rgba(105, 197, 255, 0.18);
+  border-radius: 22px;
+  padding: 1rem;
+}
+
+.personCard {
+  background: white;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 18px;
+  padding: 1rem;
+}
+
+.dateChip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 7px 11px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(93, 170, 245, 0.12);
+  color: #1d4d80;
+}
+
+.statusText {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.teamSections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.teamHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.teamTitle {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #1e293b;
+}
+
+.teamMeta {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.recordsGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.personHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.personName {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.personMeta {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.countBadge {
+  border-radius: 9999px;
+  background: #e0f2fe;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+.dateList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+  .heroCard {
+    padding: 2rem;
+  }
+
+  .filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .heroHeader {
+    align-items: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .recordsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

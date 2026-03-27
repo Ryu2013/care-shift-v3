@@ -2,14 +2,25 @@ import { useState, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
 import { getUserShifts, updateUserShiftStatus } from '../../api/shifts'
+import { createEmployeeServiceRecord, getEmployeeServiceRecords, updateEmployeeServiceRecord } from '../../api/service_records'
+import { getOfficeServiceTypes } from '../../api/service_types'
 import { getOfficeUsers } from '../../api/users'
 import { useCurrentUser } from '../../hooks/useCurrentUser'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import type { Shift, User } from '../../types'
+import type { ServiceRecord, ServiceRecordInput, Shift, User } from '../../types'
+import ServiceRecordFormModal from '../service-records/components/ServiceRecordFormModal'
 import { Header } from '../../components/Header'
 import styles from './UserShiftsPage.module.css'
+
+function toMonthValue(date: Date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+}
+
+function buildShiftLabel(shift: Shift) {
+    return `${shift.date} ${shift.start_time} - ${shift.end_time} / ${shift.client?.name || '利用者未定'}`
+}
 
 export default function UserShiftsPage() {
     const queryClient = useQueryClient()
@@ -19,8 +30,11 @@ export default function UserShiftsPage() {
     const targetUserId = userIdParam ? Number(userIdParam) : currentUser?.id
 
     const [currentDate, setCurrentDate] = useState(new Date())
+    const [selectedShiftForRecord, setSelectedShiftForRecord] = useState<Shift | undefined>(undefined)
+    const [selectedServiceRecord, setSelectedServiceRecord] = useState<ServiceRecord | undefined>(undefined)
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
+    const currentMonthValue = toMonthValue(new Date())
 
     const { data: users } = useQuery({
         queryKey: ['officeUsers'],
@@ -33,6 +47,18 @@ export default function UserShiftsPage() {
         enabled: !!targetUserId
     })
 
+    const { data: serviceTypes } = useQuery({
+        queryKey: ['office-service-types'],
+        queryFn: () => getOfficeServiceTypes().then((res) => res.data),
+        enabled: !!targetUserId
+    })
+
+    const { data: serviceRecords } = useQuery({
+        queryKey: ['employee-service-records', currentMonthValue],
+        queryFn: () => getEmployeeServiceRecords({ date: currentMonthValue }).then((res) => res.data),
+        enabled: !!targetUserId
+    })
+
     const mutation = useMutation({
         mutationFn: ({ id, work_status }: { id: number, work_status: string }) => updateUserShiftStatus(id, work_status),
         onSuccess: () => {
@@ -40,9 +66,43 @@ export default function UserShiftsPage() {
         }
     })
 
+    const saveServiceRecordMutation = useMutation({
+        mutationFn: async ({ values, submitMode }: { values: ServiceRecordInput, submitMode: 'draft' | 'submitted' }) => {
+            const payload = {
+                ...values,
+                note: values.note === '' ? null : values.note,
+                submitted_at: submitMode === 'submitted'
+                    ? new Date().toISOString()
+                    : selectedServiceRecord?.submitted_at ?? null
+            }
+
+            if (selectedServiceRecord) {
+                return updateEmployeeServiceRecord(selectedServiceRecord.id, payload)
+            }
+
+            return createEmployeeServiceRecord(payload)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['employee-service-records', currentMonthValue] })
+            setSelectedShiftForRecord(undefined)
+            setSelectedServiceRecord(undefined)
+        }
+    })
+
     const handleToggleWorkStatus = (shiftId: number) => {
         mutation.mutate({ id: shiftId, work_status: 'work' })
     }
+
+    const serviceRecordByShiftId = useMemo(() => {
+        const map = new Map<number, ServiceRecord>()
+        if (!serviceRecords) return map
+
+        for (let index = 0; index < serviceRecords.length; index += 1) {
+            map.set(serviceRecords[index].shift_id, serviceRecords[index])
+        }
+
+        return map
+    }, [serviceRecords])
 
     // ユーザー情報を特定
     const targetUser = users?.find(u => u.id === targetUserId)
@@ -126,6 +186,7 @@ export default function UserShiftsPage() {
                                 const isWorking = shift.work_status === 'work' || String(shift.work_status) === '1'
                                 const startTimeStr = shift.start_time
                                 const endTimeStr = shift.end_time
+                                const serviceRecord = serviceRecordByShiftId.get(shift.id)
                                 return (
                                     <div key={shift.id} className={`${styles.shiftCard} flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3`}>
                                         <div>
@@ -134,6 +195,11 @@ export default function UserShiftsPage() {
                                             </div>
                                             <div className={`${styles.shiftTime} text-xs font-mono`}>
                                                 {startTimeStr} - {endTimeStr}
+                                            </div>
+                                            <div className={`${styles.shiftTime} text-xs mt-1`}>
+                                                {serviceRecord
+                                                    ? serviceRecord.submitted_at ? '訪問記録: 提出済み' : '訪問記録: 下書きあり'
+                                                    : '訪問記録: 未作成'}
                                             </div>
                                         </div>
                                         <div className="flex gap-2">
@@ -155,6 +221,15 @@ export default function UserShiftsPage() {
                                                 </a>
                                             )}
                                             <button
+                                                onClick={() => {
+                                                    setSelectedShiftForRecord(shift)
+                                                    setSelectedServiceRecord(serviceRecord)
+                                                }}
+                                                className={`${styles.routeButton} px-4 py-2 text-sm flex items-center justify-center gap-2`}
+                                            >
+                                                {serviceRecord ? '訪問記録' : '記録'}
+                                            </button>
+                                            <button
                                                 onClick={() => handleToggleWorkStatus(shift.id)}
                                                 disabled={mutation.isPending || isWorking}
                                                 className={`
@@ -167,7 +242,7 @@ export default function UserShiftsPage() {
                                                     px-5 py-2 text-sm
                                                 `}
                                             >
-                                                {mutation.isPending ? '更新中...' : (isWorking ? '出勤済み' : '出勤する')}
+                                                {mutation.isPending ? '更新中...' : (isWorking ? '出勤済み' : '出勤')}
                                             </button>
                                         </div>
                                     </div>
@@ -222,6 +297,23 @@ export default function UserShiftsPage() {
                     </div>
                 )}
             </div>
+
+            <ServiceRecordFormModal
+                isOpen={selectedShiftForRecord !== undefined}
+                onClose={() => {
+                    setSelectedShiftForRecord(undefined)
+                    setSelectedServiceRecord(undefined)
+                }}
+                onSave={async (values, submitMode) => {
+                    await saveServiceRecordMutation.mutateAsync({ values, submitMode })
+                }}
+                serviceTypes={serviceTypes ?? []}
+                serviceRecord={selectedServiceRecord}
+                shiftId={selectedShiftForRecord?.id}
+                shiftLabel={selectedShiftForRecord ? buildShiftLabel(selectedShiftForRecord) : ''}
+                allowSubmitActions
+                pending={saveServiceRecordMutation.isPending}
+            />
         </div>
     )
 }

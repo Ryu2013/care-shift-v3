@@ -1,0 +1,247 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(38, 56, 74, 0.3);
+  backdrop-filter: blur(6px);
+}
+
+.modal {
+  width: min(760px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  border: 1px solid rgba(105, 197, 255, 0.25);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 28px 80px rgba(74, 144, 226, 0.18);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 24px 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--black-dark);
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  font-size: 0.92rem;
+  color: var(--black-color);
+}
+
+.closeButton {
+  border: none;
+  border-radius: 999px;
+  background: rgba(105, 197, 255, 0.14);
+  color: var(--blue-dark);
+  font-weight: 700;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+}
+
+.tabList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tabButton,
+.activeTabButton {
+  border: 1px solid rgba(105, 197, 255, 0.26);
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--black-color);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.activeTabButton {
+  border-color: rgba(74, 144, 226, 0.45);
+  background: linear-gradient(135deg, rgba(105, 197, 255, 0.18), rgba(74, 144, 226, 0.16));
+  color: var(--blue-dark);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field span {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--black-dark);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  border: 1px solid rgba(105, 197, 255, 0.35);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 14px;
+  color: var(--black-dark);
+  outline: none;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.section {
+  border: 1px solid rgba(105, 197, 255, 0.2);
+  border-radius: 18px;
+  background: rgba(105, 197, 255, 0.08);
+  padding: 18px;
+}
+
+.placeholderSection {
+  border: 1px dashed rgba(105, 197, 255, 0.32);
+  border-radius: 18px;
+  background: rgba(105, 197, 255, 0.05);
+  padding: 24px;
+}
+
+.placeholderSection h3 {
+  margin: 0 0 8px;
+  color: var(--black-dark);
+}
+
+.placeholderSection p {
+  margin: 0;
+  color: var(--black-color);
+}
+
+.imageMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  color: var(--black-color);
+  font-size: 0.9rem;
+}
+
+.imageMeta a {
+  color: var(--blue-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.section h3 {
+  margin: 0 0 14px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--black-dark);
+}
+
+.checkboxGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.checkboxItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.94rem;
+  color: var(--black-dark);
+}
+
+.checkboxItem input {
+  width: 16px;
+  height: 16px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.primaryButton,
+.secondaryButton {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, var(--blue-color), var(--blue-dark));
+  color: white;
+}
+
+.secondaryButton {
+  background: rgba(227, 91, 91, 0.12);
+  color: var(--red-dark);
+}
+
+.submittedBadge,
+.draftBadge {
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.submittedBadge {
+  background: rgba(76, 175, 80, 0.16);
+  color: #2c7a34;
+}
+
+.draftBadge {
+  background: rgba(241, 148, 148, 0.18);
+  color: var(--red-dark);
+}
+
+@media (max-width: 720px) {
+  .grid,
+  .checkboxGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions {
+    width: 100%;
+    flex-direction: column;
+  }
+}

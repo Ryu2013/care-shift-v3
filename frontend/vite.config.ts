@@ -14,7 +14,7 @@ export default defineConfig({
       includeAssets: ['favicon.ico', 'icon-192.png', 'icon-512.png', 'icon-152.png'],
       workbox: {
         // API requests, including OAuth callback navigations, must bypass the SPA fallback.
-        navigateFallbackDenylist: [/^\/api(?:\/|$)/],
+        navigateFallbackDenylist: [/^\/api(?:\/|$)/, /^\/rails\/active_storage(?:\/|$)/],
       },
       manifest: {
         name: 'ケアシフト',
@@ -51,7 +51,11 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://api:3000',
-        changeOrigin: true,
+        changeOrigin: false,
+      },
+      '/rails/active_storage': {
+        target: 'http://api:3000',
+        changeOrigin: false,
       },
     },
   },

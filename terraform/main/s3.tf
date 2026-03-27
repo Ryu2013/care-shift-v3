@@ -6,6 +6,46 @@ resource "aws_s3_bucket" "frontend" {
   }
 }
 
+resource "aws_s3_bucket" "active_storage" {
+  bucket = "${var.project}-active-storage-${data.aws_caller_identity.current.account_id}"
+
+  tags = {
+    Name = "${var.project}-active-storage"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "active_storage" {
+  bucket = aws_s3_bucket.active_storage.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "active_storage" {
+  bucket = aws_s3_bucket.active_storage.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "active_storage" {
+  bucket = aws_s3_bucket.active_storage.id
+
+  rule {
+    id     = "abort-incomplete-multipart-uploads"
+    status = "Enabled"
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 7
+    }
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "frontend" {
   bucket = aws_s3_bucket.frontend.id
 
@@ -30,8 +70,8 @@ resource "aws_s3_bucket_policy" "frontend" {
 
 data "aws_iam_policy_document" "frontend_s3" {
   statement {
-    effect  = "Allow"
-    actions = ["s3:GetObject"]
+    effect    = "Allow"
+    actions   = ["s3:GetObject"]
     resources = ["${aws_s3_bucket.frontend.arn}/*"]
 
     principals {
