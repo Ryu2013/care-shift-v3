@@ -32,6 +32,18 @@ RSpec.describe "管理者向け利用者担当API", type: :request do
       expect(response).to have_http_status(:unprocessable_content)
       expect(json["errors"]).to be_present
     end
+
+    it "別事業所のユーザーは not_found を返す" do
+      outside_user = create(:user, email: "outside-user-client-#{SecureRandom.hex(4)}@example.com")
+      api_sign_in(admin)
+
+      post "/api/admin/user_clients", params: {
+        user_client: { client_id: client.id, user_id: outside_user.id, note: "担当メモ" }
+      }, headers: csrf_headers, as: :json
+
+      expect(response).to have_http_status(:not_found)
+      expect(json["errors"]).to eq([ "Not found" ])
+    end
   end
 
   describe "DELETE /api/admin/user_clients/:id" do

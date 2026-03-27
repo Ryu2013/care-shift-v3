@@ -38,6 +38,16 @@ RSpec.describe "参加者API", type: :request do
       expect(response).to have_http_status(:not_found)
       expect(json["errors"]).to eq([ "Not found" ])
     end
+
+    it "別事業所のユーザーは not_found を返す" do
+      outside_user = create(:user, email: "outside-entry-user-#{SecureRandom.hex(4)}@example.com")
+      api_sign_in(user)
+
+      post "/api/rooms/#{room.id}/entries", params: { user_id: outside_user.id }, headers: csrf_headers, as: :json
+
+      expect(response).to have_http_status(:not_found)
+      expect(json["errors"]).to eq([ "Not found" ])
+    end
   end
 
   describe "DELETE /api/entries/:id" do

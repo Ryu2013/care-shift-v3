@@ -11,6 +11,7 @@ class Api::Admin::UsersController < Api::Admin::AuthorizationController
     attributes = user_params.compact_blank
     attributes.delete(:password) if attributes[:password].blank?
     attributes.delete(:password_confirmation) if attributes[:password].blank?
+    attributes[:team] = current_user.office.teams.find(attributes.delete(:team_id)) if attributes.key?(:team_id)
 
     if @user.update(attributes)
       render json: @user

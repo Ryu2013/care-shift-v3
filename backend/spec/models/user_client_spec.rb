@@ -39,6 +39,28 @@ RSpec.describe UserClient, type: :model do
       expect(duplicate).to be_invalid
       expect(duplicate.errors[:user_id]).to be_present
     end
+
+    it "別事業所のユーザーは無効である" do
+      office = create(:office)
+      team = create(:team, office: office)
+      client = create(:client, office: office, team: team)
+      outside_user = create(:user, email: "outside-user-client-model-#{SecureRandom.hex(4)}@example.com")
+      user_client = UserClient.new(office: office, client: client, user: outside_user)
+
+      expect(user_client).to be_invalid
+      expect(user_client.errors[:user]).to be_present
+    end
+
+    it "別事業所の利用者は無効である" do
+      office = create(:office)
+      team = create(:team, office: office)
+      user = create(:user, office: office, team: team)
+      outside_client = create(:client)
+      user_client = UserClient.new(office: office, client: outside_client, user: user)
+
+      expect(user_client).to be_invalid
+      expect(user_client.errors[:client]).to be_present
+    end
   end
 
   describe "関連削除" do

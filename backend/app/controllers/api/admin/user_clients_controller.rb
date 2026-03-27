@@ -1,7 +1,8 @@
 class Api::Admin::UserClientsController < Api::Admin::AuthorizationController
   def create
     client = current_user.office.clients.find(params[:user_client][:client_id])
-    user_client = client.user_clients.build(user_client_params.merge(office: current_user.office))
+    user = current_user.office.users.find(params[:user_client][:user_id])
+    user_client = client.user_clients.build(user: user, note: params.dig(:user_client, :note), office: current_user.office)
     if user_client.save
       render json: user_client, status: :created
     else

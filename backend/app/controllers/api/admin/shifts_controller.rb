@@ -1,6 +1,4 @@
 class Api::Admin::ShiftsController < Api::Admin::AuthorizationController
-  before_action :set_shift, only: %i[update destroy]
-
   def index
     date = params[:date].present? ? Date.strptime(params[:date], "%Y-%m") : Date.current
     shifts = current_user.office.shifts.scope_month(date).includes(:user, :client)
@@ -12,7 +10,9 @@ class Api::Admin::ShiftsController < Api::Admin::AuthorizationController
     unless current_user.office.subscription_active?
       return render json: { errors: [ "サブスクリプションが有効ではありません" ] }, status: :payment_required
     end
-    shift = current_user.office.shifts.build(shift_params)
+    shift = current_user.office.shifts.build(shift_params.except(:client_id, :user_id))
+    assign_shift_relations(shift)
+
     if shift.save
       render json: ShiftSerializer.new(shift), status: :created
     else
@@ -21,15 +21,20 @@ class Api::Admin::ShiftsController < Api::Admin::AuthorizationController
   end
 
   def update
-    if @shift.update(shift_params)
-      render json: ShiftSerializer.new(@shift)
+    shift = current_user.office.shifts.find(params[:id])
+    shift.assign_attributes(shift_params.except(:client_id, :user_id))
+    assign_shift_relations(shift)
+
+    if shift.save
+      render json: ShiftSerializer.new(shift)
     else
-      render json: { errors: @shift.errors.full_messages }, status: :unprocessable_content
+      render json: { errors: shift.errors.full_messages }, status: :unprocessable_content
     end
   end
 
   def destroy
-    @shift.destroy!
+    shift = current_user.office.shifts.find(params[:id])
+    shift.destroy!
     head :no_content
   end
 
@@ -42,8 +47,9 @@ class Api::Admin::ShiftsController < Api::Admin::AuthorizationController
 
   private
 
-  def set_shift
-    @shift = current_user.office.shifts.find(params[:id])
+  def assign_shift_relations(shift)
+    shift.client = current_user.office.clients.find(shift_params[:client_id]) if shift_params[:client_id].present?
+    shift.user = shift_params[:user_id].present? ? current_user.office.users.find(shift_params[:user_id]) : nil
   end
 
   def shift_params

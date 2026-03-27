@@ -61,6 +61,46 @@ RSpec.describe "管理者向けシフトAPI", type: :request do
       expect(response).to have_http_status(:payment_required)
       expect(json["errors"]).to eq([ "サブスクリプションが有効ではありません" ])
     end
+
+    it "別事業所の利用者は not_found を返す" do
+      office.update!(subscription_status: "active")
+      outside_client = create(:client)
+      api_sign_in(admin)
+
+      post "/api/admin/shifts", params: {
+        shift: {
+          client_id: outside_client.id,
+          user_id: admin.id,
+          shift_type: :day,
+          date: "2025-11-10",
+          start_time: "09:00",
+          end_time: "17:00"
+        }
+      }, headers: csrf_headers, as: :json
+
+      expect(response).to have_http_status(:not_found)
+      expect(json["errors"]).to eq([ "Not found" ])
+    end
+
+    it "別事業所のユーザーは not_found を返す" do
+      office.update!(subscription_status: "active")
+      outside_user = create(:user, email: "outside-shift-user-#{SecureRandom.hex(4)}@example.com")
+      api_sign_in(admin)
+
+      post "/api/admin/shifts", params: {
+        shift: {
+          client_id: client.id,
+          user_id: outside_user.id,
+          shift_type: :day,
+          date: "2025-11-10",
+          start_time: "09:00",
+          end_time: "17:00"
+        }
+      }, headers: csrf_headers, as: :json
+
+      expect(response).to have_http_status(:not_found)
+      expect(json["errors"]).to eq([ "Not found" ])
+    end
   end
 
   describe "POST /api/admin/shifts/generate_monthly" do
