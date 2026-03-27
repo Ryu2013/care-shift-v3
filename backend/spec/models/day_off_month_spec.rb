@@ -64,5 +64,4 @@ RSpec.describe DayOffMonth, type: :model do
       }.to change(day_off_month, :target_month).from(Date.new(2026, 4, 15)).to(Date.new(2026, 4, 1))
     end
   end
-
 end

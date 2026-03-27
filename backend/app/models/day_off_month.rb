@@ -43,8 +43,8 @@ class DayOffMonth < ApplicationRecord
   end
 
   def normalize_request_dates!(request_dates)
-    dates = Array(request_dates) #配列に変換
-      .map { |request_date| Date.parse(request_date.to_s) } #Dateが文字列を期待する為to_s
+    dates = Array(request_dates) # 配列に変換
+      .map { |request_date| Date.parse(request_date.to_s) } # Dateが文字列を期待する為to_s
       .sort
       .uniq
 
@@ -55,13 +55,13 @@ class DayOffMonth < ApplicationRecord
     raise SubmissionError, "希望休の日付形式が不正です"
   end
 
-  def validate_deadline! #提出期限を過ぎてないか
+  def validate_deadline! # 提出期限を過ぎてないか
     return unless Date.current > office.day_off_deadline_for(target_month)
 
     raise SubmissionError, "提出期限を過ぎているため更新できません"
   end
 
-  def validate_request_dates_limit!(request_dates) #希望上限を超えてないか
+  def validate_request_dates_limit!(request_dates) # 希望上限を超えてないか
     return unless request_dates.size > office.monthly_day_off_limit
 
     raise SubmissionError, "希望休は月#{office.monthly_day_off_limit}日までです"
