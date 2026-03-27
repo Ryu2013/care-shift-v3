@@ -7,6 +7,8 @@ class StripeSubscriptionService
   end
 
   def create_checkout_session(success_url:, cancel_url:)
+    raise Stripe::InvalidRequestError.new("Stripe is disabled", nil) unless StripeSettings.enabled?
+
     create_customer unless office.stripe_customer_id.present?
 
     session = Stripe::Checkout::Session.create(
@@ -23,6 +25,8 @@ class StripeSubscriptionService
   end
 
   def create_portal_session(return_url:)
+    raise Stripe::InvalidRequestError.new("Stripe is disabled", nil) unless StripeSettings.enabled?
+
     Stripe::BillingPortal::Session.create(
       customer: office.stripe_customer_id,
       return_url: return_url

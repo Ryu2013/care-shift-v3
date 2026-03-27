@@ -25,6 +25,7 @@ import shift4Img from '../../assets/shift4.png';
 import footerTitleImg from '../../assets/footer_title.png';
 import dayoffImg from '../../assets/dayoff.png';
 import dayofficonImg from '../../assets/dayofficon.png';
+import kirokuImg from '../../assets/kiroku.png';
 
 const ResponsiveIcon = () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-16 h-16 mx-auto mb-4 text-[#69C5FF]">
@@ -37,6 +38,15 @@ const ResponsiveIcon = () => (
 );
 
 const features: FeatureSectionProps[] = [
+    {
+        title: '訪問記録も',
+        highlightText: 'らくらく!',
+        descriptionLines: ['スマホでもタブレットでも、', '見やすい、使いやすい。'],
+        imageItems: [{ src: kirokuImg, alt: '訪問記録', className: styles.featureImg }],
+        reverse: true,
+        background: true,
+        imageFrame: `${featureSectionStyles.featureFrame} max-w-sm transform hover:-rotate-1`,
+    },
     {
         title: '2クリックで',
         highlightText: '簡単にシフト登録!',
@@ -165,7 +175,7 @@ const HomePage = () => {
                 <div className="max-w-4xl mx-auto flex flex-col items-center gap-10">
                     <div className="relative mt-6 w-full md:mt-10">
                         <div className={`absolute top-0 left-0 -mt-6 md:-mt-10 ml-0 md:-ml-4 text-2xl md:text-5xl font-bold tracking-widest whitespace-nowrap z-10 ${styles.heroTitle}`}>
-                            <FadeInText text={"訪問介護\n重度訪問介護\n業務効率化アプリ"} />
+                            <FadeInText text={"無料の訪問介護\n重度訪問介護\n業務効率化アプリ"} />
                         </div>
                         <img src={titleImg} alt="タイトル" className={`${styles.heroTitleImage} mt-10 md:mt-0`} />
                     </div>
@@ -173,13 +183,8 @@ const HomePage = () => {
                     <div className={styles.heroHighlights}>
                         <div className={styles.heroHighlightCard}>
                             <p className={styles.heroHighlightLabel}>料金</p>
-                            <p className={styles.heroHighlightValue}>0円から始められる</p>
-                            <p className={styles.heroHighlightText}>日本一低コストで続けやすい</p>
-                        </div>
-                        <div className={styles.heroHighlightCard}>
-                            <p className={styles.heroHighlightLabel}>サポート</p>
-                            <p className={styles.heroHighlightValue}>導入前後も安心サポート</p>
-                            <p className={styles.heroHighlightText}>使い始めの不安を減らし、現場への定着を支えます。</p>
+                            <p className={styles.heroHighlightValue}>完全無料！</p>
+                            <p className={styles.heroHighlightText}>特に料金はかかりません！</p>
                         </div>
                     </div>
 
@@ -239,9 +244,8 @@ const HomePage = () => {
                         <div className={styles.problemCard}>
                             <p className={styles.problemCardTitle}>アプリは導入したいけどコストが高い</p>
                             <p className={styles.problemCardText}>
-                                ケアシフトは5人までならずっと0円！<br />
-                                5人以降も1人あたり300円で業界最安値で利用できます！<br />
-                                例: 10人なら月額1,500円で利用できます。
+                                ケアシフトならずっと0円！<br />
+                                初回無料や、最初の何か月といった制約もありません！
                             </p>
                         </div>
                         <div className={styles.problemCard}>
@@ -253,7 +257,7 @@ const HomePage = () => {
                     </div>
 
                     <div className={styles.problemClosing}>
-                        <h2 className={styles.problemTitle}>低コストで、誰でもすぐ使える！</h2>
+                        <h2 className={styles.problemTitle}>ずっと無料で、誰でもすぐ使える！</h2>
                         <p className={styles.problemLead}>
                             時間とお金をもっと現場に使いたい。
                             そんな想いからケアシフトは出来ました。
@@ -295,13 +299,12 @@ const HomePage = () => {
 
                     <div className={`${styles.cardContainer} flex-1 p-10 text-center flex flex-col items-center justify-between ${styles.scrollTrigger}`} style={{ transitionDelay: '0.2s' }}>
                         <div className="mb-4">
-                            <span className={styles.priceTag}>¥300</span>
-                            <span className="text-gray-500 font-medium ml-1">/月</span>
+                            <span className={styles.priceTag}>¥0</span>
                         </div>
-                        <h3 className={`${styles.cardTitle} mb-4`}>分かりやすい料金体系</h3>
+                        <h3 className={`${styles.cardTitle} mb-4`}>ずっと無料で利用可能</h3>
                         <p className="text-gray-600 leading-relaxed text-sm md:text-base">
-                            契約日に毎月、従業員1人につき300円請求いたします。<br />
-                            <span className={`${styles.featureTitleHighlight} font-bold mt-2 block`}>最初の5人までは<br />無料でご利用いただけます。</span>
+                            初回無料や、最初の何か月といった制約もありません！<br />
+                            <span className={`${styles.featureTitleHighlight} font-bold mt-2 block`}>何名様でも<br />無料でご利用いただけます。</span>
                         </p>
                     </div>
                 </div>
@@ -328,17 +331,15 @@ const HomePage = () => {
                         </div>
 
                         <div className="flex flex-wrap justify-center items-center gap-4 text-gray-400 text-sm mt-4">
-                            <a href="/how_to_use" className={styles.footerLink}>使い方</a>
+                            <Link to="/how-to-use" className={styles.footerLink}>使い方</Link>
                             <span className="hidden sm:inline">|</span>
                             <a href="https://ryu2013.github.io/ryuuiti_memos/" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>アプリ運営者</a>
                         </div>
 
                         <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-gray-400 text-xs mt-2 border-t border-gray-200 pt-8 w-full">
-                            <a href="/terms" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>利用規約</a>
+                            <Link to="/terms" className={styles.footerLink}>利用規約</Link>
                             <span className="hidden sm:inline">|</span>
-                            <a href="/privacy_policy" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>プライバシーポリシー</a>
-                            <span className="hidden sm:inline">|</span>
-                            <a href="/specified_commercial_transactions" className={styles.footerLink}>特定商取引法に基づく表記</a>
+                            <Link to="/privacy_policy" className={styles.footerLink}>プライバシーポリシー</Link>
                         </div>
 
                         <p className="text-gray-400 text-xs mt-6">© 2026 CareShift All Rights Reserved.</p>

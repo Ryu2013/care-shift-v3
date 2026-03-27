@@ -248,98 +248,100 @@ export default function SettingsPage() {
 
                     {activeTab === 'company' && office && (
                         <div className="space-y-8">
-                            <div className={`${styles.card} p-6`}>
-                                <h3 className={`${styles.sectionTitle} text-lg mb-4 pb-3`}>契約状況</h3>
+                            {office.stripe_enabled && (
+                                <div className={`${styles.card} p-6`}>
+                                    <h3 className={`${styles.sectionTitle} text-lg mb-4 pb-3`}>契約状況</h3>
 
-                                {subscriptionSuccess && (
-                                    <div className="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 flex items-start gap-3 shadow-sm animate-fade-in">
-                                        <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <div>
-                                            <p className="font-bold text-green-800 text-sm">サブスクリプションに加入しました！</p>
-                                            <p className="text-green-700 text-xs mt-1">すべてのご機能をご利用いただけます。</p>
+                                    {subscriptionSuccess && (
+                                        <div className="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 flex items-start gap-3 shadow-sm animate-fade-in">
+                                            <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <div>
+                                                <p className="font-bold text-green-800 text-sm">サブスクリプションに加入しました！</p>
+                                                <p className="text-green-700 text-xs mt-1">すべてのご機能をご利用いただけます。</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
 
-                                {(() => {
-                                    const status = office.subscription_status
-                                    const isActive = ['active', 'trialing', 'past_due', 'unpaid'].includes(status || '')
-
-                                    if (isActive) {
-                                        if (office.cancel_at_period_end) {
-                                            return (
-                                                <div className="space-y-4 shadow-sm border border-yellow-100 bg-yellow-50/50 p-5 rounded-2xl">
-                                                    <div className="flex items-center gap-3 mb-2">
-                                                        <div className={`inline-block px-3 py-1 text-sm ${styles.statusBadge} ${styles.statusWarning}`}>解約予約済み</div>
-                                                        <span className="text-yellow-700 font-bold">サブスクリプションを解約しました</span>
-                                                    </div>
-                                                    <p className="text-gray-700 font-medium text-sm leading-relaxed">
-                                                        <strong>{formatDate(office.current_period_end)}</strong> までは引き継ぎ期間として現在のプランをお使いいただけます。期限を過ぎると自動的に無料プランへ移行します。
-                                                    </p>
-                                                </div>
-                                            )
-                                        } else {
-                                            return (
-                                                <div className="space-y-4 shadow-sm border border-green-100 bg-green-50/50 p-5 rounded-2xl">
-                                                    <div className="flex items-center gap-3 mb-2">
-                                                        <div className={`inline-block px-3 py-1 text-sm ${styles.statusBadge} ${styles.statusSuccess}`}>契約中</div>
-                                                        <span className="text-green-700 font-bold">サブスクリプションに加入しています 🎉</span>
-                                                    </div>
-                                                    <p className="text-gray-700 font-medium text-sm leading-relaxed">
-                                                        次回更新予定日: <strong>{formatDate(office.current_period_end)}</strong><br />
-                                                        引き続きすべての機能をご利用いただけます。
-                                                    </p>
-                                                </div>
-                                            )
-                                        }
-                                    } else if (status === 'canceled') {
-                                        return (
-                                            <div className="space-y-4">
-                                                <div className={`inline-block px-3 py-1 text-sm ${styles.statusBadge} ${styles.statusWarning}`}>解約済み</div>
-                                                <p className="text-gray-600 text-sm leading-relaxed mt-3">
-                                                    現在は無料プランをご利用中です。
-                                                </p>
-                                            </div>
-                                        )
-                                    } else {
-                                        return (
-                                            <div className="py-2">
-                                                <p className="text-gray-500 text-sm">現在は無料プランをご利用中です。</p>
-                                            </div>
-                                        )
-                                    }
-                                })()}
-
-                                <div className="mt-8 pt-6 border-t border-white/20">
                                     {(() => {
                                         const status = office.subscription_status
                                         const isActive = ['active', 'trialing', 'past_due', 'unpaid'].includes(status || '')
 
-                                        if (isActive || status === 'canceled') {
+                                        if (isActive) {
+                                            if (office.cancel_at_period_end) {
+                                                return (
+                                                    <div className="space-y-4 shadow-sm border border-yellow-100 bg-yellow-50/50 p-5 rounded-2xl">
+                                                        <div className="flex items-center gap-3 mb-2">
+                                                            <div className={`inline-block px-3 py-1 text-sm ${styles.statusBadge} ${styles.statusWarning}`}>解約予約済み</div>
+                                                            <span className="text-yellow-700 font-bold">サブスクリプションを解約しました</span>
+                                                        </div>
+                                                        <p className="text-gray-700 font-medium text-sm leading-relaxed">
+                                                            <strong>{formatDate(office.current_period_end)}</strong> までは引き継ぎ期間として現在のプランをお使いいただけます。期限を過ぎると自動的に無料プランへ移行します。
+                                                        </p>
+                                                    </div>
+                                                )
+                                            } else {
+                                                return (
+                                                    <div className="space-y-4 shadow-sm border border-green-100 bg-green-50/50 p-5 rounded-2xl">
+                                                        <div className="flex items-center gap-3 mb-2">
+                                                            <div className={`inline-block px-3 py-1 text-sm ${styles.statusBadge} ${styles.statusSuccess}`}>契約中</div>
+                                                            <span className="text-green-700 font-bold">サブスクリプションに加入しています 🎉</span>
+                                                        </div>
+                                                        <p className="text-gray-700 font-medium text-sm leading-relaxed">
+                                                            次回更新予定日: <strong>{formatDate(office.current_period_end)}</strong><br />
+                                                            引き続きすべての機能をご利用いただけます。
+                                                        </p>
+                                                    </div>
+                                                )
+                                            }
+                                        } else if (status === 'canceled') {
                                             return (
-                                                <button
-                                                    onClick={handlePortalRedirect}
-                                                    disabled={isRedirectingPortal}
-                                                    className={`block w-full text-center px-6 py-3 ${styles.btn} ${isRedirectingPortal ? 'opacity-50 cursor-not-allowed bg-gray-200 text-gray-500 border border-gray-300' : styles.btnSecondary}`}
-                                                >
-                                                    {isRedirectingPortal ? 'リダイレクト中...' : '契約内容の確認・変更・解約'}
-                                                </button>
+                                                <div className="space-y-4">
+                                                    <div className={`inline-block px-3 py-1 text-sm ${styles.statusBadge} ${styles.statusWarning}`}>解約済み</div>
+                                                    <p className="text-gray-600 text-sm leading-relaxed mt-3">
+                                                        現在は無料プランをご利用中です。
+                                                    </p>
+                                                </div>
                                             )
                                         } else {
                                             return (
-                                                <button
-                                                    onClick={() => navigate('/subscription')}
-                                                    className={`block w-full text-center px-6 py-3 ${styles.btn} ${styles.btnPrimary}`}
-                                                >
-                                                    プランを選択する
-                                                </button>
+                                                <div className="py-2">
+                                                    <p className="text-gray-500 text-sm">現在は無料プランをご利用中です。</p>
+                                                </div>
                                             )
                                         }
                                     })()}
+
+                                    <div className="mt-8 pt-6 border-t border-white/20">
+                                        {(() => {
+                                            const status = office.subscription_status
+                                            const isActive = ['active', 'trialing', 'past_due', 'unpaid'].includes(status || '')
+
+                                            if (isActive || status === 'canceled') {
+                                                return (
+                                                    <button
+                                                        onClick={handlePortalRedirect}
+                                                        disabled={isRedirectingPortal}
+                                                        className={`block w-full text-center px-6 py-3 ${styles.btn} ${isRedirectingPortal ? 'opacity-50 cursor-not-allowed bg-gray-200 text-gray-500 border border-gray-300' : styles.btnSecondary}`}
+                                                    >
+                                                        {isRedirectingPortal ? 'リダイレクト中...' : '契約内容の確認・変更・解約'}
+                                                    </button>
+                                                )
+                                            } else {
+                                                return (
+                                                    <button
+                                                        onClick={() => navigate('/subscription')}
+                                                        className={`block w-full text-center px-6 py-3 ${styles.btn} ${styles.btnPrimary}`}
+                                                    >
+                                                        プランを選択する
+                                                    </button>
+                                                )
+                                            }
+                                        })()}
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
                             <div className={`${styles.card} p-6`}>
                                 <h3 className={`${styles.sectionTitle} text-lg mb-4 pb-3`}>会社情報の編集</h3>

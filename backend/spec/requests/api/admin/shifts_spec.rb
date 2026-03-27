@@ -6,6 +6,11 @@ RSpec.describe "管理者向けシフトAPI", type: :request do
   let(:team) { admin.team }
   let(:client) { create(:client, office: office, team: team) }
 
+  before do
+    allow(Rails.application.credentials).to receive(:dig).and_call_original
+    allow(Rails.application.credentials).to receive(:dig).with(:stripe, :enabled).and_return("true")
+  end
+
   describe "GET /api/admin/shifts" do
     it "指定月のシフト一覧を返す" do
       target = create(:shift, office: office, client: client, date: Date.new(2025, 11, 10))
@@ -101,6 +106,29 @@ RSpec.describe "管理者向けシフトAPI", type: :request do
       expect(response).to have_http_status(:not_found)
       expect(json["errors"]).to eq([ "Not found" ])
     end
+
+    it "Stripe が無効なら無料枠超過でもシフトを作成する" do
+      allow(Rails.application.credentials).to receive(:dig).with(:stripe, :enabled).and_return("false")
+      office.update!(subscription_status: "canceled")
+      4.times do |index|
+        create(:user, office: office, team: team, email: "free-shift-user-#{index}-#{SecureRandom.hex(2)}@example.com")
+      end
+      api_sign_in(admin)
+
+      expect {
+        post "/api/admin/shifts", params: {
+          shift: {
+            client_id: client.id,
+            shift_type: :day,
+            date: "2025-11-10",
+            start_time: "09:00",
+            end_time: "17:00"
+          }
+        }, headers: csrf_headers, as: :json
+      }.to change(Shift, :count).by(1)
+
+      expect(response).to have_http_status(:created)
+    end
   end
 
   describe "POST /api/admin/shifts/generate_monthly" do
@@ -112,6 +140,25 @@ RSpec.describe "管理者向けシフトAPI", type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(json["created"]).to be > 0
+    end
+  end
+
+  describe "PATCH /api/admin/shifts/:id" do
+    it "日付だけ更新しても担当者を維持する" do
+      office.update!(subscription_status: "active")
+      assigned_user = create(:user, office: office, team: team, email: "assigned-shift-user-#{SecureRandom.hex(4)}@example.com")
+      shift = create(:shift, office: office, client: client, user: assigned_user, date: Date.new(2025, 11, 10))
+      api_sign_in(admin)
+
+      patch "/api/admin/shifts/#{shift.id}", params: {
+        shift: {
+          date: "2025-11-11"
+        }
+      }, headers: csrf_headers, as: :json
+
+      expect(response).to have_http_status(:ok)
+      expect(shift.reload.date).to eq(Date.new(2025, 11, 11))
+      expect(shift.user_id).to eq(assigned_user.id)
     end
   end
 end

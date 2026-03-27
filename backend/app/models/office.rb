@@ -25,6 +25,7 @@ class Office < ApplicationRecord
   end
 
   def subscription_active?
+    return true unless StripeSettings.enabled?
     return true if users.count <= 4
     return true if [ "active", "trialing", "past_due", "unpaid" ].include?(subscription_status)
     false

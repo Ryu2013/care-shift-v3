@@ -48,8 +48,13 @@ class Api::Admin::ShiftsController < Api::Admin::AuthorizationController
   private
 
   def assign_shift_relations(shift)
-    shift.client = current_user.office.clients.find(shift_params[:client_id]) if shift_params[:client_id].present?
-    shift.user = shift_params[:user_id].present? ? current_user.office.users.find(shift_params[:user_id]) : nil
+    if shift_params.key?(:client_id)
+      shift.client = shift_params[:client_id].present? ? current_user.office.clients.find(shift_params[:client_id]) : nil
+    end
+
+    if shift_params.key?(:user_id)
+      shift.user = shift_params[:user_id].present? ? current_user.office.users.find(shift_params[:user_id]) : nil
+    end
   end
 
   def shift_params

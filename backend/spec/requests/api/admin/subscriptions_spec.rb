@@ -7,6 +7,8 @@ RSpec.describe "管理者向けサブスクリプションAPI", type: :request d
   before do
     stub_const("ENV", ENV.to_h.merge("FRONTEND_URL" => "http://frontend.test"))
     allow(StripeSubscriptionService).to receive(:new).with(admin.office, admin).and_return(service)
+    allow(Rails.application.credentials).to receive(:dig).and_call_original
+    allow(Rails.application.credentials).to receive(:dig).with(:stripe, :enabled).and_return("true")
   end
 
   describe "POST /api/admin/subscription/subscribe" do
@@ -23,6 +25,17 @@ RSpec.describe "管理者向けサブスクリプションAPI", type: :request d
         cancel_url: "http://frontend.test/subscription"
       )
     end
+
+    it "Stripe が無効ならエラーを返す" do
+      allow(Rails.application.credentials).to receive(:dig).with(:stripe, :enabled).and_return("false")
+      expect(StripeSubscriptionService).not_to receive(:new)
+      api_sign_in(admin)
+
+      post "/api/admin/subscription/subscribe", headers: csrf_headers, as: :json
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(json["errors"]).to eq([ "Stripe課金は現在無効です" ])
+    end
   end
 
   describe "POST /api/admin/subscription/portal" do
@@ -37,6 +50,17 @@ RSpec.describe "管理者向けサブスクリプションAPI", type: :request d
       expect(service).to have_received(:create_portal_session).with(
         return_url: "http://frontend.test/settings"
       )
+    end
+
+    it "Stripe が無効ならエラーを返す" do
+      allow(Rails.application.credentials).to receive(:dig).with(:stripe, :enabled).and_return("false")
+      expect(StripeSubscriptionService).not_to receive(:new)
+      api_sign_in(admin)
+
+      post "/api/admin/subscription/portal", headers: csrf_headers, as: :json
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(json["errors"]).to eq([ "Stripe課金は現在無効です" ])
     end
   end
 end

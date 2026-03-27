@@ -17,6 +17,7 @@ export interface Office {
   name: string
   monthly_day_off_limit: number
   request_deadline_day: number
+  stripe_enabled: boolean
   subscription_active?: boolean
   subscription_status: string | null
   current_period_end: string | null

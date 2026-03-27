@@ -11,6 +11,10 @@ RSpec.describe StripeSubscriptionService, type: :service do
   let(:session_double) { instance_double(Stripe::Checkout::Session, url: session_url) }
 
   before do
+    allow(Rails.application.credentials).to receive(:dig).and_call_original
+    allow(Rails.application.credentials).to receive(:dig)
+      .with(:stripe, :enabled)
+      .and_return("true")
     allow(Rails.application.credentials).to receive(:dig)
       .with(:stripe, :metered_price_id)
       .and_return(price_id)
@@ -18,6 +22,14 @@ RSpec.describe StripeSubscriptionService, type: :service do
   end
 
   describe "#create_checkout_session" do
+    it "Stripe が無効ならエラーにする" do
+      allow(Rails.application.credentials).to receive(:dig).with(:stripe, :enabled).and_return("false")
+
+      expect {
+        service.create_checkout_session(success_url: success_url, cancel_url: cancel_url)
+      }.to raise_error(Stripe::InvalidRequestError)
+    end
+
     context "Stripe 顧客IDが設定済みの場合" do
       let(:office) { create(:office, stripe_customer_id: "cus_existing") }
       let(:user) { create(:user, office: office, team: create(:team, office: office)) }
