@@ -1,0 +1,77 @@
+.backdrop {
+  background: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.header {
+  border-bottom: 1px solid rgb(229 231 235);
+}
+
+.title {
+  color: var(--black-dark);
+  font-weight: 700;
+}
+
+.closeButton {
+  color: rgb(156 163 175);
+  transition: color 0.2s ease;
+}
+
+.closeButton:hover {
+  color: var(--black-color);
+}
+
+.label {
+  color: #444;
+  font-weight: 700;
+}
+
+.required {
+  color: var(--red-dark);
+}
+
+.field {
+  border: 2px solid rgb(229 231 235);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  outline: none;
+  background: white;
+}
+
+.field:focus {
+  border-color: var(--blue-color);
+}
+
+.errorText {
+  color: var(--red-dark);
+  font-size: 0.875rem;
+  font-weight: 700;
+  white-space: pre-line;
+}
+
+.submitButton {
+  background: var(--blue-color);
+  color: white;
+  font-weight: 700;
+  border-radius: 9999px;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  transition: all 0.2s ease;
+}
+
+.submitButton:hover {
+  background: var(--blue-dark);
+}
+
+.submitButton:active {
+  transform: scale(0.95);
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+}

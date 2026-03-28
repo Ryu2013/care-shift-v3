@@ -44,3 +44,10 @@ export const resendConfirmation = (email: string) =>
 
 export const sendUnlockEmail = (email: string) =>
   ensureCsrfToken().then(() => apiClient.post<{ message: string }>('/users/unlock', { user: { email } }))
+
+export const acceptInvitation = (invitation_token: string, password: string, password_confirmation: string, name?: string) =>
+  ensureCsrfToken().then(() =>
+    apiClient.put<{ message: string }>('/users/invitation', {
+      user: { invitation_token, password, password_confirmation, name },
+    }),
+  )

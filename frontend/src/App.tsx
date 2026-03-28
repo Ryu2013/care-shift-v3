@@ -6,6 +6,7 @@ import Layout from './components/Layout'
 import HomePage from './pages/home/HomePage'
 import LoginPage from './pages/auth/LoginPage'
 import UserRegistrationPage from './pages/auth/UserRegistrationPage'
+import AcceptInvitationPage from './pages/auth/AcceptInvitationPage'
 import ShiftsPage from './pages/admin/shifts/ShiftsPage'
 import ClientsPage from './pages/admin/clients/ClientsPage'
 import UsersPage from './pages/admin/users/UsersPage'
@@ -59,6 +60,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<UserRegistrationPage />} />
+        <Route path="/invitation/accept" element={<AcceptInvitationPage />} />
         <Route path="/password-reset" element={<ForgotPasswordPage />} />
         <Route path="/password-reset/edit" element={<ResetPasswordPage />} />
         <Route path="/resend-confirmation" element={<ResendConfirmationPage />} />

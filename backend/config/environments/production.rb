@@ -74,6 +74,7 @@ Rails.application.configure do
 
   # メールのリンクで使用するデフォルトのホスト設定
   config.action_mailer.default_url_options = { host: "www.ryuuichi-app.com", protocol: "https" }
+  config.x.frontend_url = ENV.fetch("FRONTEND_URL", "https://www.ryuuichi-app.com")
 
   # 不正なメールアドレスを無視して、メール配信エラーを発生させません。
   # 配信エラーを発生させたい場合は true に設定し、メールサーバを即時配信するよう設定してください。

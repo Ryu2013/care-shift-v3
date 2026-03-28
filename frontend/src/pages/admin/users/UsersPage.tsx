@@ -4,13 +4,16 @@ import { useNavigate, Link } from 'react-router-dom'
 import { getUsers } from '../../../api/users'
 import { getTeams } from '../../../api/teams'
 import type { User, Team } from '../../../types'
+import InviteUserModal from './components/InviteUserModal'
 import UserFormModal from './components/UserFormModal'
+import { Header } from '../../../components/Header'
 import styles from './UsersPage.module.css'
 
 export default function UsersPage() {
   const navigate = useNavigate()
   const [selectedTeamId, setSelectedTeamId] = useState<number | ''>('')
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | undefined>(undefined)
 
   const { data: teams } = useQuery({
@@ -24,22 +27,18 @@ export default function UsersPage() {
   })
 
   return (
-    <div className={`${styles.page} min-h-screen`}>
-      {/* Header Area */}
-      <div className="p-4 flex items-center gap-4">
-        <button onClick={() => navigate('/shifts')} className={styles.backButton}>
-          <svg className={`${styles.backIcon} w-8 h-8`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-        </button>
-        <h1 className={`${styles.pageTitle} text-2xl`}>
-          {teams?.find(t => t.id === selectedTeamId)?.name || '全部署'}
-        </h1>
-      </div>
+    <div className="min-h-screen">
+      <Header />
 
-      <div className="px-4 space-y-6 max-w-2xl mx-auto">
+      <div className={styles.container}>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className={`${styles.pageTitle} text-xl md:text-2xl`}>
+            {teams?.find(t => t.id === selectedTeamId)?.name || '全部署'}
+          </h1>
+        </div>
+
         {/* Team Selection */}
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-6">
           <select
             value={selectedTeamId}
             onChange={(e) => setSelectedTeamId(e.target.value ? Number(e.target.value) : '')}
@@ -53,59 +52,65 @@ export default function UsersPage() {
         </div>
 
         {/* Action Bar & Toggle */}
-        <div className="flex items-center justify-between gap-4">
-          <button className={`${styles.inviteButton} px-6 py-2`}>
-            新規招待
-          </button>
-
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
           <div className={`${styles.toggleWrapper} flex p-1`}>
             <div className={`${styles.toggleActive} px-6 py-1.5 text-sm`}>
               従業員
             </div>
             <Link
               to="/clients"
-              className={`${styles.toggleLink} px-6 py-1.5 rounded-full text-sm transition-all`}
+              className={`${styles.toggleLink} px-6 py-1.5 text-sm`}
             >
               顧客
             </Link>
           </div>
+
+          <button
+            onClick={() => setIsInviteModalOpen(true)}
+            className={`${styles.inviteButton} px-6 py-2`}
+          >
+            新規招待
+          </button>
         </div>
 
         {/* User List */}
-        <div className="space-y-4">
-          {isLoading ? (
-            <div className={`${styles.emptyText} text-center py-10`}>読み込み中...</div>
-          ) : users?.length === 0 ? (
-            <div className={`${styles.emptyText} text-center py-10`}>スタッフが登録されていません</div>
-          ) : (
-            users?.map((user: User) => (
-              <div
-                key={user.id}
-                onClick={() => {
-                  setSelectedUser(user)
-                  setIsModalOpen(true)
-                }}
-                className={`${styles.userCard} p-6 group`}
-              >
-                <div className="flex justify-between items-start">
-                  <div className="space-y-2">
-                    <div className="flex items-baseline gap-2">
-                      <span className={`${styles.metaLabel} text-xs`}>名前</span>
-                      <span className={`${styles.nameValue} text-lg`}>
-                        {user.name}
-                      </span>
+        <div className={styles.card}>
+          <ul className={styles.userList}>
+            {isLoading ? (
+              <li className={`${styles.emptyState}`}>読み込み中...</li>
+            ) : users?.length === 0 ? (
+              <li className={`${styles.emptyState}`}>スタッフが登録されていません</li>
+            ) : (
+              users?.map((user: User) => (
+                <li
+                  key={user.id}
+                  onClick={() => {
+                    setSelectedUser(user)
+                    setIsEditModalOpen(true)
+                  }}
+                  className={styles.userItem}
+                >
+                  <div className={styles.userInfo}>
+                    <div className={styles.userIcon}>
+                      {user.name.charAt(0) || '#'}
                     </div>
-                    <div className="flex items-baseline gap-2">
-                      <span className={`${styles.metaLabel} text-xs`}>住所</span>
-                      <span className={styles.addressValue}>
-                        {user.address || '未登録'}
-                      </span>
+                    <div className={styles.userInfoContent}>
+                      <div className="flex items-baseline gap-2">
+                        <span className={styles.nameValue}>
+                          {user.name}
+                        </span>
+                        <span className={`${styles.roleBadge} ${user.role === 'admin' ? styles.adminBadge : styles.employeeBadge} text-[10px] px-2 py-0.5`}>
+                          {user.role === 'admin' ? '管理者' : 'スタッフ'}
+                        </span>
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <span className={styles.addressValue}>
+                          {user.address || '未登録'}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <span className={`${styles.roleBadge} ${user.role === 'admin' ? styles.adminBadge : styles.employeeBadge} text-[10px] px-2 py-0.5`}>
-                      {user.role === 'admin' ? '管理者' : 'スタッフ'}
-                    </span>
+                  <div className="flex items-center gap-4">
                     <button
                       onClick={(e) => {
                         e.stopPropagation() // Prevent modal from opening
@@ -113,24 +118,31 @@ export default function UsersPage() {
                       }}
                       className={`${styles.shiftButton} px-3 py-1 text-xs`}
                     >
-                      シフト確認
+                      シフト
                     </button>
+                    <svg className={styles.chevron} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </div>
-                </div>
-              </div>
-            ))
-          )}
+                </li>
+              ))
+            )}
+          </ul>
         </div>
       </div>
 
       <UserFormModal
-        isOpen={isModalOpen}
+        isOpen={isEditModalOpen}
         onClose={() => {
-          setIsModalOpen(false)
+          setIsEditModalOpen(false)
           setSelectedUser(undefined)
         }}
         onSuccess={() => refetch()}
         user={selectedUser}
+      />
+      <InviteUserModal
+        isOpen={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
       />
     </div>
   )
