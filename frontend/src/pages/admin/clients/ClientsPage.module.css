@@ -1,5 +1,25 @@
-.page {
-  background: #f5f6f8;
+/* =========================================
+   ClientsPage Module
+   ========================================= */
+
+.container {
+  max-width: 600px;
+  margin: 7rem auto 2rem auto;
+  padding: 2rem;
+  background-color: var(--white-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 640px) {
+  .container {
+    margin: 6rem 1rem 1.5rem 1rem;
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+  }
 }
 
 .pageTitle {
@@ -12,8 +32,8 @@
   font-weight: 500;
   border: 2px solid rgb(229 231 235);
   border-radius: 0.5rem;
-  outline: none;
   transition: all 0.2s ease;
+  outline: none;
   background: white;
 }
 
@@ -29,6 +49,7 @@
   border-radius: 9999px;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .createButton:hover {
@@ -40,64 +61,114 @@
 }
 
 .toggleWrapper {
-  background: rgb(229 231 235);
-  border-radius: 9999px;
-  box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
-}
-
-.toggleLink {
-  color: rgb(107 114 128);
-  font-weight: 700;
-  transition: color 0.2s ease;
-}
-
-.toggleLink:hover {
-  color: var(--black-color);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(105, 197, 255, 0.2);
+  display: flex;
 }
 
 .toggleActive {
   background: white;
-  color: #2563eb;
+  color: var(--blue-dark);
   font-weight: 700;
-  border-radius: 9999px;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.emptyText {
+.toggleLink {
   color: var(--black-color);
   font-weight: 500;
+  transition: color 0.2s ease, background-color 0.2s;
+  border-radius: 10px;
 }
 
-.clientCard {
-  background: white;
-  border: 1px solid rgb(243 244 246);
-  border-radius: 1rem;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  transition: box-shadow 0.2s ease;
+.toggleLink:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: var(--black-dark);
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  border: 1px solid rgba(105, 197, 255, 0.2);
+  overflow: hidden;
+}
+
+.clientList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.clientItem {
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.clientCard:hover {
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+.clientItem:hover {
+  background-color: rgba(105, 197, 255, 0.1);
 }
 
-.metaLabel {
-  color: rgb(156 163 175);
-  font-weight: 700;
+.clientItem:not(:last-child) {
+  border-bottom: 1px solid rgba(105, 197, 255, 0.1);
+}
+
+.clientInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.clientIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background-color: var(--blue-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.clientInfoContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .nameValue {
   color: var(--black-dark);
   font-weight: 700;
-  transition: color 0.2s ease;
-  text-transform: uppercase;
-}
-
-.clientCard:hover .nameValue {
-  color: #2563eb;
+  font-size: 1.125rem;
 }
 
 .addressValue {
-  color: var(--black-color);
-  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.8125rem;
 }
+
+.chevron {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--blue-color);
+  transition: transform 0.2s;
+}
+
+.clientItem:hover .chevron {
+  transform: translateX(4px);
+}
+
+.emptyState {
+  padding: 2rem;
+  text-align: center;
+  color: var(--black-color);
+}
+

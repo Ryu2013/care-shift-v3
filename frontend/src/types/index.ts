@@ -12,6 +12,17 @@ export interface User {
   address: string | null
 }
 
+export interface UserInvitationInput {
+  email: string
+  name: string
+  team_id: number
+  role: Role
+}
+
+export interface ApiMessageResponse {
+  message: string
+}
+
 export interface Office {
   id: number
   name: string

@@ -32,18 +32,18 @@ export default function ClientsPage() {
   })
 
   return (
-    <div className={`${styles.page} min-h-screen`}>
+    <div className="min-h-screen">
       <Header />
 
-      <div className="pt-24 px-4 space-y-6 max-w-2xl mx-auto">
-        <div className="flex items-center justify-between">
-          <h1 className={`${styles.pageTitle} text-2xl`}>
+      <div className={styles.container}>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className={`${styles.pageTitle} text-xl md:text-2xl`}>
             {teams?.find(t => t.id === selectedTeamId)?.name || '部署'}
           </h1>
         </div>
 
         {/* Team Selection */}
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-6">
           <select
             value={selectedTeamId || ''}
             onChange={(e) => setSelectedTeamId(Number(e.target.value))}
@@ -56,7 +56,19 @@ export default function ClientsPage() {
         </div>
 
         {/* Action Bar & Toggle */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+          <div className={`${styles.toggleWrapper} flex p-1`}>
+            <Link
+              to="/users"
+              className={`${styles.toggleLink} px-6 py-1.5 text-sm`}
+            >
+              従業員
+            </Link>
+            <div className={`${styles.toggleActive} px-6 py-1.5 text-sm`}>
+              顧客
+            </div>
+          </div>
+
           <button
             onClick={() => {
               setSelectedClient(undefined)
@@ -66,53 +78,45 @@ export default function ClientsPage() {
           >
             新規登録
           </button>
-
-          <div className={`${styles.toggleWrapper} flex p-1`}>
-            <Link
-              to="/users"
-              className={`${styles.toggleLink} px-6 py-1.5 rounded-full text-sm transition-all`}
-            >
-              従業員
-            </Link>
-            <div className={`${styles.toggleActive} px-6 py-1.5 text-sm`}>
-              顧客
-            </div>
-          </div>
         </div>
 
         {/* Client List */}
-        <div className="space-y-4">
-          {isLoading ? (
-            <div className={`${styles.emptyText} text-center py-10`}>読み込み中...</div>
-          ) : clients?.length === 0 ? (
-            <div className={`${styles.emptyText} text-center py-10`}>利用者が登録されていません</div>
-          ) : (
-            clients?.map((client: Client) => (
-              <div
-                key={client.id}
-                onClick={() => {
-                  setSelectedClient(client)
-                  setIsModalOpen(true)
-                }}
-                className={`${styles.clientCard} p-6 group`}
-              >
-                <div className="space-y-2">
-                  <div className="flex items-baseline gap-2">
-                    <span className={`${styles.metaLabel} text-xs`}>名前</span>
-                    <span className={`${styles.nameValue} text-lg`}>
-                      {client.name}
-                    </span>
+        <div className={styles.card}>
+          <ul className={styles.clientList}>
+            {isLoading ? (
+              <li className={`${styles.emptyState}`}>読み込み中...</li>
+            ) : clients?.length === 0 ? (
+              <li className={`${styles.emptyState}`}>利用者が登録されていません</li>
+            ) : (
+              clients?.map((client: Client) => (
+                <li
+                  key={client.id}
+                  onClick={() => {
+                    setSelectedClient(client)
+                    setIsModalOpen(true)
+                  }}
+                  className={styles.clientItem}
+                >
+                  <div className={styles.clientInfo}>
+                    <div className={styles.clientIcon}>
+                      {client.name.charAt(0) || '#'}
+                    </div>
+                    <div className={styles.clientInfoContent}>
+                      <span className={styles.nameValue}>
+                        {client.name}
+                      </span>
+                      <span className={styles.addressValue}>
+                        {client.address || '未登録'}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-baseline gap-2">
-                    <span className={`${styles.metaLabel} text-xs`}>住所</span>
-                    <span className={styles.addressValue}>
-                      {client.address || '未登録'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
+                  <svg className={styles.chevron} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </li>
+              ))
+            )}
+          </ul>
         </div>
       </div>
 

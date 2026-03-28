@@ -43,6 +43,7 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
 
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  config.x.frontend_url = ENV.fetch("FRONTEND_URL", "http://localhost:5173")
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

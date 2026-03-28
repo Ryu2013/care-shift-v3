@@ -1,5 +1,5 @@
 import apiClient from './rails-api'
-import type { User } from '../types'
+import type { ApiMessageResponse, User, UserInvitationInput } from '../types'
 
 export const getUsers = (team_id?: number) =>
   apiClient.get<User[]>('/admin/users', { params: { team_id } })
@@ -12,3 +12,6 @@ export const updateUser = (id: number, data: Partial<User> & { password?: string
 
 export const deleteUser = (id: number) =>
   apiClient.delete(`/admin/users/${id}`)
+
+export const inviteUser = (data: UserInvitationInput) =>
+  apiClient.post<ApiMessageResponse>('/users/invitation', { user: data })
