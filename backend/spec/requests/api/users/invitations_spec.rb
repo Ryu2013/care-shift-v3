@@ -31,6 +31,26 @@ RSpec.describe "招待API", type: :request do
       expect(invited_user.invitation_token).to be_present
     end
 
+    it "role に admin を渡しても employee として招待する" do
+      api_sign_in(admin)
+
+      expect {
+        post "/api/users/invitation", params: {
+          user: {
+            email: "invited-admin-#{SecureRandom.hex(4)}@example.com",
+            name: "招待ユーザー",
+            team_id: admin.team_id,
+            role: "admin"
+          }
+        }, headers: csrf_headers, as: :json
+      }.to change(User, :count).by(1)
+
+      invited_user = User.order(:id).last
+
+      expect(response).to have_http_status(:ok)
+      expect(invited_user.role).to eq("employee")
+    end
+
     it "不正なパラメータでは unprocessable_content を返す" do
       api_sign_in(admin)
 

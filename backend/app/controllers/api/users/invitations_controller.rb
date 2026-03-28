@@ -15,14 +15,14 @@ class Api::Users::InvitationsController < Devise::InvitationsController
         name: invite_params.fetch(:name),
         team: team,
         office: current_user.office,
-        role: invite_params[:role].presence || "employee"
+        role: "employee"
       },
       current_user
     )
   end
 
   def invite_params
-    params.require(:user).permit(:email, :name, :team_id, :role)
+    params.require(:user).permit(:email, :name, :team_id)
   end
 
   def authorize_admin!
